@@ -32,7 +32,7 @@ export class PrintStream extends FilterOutputStream {
     println(s: string);
 
     println(arg?: any) {
-        this.write(new TextEncoder().encode(String(arg ? arg : "") + "\n"))
+        this.write(new TextEncoder().encode(String(arg == null ? "" : arg) + "\n"))
     }
 
     toString(): string {

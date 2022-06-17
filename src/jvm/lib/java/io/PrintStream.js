@@ -28,7 +28,7 @@ var PrintStream = /** @class */ (function (_super) {
         this.write(new TextEncoder().encode(String(arg ? arg : "")));
     };
     PrintStream.prototype.println = function (arg) {
-        this.write(new TextEncoder().encode(String(arg ? arg : "") + "\n"));
+        this.write(new TextEncoder().encode(String(arg == null ? "" : arg) + "\n"));
     };
     PrintStream.prototype.toString = function () {
         return "java.io.PrintStream";
