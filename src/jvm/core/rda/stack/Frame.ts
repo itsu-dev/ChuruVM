@@ -17,7 +17,7 @@ import {
     readUtf8FromConstantPool
 } from "../../../models/info/ConstantPoolInfo.js";
 import {
-    AnyVariable,
+    AnyVariable, PrimitiveArrayVariable,
     DoubleVariable,
     FloatVariable,
     IntVariable,
@@ -432,6 +432,28 @@ export class Frame {
                         break;
                     }
 
+                    // iaload
+                    case 0x2e:
+                    // laload
+                    case 0x2f:
+                    // faload
+                    case 0x30:
+                    // daload
+                    case 0x31:
+                    // aaload
+                    case 0x32:
+                    // baload
+                    case 0x33:
+                    // caload
+                    case 0x34:
+                    // saload
+                    case 0x35: {
+                        const index = this.operandStack.pop();
+                        const array = this.operandStack.pop();
+                        this.operandStack.push(array[index]);
+                        break;
+                    }
+
                     // istore
                     case 0x36: {
                         const index = opcode.operands[0];
@@ -684,6 +706,29 @@ export class Frame {
                         } else {
                             this.locals.splice(3, 0, new AnyVariable(this.operandStack.pop()));
                         }
+                        break;
+                    }
+
+                    // iastore
+                    case 0x4f:
+                    // lastore
+                    case 0x50:
+                    // fastore
+                    case 0x51:
+                    // dastore
+                    case 0x52:
+                    // aastore
+                    case 0x53:
+                    // bastore
+                    case 0x54:
+                    // castore
+                    case 0x55:
+                    // sastore
+                    case 0x56: {
+                        const value = this.operandStack.pop();
+                        const index = this.operandStack.pop();
+                        const array = this.operandStack.pop();
+                        array[index] = value;
                         break;
                     }
 
@@ -1234,9 +1279,14 @@ export class Frame {
                             methodArgs.push(this.operandStack.pop());
                         }
 
-                        this.thread.invokeMethod(invokeMethodName, this.classFile, methodArgs);
+                        let module: any
 
-                        // this.operandStack.pop()["callable"]["constructor"](...methodArgs)
+                        try {
+                            module = await import("../../../lib/" + className + ".js");
+                            this.operandStack.push(module.default[invokeMethodName](...methodArgs));
+                        } catch (e) {
+                            this.thread.invokeMethod(invokeMethodName, this.classFile, methodArgs);
+                        }
 
                         break;
                     }
@@ -1251,15 +1301,37 @@ export class Frame {
 
                         module = await import("../../../lib/" + className + ".js");
 
-                        /*
-                        this.operandStack.push({
-                            "callable": new module[this.getClassName(readUtf8FromConstantPool(this.constantPool, classRef.nameIndex))]()
-                        });
+                        this.operandStack.push(module.default);
 
-                         */
+                        break;
+                    }
 
-                        this.operandStack.push(module.default.prototype);
+                    // newarray
+                    case 0xbc: {
+                        const type = opcode.operands[0];
+                        const count = this.operandStack.pop();
+                        let array;
+                        switch (type) {
+                            case 4: {
+                                // TODO JavaではJava標準の配列オブジェクトを持つのでは？
+                                array = new Array<boolean>(count).fill(false);
+                                break;
+                            }
+                            default: {
+                                array = new Array<number>(count).fill(0);
+                            }
+                        }
+                        this.operandStack.push(array);
+                        break;
+                    }
 
+                    // anewarray
+                    case 0xbd: {
+                        const branchByte1 = opcode.operands[0];
+                        const branchByte2 = opcode.operands[1];
+                        const count = this.operandStack.pop();
+                        // const module = await import("../../../lib/" + readUtf8FromConstantPool(this.constantPool, classRef.nameIndex) + ".js")
+                        this.operandStack.push(new Array<any>(count).fill(null));
                         break;
                     }
 
@@ -1617,6 +1689,16 @@ export class Frame {
                     break;
                 }
 
+                case 0x19: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8()]
+                    })
+                    id++;
+                    break;
+                }
+
                 // lload_2
                 case 0x20: {
                     this.opcodes.push({
@@ -1749,6 +1831,30 @@ export class Frame {
 
                 // aload_3
                 case 0x2d: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
+                    break;
+                }
+
+                // iaload
+                case 0x2e:
+                // laload
+                case 0x2f:
+                // faload
+                case 0x30:
+                // daload
+                case 0x31:
+                // aaload
+                case 0x32:
+                // baload
+                case 0x33:
+                // caload
+                case 0x34:
+                // saload
+                case 0x35: {
                     this.opcodes.push({
                         id: id,
                         opcode: opcode,
@@ -1953,7 +2059,7 @@ export class Frame {
                 }
 
                 // dstore_2
-                case 0x48: {
+                case 0x49: {
                     this.opcodes.push({
                         id: id,
                         opcode: opcode,
@@ -2004,6 +2110,30 @@ export class Frame {
 
                 // astore_3
                 case 0x4e: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
+                    break;
+                }
+
+                // iastore
+                case 0x4f:
+                // lastore
+                case 0x50:
+                // fastore
+                case 0x51:
+                // dastore
+                case 0x52:
+                // aastore
+                case 0x53:
+                // bastore
+                case 0x54:
+                // castore
+                case 0x55:
+                // sastore
+                case 0x56: {
                     this.opcodes.push({
                         id: id,
                         opcode: opcode,
@@ -2675,6 +2805,28 @@ export class Frame {
 
                 // new
                 case 0xbb: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8(), code.getUint8()]
+                    });
+                    id += 2;
+                    break;
+                }
+
+                // newarray
+                case 0xbc: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8()]
+                    });
+                    id++;
+                    break;
+                }
+
+                // anewarray
+                case 0xbd: {
                     this.opcodes.push({
                         id: id,
                         opcode: opcode,
