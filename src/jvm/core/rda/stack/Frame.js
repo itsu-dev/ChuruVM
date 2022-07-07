@@ -245,15 +245,16 @@ var Frame = /** @class */ (function () {
                                             case 0xbb: return [3 /*break*/, 166];
                                             case 0xbc: return [3 /*break*/, 168];
                                             case 0xbd: return [3 /*break*/, 169];
-                                            case 0xc5: return [3 /*break*/, 170];
-                                            case 0xc6: return [3 /*break*/, 171];
+                                            case 0xbe: return [3 /*break*/, 170];
+                                            case 0xc5: return [3 /*break*/, 171];
                                             case 0xc6: return [3 /*break*/, 172];
-                                            case 0xc7: return [3 /*break*/, 175];
+                                            case 0xc6: return [3 /*break*/, 173];
+                                            case 0xc7: return [3 /*break*/, 176];
                                         }
-                                        return [3 /*break*/, 178];
+                                        return [3 /*break*/, 179];
                                     case 1:
                                         {
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 2;
                                     case 2:
@@ -272,7 +273,7 @@ var Frame = /** @class */ (function () {
                                         module = _g.sent();
                                         fieldClassFileName = readUtf8FromConstantPool(this_1.constantPool, fieldNameAndTypeRef.nameIndex);
                                         this_1.operandStack.push(module[this_1.getClassName(readUtf8FromConstantPool(this_1.constantPool, classRef.nameIndex))][fieldClassFileName]);
-                                        return [3 /*break*/, 178];
+                                        return [3 /*break*/, 179];
                                     case 4:
                                         {
                                             index_1 = opcode.operands[0];
@@ -292,7 +293,7 @@ var Frame = /** @class */ (function () {
                                                 dataView.resetOffset();
                                                 this_1.operandStack.push(dataView.getFloat32());
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 5;
                                     case 5:
@@ -314,7 +315,7 @@ var Frame = /** @class */ (function () {
                                                 dataView.resetOffset();
                                                 this_1.operandStack.push(dataView.getFloat64());
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 6;
                                     case 6:
@@ -343,253 +344,253 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 (_d = this_1.operandStack.pop())[invokeMethodName].apply(_d, methodArgs);
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 7;
                                     case 7:
                                         {
                                             this_1.operandStack.push(-1);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 8;
                                     case 8:
                                         {
                                             this_1.operandStack.push(0);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 9;
                                     case 9:
                                         {
                                             this_1.operandStack.push(1);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 10;
                                     case 10:
                                         {
                                             this_1.operandStack.push(2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 11;
                                     case 11:
                                         {
                                             this_1.operandStack.push(3);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 12;
                                     case 12:
                                         {
                                             this_1.operandStack.push(4);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 13;
                                     case 13:
                                         {
                                             this_1.operandStack.push(5);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 14;
                                     case 14:
                                         {
                                             this_1.operandStack.push(1);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 15;
                                     case 15:
                                         {
                                             this_1.operandStack.push(2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 16;
                                     case 16:
                                         {
                                             this_1.operandStack.push(0.0);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 17;
                                     case 17:
                                         {
                                             this_1.operandStack.push(1.0);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 18;
                                     case 18:
                                         {
                                             this_1.operandStack.push(2.0);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 19;
                                     case 19:
                                         {
                                             this_1.operandStack.push(0.0);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 20;
                                     case 20:
                                         {
                                             this_1.operandStack.push(1.0);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 21;
                                     case 21:
                                         {
                                             data = opcode.operands[0];
                                             this_1.operandStack.push(data);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 22;
                                     case 22:
                                         {
                                             index_2 = opcode.operands[0];
                                             this_1.operandStack.push(this_1.locals[index_2].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 23;
                                     case 23:
                                         {
                                             index_3 = opcode.operands[0];
                                             this_1.operandStack.push(this_1.locals[index_3].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 24;
                                     case 24:
                                         {
                                             index_4 = opcode.operands[0];
                                             this_1.operandStack.push(this_1.locals[index_4].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 25;
                                     case 25:
                                         {
                                             index_5 = opcode.operands[0];
                                             this_1.operandStack.push(this_1.locals[index_5].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 26;
                                     case 26:
                                         {
                                             index_6 = opcode.operands[0];
                                             this_1.operandStack.push(this_1.locals[index_6].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 27;
                                     case 27:
                                         {
                                             this_1.operandStack.push(this_1.locals[0].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 28;
                                     case 28:
                                         {
                                             this_1.operandStack.push(this_1.locals[1].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 29;
                                     case 29:
                                         {
                                             this_1.operandStack.push(this_1.locals[2].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 30;
                                     case 30:
                                         {
                                             this_1.operandStack.push(this_1.locals[3].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 31;
                                     case 31:
                                         {
                                             this_1.operandStack.push(this_1.locals[0].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 32;
                                     case 32:
                                         {
                                             this_1.operandStack.push(this_1.locals[1].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 33;
                                     case 33:
                                         {
                                             this_1.operandStack.push(this_1.locals[2].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 34;
                                     case 34:
                                         {
                                             this_1.operandStack.push(this_1.locals[3].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 35;
                                     case 35:
                                         {
                                             this_1.operandStack.push(this_1.locals[0].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 36;
                                     case 36:
                                         {
                                             this_1.operandStack.push(this_1.locals[1].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 37;
                                     case 37:
                                         {
                                             this_1.operandStack.push(this_1.locals[2].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 38;
                                     case 38:
                                         {
                                             this_1.operandStack.push(this_1.locals[3].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 39;
                                     case 39:
                                         {
                                             this_1.operandStack.push(this_1.locals[0].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 40;
                                     case 40:
                                         {
                                             this_1.operandStack.push(this_1.locals[1].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 41;
                                     case 41:
                                         {
                                             this_1.operandStack.push(this_1.locals[2].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 42;
                                     case 42:
                                         {
                                             this_1.operandStack.push(this_1.locals[3].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 43;
                                     case 43:
                                         {
                                             this_1.operandStack.push(this_1.locals[0].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 44;
                                     case 44:
                                         {
                                             this_1.operandStack.push(this_1.locals[1].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 45;
                                     case 45:
                                         {
                                             this_1.operandStack.push(this_1.locals[2].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 46;
                                     case 46:
                                         {
                                             this_1.operandStack.push(this_1.locals[3].getValue());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 47;
                                     case 47:
@@ -597,7 +598,7 @@ var Frame = /** @class */ (function () {
                                             index_7 = this_1.operandStack.pop();
                                             array = this_1.operandStack.pop();
                                             this_1.operandStack.push(array[index_7]);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 48;
                                     case 48:
@@ -609,7 +610,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(index_8, 0, new IntVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 49;
                                     case 49:
@@ -621,7 +622,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(index_9, 0, new LongVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 50;
                                     case 50:
@@ -633,7 +634,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(index_10, 0, new FloatVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 51;
                                     case 51:
@@ -645,7 +646,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(index_11, 0, new DoubleVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 52;
                                     case 52:
@@ -657,7 +658,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(index_12, 0, new AnyVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 53;
                                     case 53:
@@ -668,7 +669,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(0, 0, new IntVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 54;
                                     case 54:
@@ -679,7 +680,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(1, 0, new IntVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 55;
                                     case 55:
@@ -690,7 +691,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(2, 0, new IntVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 56;
                                     case 56:
@@ -701,7 +702,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(3, 0, new IntVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 57;
                                     case 57:
@@ -712,7 +713,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(0, 0, new LongVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 58;
                                     case 58:
@@ -723,7 +724,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(1, 0, new LongVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 59;
                                     case 59:
@@ -734,7 +735,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(2, 0, new LongVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 60;
                                     case 60:
@@ -745,7 +746,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(3, 0, new LongVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 61;
                                     case 61:
@@ -756,7 +757,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(0, 0, new FloatVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 62;
                                     case 62:
@@ -767,7 +768,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(1, 0, new FloatVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 63;
                                     case 63:
@@ -778,7 +779,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(2, 0, new FloatVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 64;
                                     case 64:
@@ -789,7 +790,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(3, 0, new FloatVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 65;
                                     case 65:
@@ -800,7 +801,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(0, 0, new DoubleVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 66;
                                     case 66:
@@ -811,7 +812,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(1, 0, new DoubleVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 67;
                                     case 67:
@@ -822,7 +823,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(2, 0, new DoubleVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 68;
                                     case 68:
@@ -833,7 +834,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(3, 0, new DoubleVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 69;
                                     case 69:
@@ -844,7 +845,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(0, 0, new AnyVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 70;
                                     case 70:
@@ -855,7 +856,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(1, 0, new AnyVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 71;
                                     case 71:
@@ -866,7 +867,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(2, 0, new AnyVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 72;
                                     case 72:
@@ -877,7 +878,7 @@ var Frame = /** @class */ (function () {
                                             else {
                                                 this_1.locals.splice(3, 0, new AnyVariable(this_1.operandStack.pop()));
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 73;
                                     case 73:
@@ -886,7 +887,7 @@ var Frame = /** @class */ (function () {
                                             index_13 = this_1.operandStack.pop();
                                             array = this_1.operandStack.pop();
                                             array[index_13] = value;
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 74;
                                     case 74:
@@ -896,7 +897,7 @@ var Frame = /** @class */ (function () {
                                                 System.err.println("Illegal operation: pop with category 2.");
                                                 return [2 /*return*/, { value: void 0 }];
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 75;
                                     case 75:
@@ -905,17 +906,17 @@ var Frame = /** @class */ (function () {
                                             isCategory2 = function (data) { return data instanceof DoubleVariable || data instanceof LongVariable; };
                                             value1 = this_1.operandStack.pop();
                                             if (isCategory2(value1))
-                                                return [3 /*break*/, 178];
+                                                return [3 /*break*/, 179];
                                             else if (isCategory1(value1)) {
                                                 value2 = this_1.operandStack.pop();
                                                 if (isCategory1(value2))
-                                                    return [3 /*break*/, 178];
+                                                    return [3 /*break*/, 179];
                                                 else {
                                                     System.err.println("Illegal operation: pop2 with category 1.");
                                                     return [2 /*return*/, { value: void 0 }];
                                                 }
                                             }
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 76;
                                     case 76:
@@ -925,115 +926,115 @@ var Frame = /** @class */ (function () {
                                             copied2 = Object.assign(Object.create(Object.getPrototypeOf(original)), original);
                                             this_1.operandStack.push(copied);
                                             this_1.operandStack.push(copied2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 77;
                                     case 77:
                                         {
                                             this_1.operandStack.push(this_1.operandStack.pop() + this_1.operandStack.pop());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 78;
                                     case 78:
                                         {
                                             this_1.operandStack.push(this_1.operandStack.pop() + this_1.operandStack.pop());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 79;
                                     case 79:
                                         {
                                             this_1.operandStack.push(this_1.operandStack.pop() + this_1.operandStack.pop());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 80;
                                     case 80:
                                         {
                                             this_1.operandStack.push(this_1.operandStack.pop() + this_1.operandStack.pop());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 81;
                                     case 81:
                                         {
                                             value2 = this_1.operandStack.pop();
                                             this_1.operandStack.push(this_1.operandStack.pop() - value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 82;
                                     case 82:
                                         {
                                             value2 = this_1.operandStack.pop();
                                             this_1.operandStack.push(this_1.operandStack.pop() - value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 83;
                                     case 83:
                                         {
                                             value2 = this_1.operandStack.pop();
                                             this_1.operandStack.push(this_1.operandStack.pop() - value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 84;
                                     case 84:
                                         {
                                             value2 = this_1.operandStack.pop();
                                             this_1.operandStack.push(this_1.operandStack.pop() - value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 85;
                                     case 85:
                                         {
                                             value2 = this_1.operandStack.pop();
                                             this_1.operandStack.push(this_1.operandStack.pop() * value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 86;
                                     case 86:
                                         {
                                             value2 = this_1.operandStack.pop();
                                             this_1.operandStack.push(this_1.operandStack.pop() * value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 87;
                                     case 87:
                                         {
                                             value2 = this_1.operandStack.pop();
                                             this_1.operandStack.push(this_1.operandStack.pop() * value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 88;
                                     case 88:
                                         {
                                             value2 = this_1.operandStack.pop();
                                             this_1.operandStack.push(this_1.operandStack.pop() * value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 89;
                                     case 89:
                                         {
                                             value2 = this_1.operandStack.pop();
                                             this_1.operandStack.push(this_1.operandStack.pop() / value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 90;
                                     case 90:
                                         {
                                             value2 = this_1.operandStack.pop();
                                             this_1.operandStack.push(this_1.operandStack.pop() / value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 91;
                                     case 91:
                                         {
                                             value2 = this_1.operandStack.pop();
                                             this_1.operandStack.push(this_1.operandStack.pop() / value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 92;
                                     case 92:
                                         {
                                             value2 = this_1.operandStack.pop();
                                             this_1.operandStack.push(this_1.operandStack.pop() / value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 93;
                                     case 93:
@@ -1041,7 +1042,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 % value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 94;
                                     case 94:
@@ -1049,7 +1050,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 % value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 95;
                                     case 95:
@@ -1057,7 +1058,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 % value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 96;
                                     case 96:
@@ -1065,31 +1066,31 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 % value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 97;
                                     case 97:
                                         {
                                             this_1.operandStack.push(-this_1.operandStack.pop());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 98;
                                     case 98:
                                         {
                                             this_1.operandStack.push(-this_1.operandStack.pop());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 99;
                                     case 99:
                                         {
                                             this_1.operandStack.push(-this_1.operandStack.pop());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 100;
                                     case 100:
                                         {
                                             this_1.operandStack.push(-this_1.operandStack.pop());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 101;
                                     case 101:
@@ -1097,7 +1098,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 << value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 102;
                                     case 102:
@@ -1105,7 +1106,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 << value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 103;
                                     case 103:
@@ -1113,7 +1114,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 >> value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 104;
                                     case 104:
@@ -1121,7 +1122,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 >> value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 105;
                                     case 105:
@@ -1129,7 +1130,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 >> value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 106;
                                     case 106:
@@ -1137,7 +1138,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 >> value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 107;
                                     case 107:
@@ -1145,7 +1146,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 & value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 108;
                                     case 108:
@@ -1153,7 +1154,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 & value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 109;
                                     case 109:
@@ -1161,7 +1162,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 | value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 110;
                                     case 110:
@@ -1169,7 +1170,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 | value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 111;
                                     case 111:
@@ -1177,7 +1178,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 ^ value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 112;
                                     case 112:
@@ -1185,7 +1186,7 @@ var Frame = /** @class */ (function () {
                                             value2 = this_1.operandStack.pop();
                                             value1 = this_1.operandStack.pop();
                                             this_1.operandStack.push(value1 ^ value2);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 113;
                                     case 113:
@@ -1193,10 +1194,10 @@ var Frame = /** @class */ (function () {
                                             index_14 = opcode.operands[0];
                                             vConst = opcode.operands[1];
                                             this_1.locals[index_14].setValue(this_1.locals[index_14].getValue() + vConst);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 114;
-                                    case 114: return [3 /*break*/, 178];
+                                    case 114: return [3 /*break*/, 179];
                                     case 115:
                                         {
                                             value2 = this_1.operandStack.pop();
@@ -1207,7 +1208,7 @@ var Frame = /** @class */ (function () {
                                                 this_1.operandStack.push(0);
                                             else
                                                 this_1.operandStack.push(-1);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 116;
                                     case 116:
@@ -1222,7 +1223,7 @@ var Frame = /** @class */ (function () {
                                                 this_1.operandStack.push(0);
                                             else
                                                 this_1.operandStack.push(-1);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 117;
                                     case 117:
@@ -1237,7 +1238,7 @@ var Frame = /** @class */ (function () {
                                                 this_1.operandStack.push(0);
                                             else
                                                 this_1.operandStack.push(1);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 118;
                                     case 118:
@@ -1252,7 +1253,7 @@ var Frame = /** @class */ (function () {
                                                 this_1.operandStack.push(0);
                                             else
                                                 this_1.operandStack.push(-1);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 119;
                                     case 119:
@@ -1267,7 +1268,7 @@ var Frame = /** @class */ (function () {
                                                 this_1.operandStack.push(0);
                                             else
                                                 this_1.operandStack.push(1);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 120;
                                     case 120:
@@ -1278,7 +1279,7 @@ var Frame = /** @class */ (function () {
                                     case 121:
                                         _g.sent();
                                         _g.label = 122;
-                                    case 122: return [3 /*break*/, 178];
+                                    case 122: return [3 /*break*/, 179];
                                     case 123:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
@@ -1287,7 +1288,7 @@ var Frame = /** @class */ (function () {
                                     case 124:
                                         _g.sent();
                                         return [2 /*return*/, "break-mainloop"];
-                                    case 125: return [3 /*break*/, 178];
+                                    case 125: return [3 /*break*/, 179];
                                     case 126:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
@@ -1296,7 +1297,7 @@ var Frame = /** @class */ (function () {
                                     case 127:
                                         _g.sent();
                                         _g.label = 128;
-                                    case 128: return [3 /*break*/, 178];
+                                    case 128: return [3 /*break*/, 179];
                                     case 129:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
@@ -1305,7 +1306,7 @@ var Frame = /** @class */ (function () {
                                     case 130:
                                         _g.sent();
                                         _g.label = 131;
-                                    case 131: return [3 /*break*/, 178];
+                                    case 131: return [3 /*break*/, 179];
                                     case 132:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
@@ -1314,7 +1315,7 @@ var Frame = /** @class */ (function () {
                                     case 133:
                                         _g.sent();
                                         _g.label = 134;
-                                    case 134: return [3 /*break*/, 178];
+                                    case 134: return [3 /*break*/, 179];
                                     case 135:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
@@ -1323,7 +1324,7 @@ var Frame = /** @class */ (function () {
                                     case 136:
                                         _g.sent();
                                         _g.label = 137;
-                                    case 137: return [3 /*break*/, 178];
+                                    case 137: return [3 /*break*/, 179];
                                     case 138:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
@@ -1334,7 +1335,7 @@ var Frame = /** @class */ (function () {
                                     case 139:
                                         _g.sent();
                                         _g.label = 140;
-                                    case 140: return [3 /*break*/, 178];
+                                    case 140: return [3 /*break*/, 179];
                                     case 141:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
@@ -1345,7 +1346,7 @@ var Frame = /** @class */ (function () {
                                     case 142:
                                         _g.sent();
                                         _g.label = 143;
-                                    case 143: return [3 /*break*/, 178];
+                                    case 143: return [3 /*break*/, 179];
                                     case 144:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
@@ -1356,7 +1357,7 @@ var Frame = /** @class */ (function () {
                                     case 145:
                                         _g.sent();
                                         _g.label = 146;
-                                    case 146: return [3 /*break*/, 178];
+                                    case 146: return [3 /*break*/, 179];
                                     case 147:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
@@ -1367,7 +1368,7 @@ var Frame = /** @class */ (function () {
                                     case 148:
                                         _g.sent();
                                         _g.label = 149;
-                                    case 149: return [3 /*break*/, 178];
+                                    case 149: return [3 /*break*/, 179];
                                     case 150:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
@@ -1378,7 +1379,7 @@ var Frame = /** @class */ (function () {
                                     case 151:
                                         _g.sent();
                                         _g.label = 152;
-                                    case 152: return [3 /*break*/, 178];
+                                    case 152: return [3 /*break*/, 179];
                                     case 153:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
@@ -1389,24 +1390,24 @@ var Frame = /** @class */ (function () {
                                     case 154:
                                         _g.sent();
                                         _g.label = 155;
-                                    case 155: return [3 /*break*/, 178];
+                                    case 155: return [3 /*break*/, 179];
                                     case 156:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
                                         return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
                                     case 157:
                                         _g.sent();
-                                        return [3 /*break*/, 178];
+                                        return [3 /*break*/, 179];
                                     case 158:
                                         {
                                             this_1.thread.stack[this_1.thread.runtimeDataArea.getPCRegister(this_1.thread.id) - 2].operandStack.push(this_1.operandStack.pop());
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 159;
                                     case 159:
                                         {
                                             this_1.isRunning = false;
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 160;
                                     case 160:
@@ -1422,7 +1423,7 @@ var Frame = /** @class */ (function () {
                                                 methodArgs.push(this_1.operandStack.pop());
                                             }
                                             this_1.operandStack.push((_e = this_1.operandStack.pop())["constructor"].apply(_e, methodArgs));
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 161;
                                     case 161:
@@ -1452,7 +1453,7 @@ var Frame = /** @class */ (function () {
                                         e_1 = _g.sent();
                                         this_1.thread.invokeMethod(invokeMethodName, this_1.classFile, methodArgs);
                                         return [3 /*break*/, 165];
-                                    case 165: return [3 /*break*/, 178];
+                                    case 165: return [3 /*break*/, 179];
                                     case 166:
                                         indexByte1 = opcode.operands[0];
                                         indexByte2 = opcode.operands[1];
@@ -1463,7 +1464,7 @@ var Frame = /** @class */ (function () {
                                     case 167:
                                         module = _g.sent();
                                         this_1.operandStack.push(module.default);
-                                        return [3 /*break*/, 178];
+                                        return [3 /*break*/, 179];
                                     case 168:
                                         {
                                             type = opcode.operands[0];
@@ -1480,7 +1481,7 @@ var Frame = /** @class */ (function () {
                                                 }
                                             }
                                             this_1.operandStack.push(array);
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 169;
                                     case 169:
@@ -1491,10 +1492,16 @@ var Frame = /** @class */ (function () {
                                             // TODO
                                             // const module = await import("../../../lib/" + readUtf8FromConstantPool(this.constantPool, classRef.nameIndex) + ".js")
                                             this_1.operandStack.push(new Array(count).fill(null));
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
                                         _g.label = 170;
                                     case 170:
+                                        {
+                                            this_1.operandStack.push(this_1.operandStack.pop().length);
+                                            return [3 /*break*/, 179];
+                                        }
+                                        _g.label = 171;
+                                    case 171:
                                         {
                                             branchByte1 = opcode.operands[0];
                                             branchByte2 = opcode.operands[1];
@@ -1510,39 +1517,39 @@ var Frame = /** @class */ (function () {
                                             // TODO
                                             // const module = await import("../../../lib/" + readUtf8FromConstantPool(this.constantPool, classRef.nameIndex) + ".js")
                                             this_1.operandStack.push(createMultiDimensionalArray_1(dimension));
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
-                                        _g.label = 171;
-                                    case 171:
+                                        _g.label = 172;
+                                    case 172:
                                         {
                                             branchByte1 = opcode.operands[0];
                                             branchByte2 = opcode.operands[1];
                                             ref = getConstantPoolInfo(this_1.constantPool, (branchByte1 << 8) | branchByte2);
                                             // TODO
-                                            return [3 /*break*/, 178];
+                                            return [3 /*break*/, 179];
                                         }
-                                        _g.label = 172;
-                                    case 172:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        value = this_1.operandStack.pop();
-                                        if (!(value == null)) return [3 /*break*/, 174];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
+                                        _g.label = 173;
                                     case 173:
-                                        _g.sent();
-                                        _g.label = 174;
-                                    case 174: return [3 /*break*/, 178];
-                                    case 175:
                                         branchByte1 = opcode.operands[0];
                                         branchByte2 = opcode.operands[1];
                                         value = this_1.operandStack.pop();
-                                        if (!value) return [3 /*break*/, 177];
+                                        if (!(value == null)) return [3 /*break*/, 175];
                                         return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 176:
+                                    case 174:
                                         _g.sent();
-                                        _g.label = 177;
-                                    case 177: return [3 /*break*/, 178];
-                                    case 178: return [2 /*return*/];
+                                        _g.label = 175;
+                                    case 175: return [3 /*break*/, 179];
+                                    case 176:
+                                        branchByte1 = opcode.operands[0];
+                                        branchByte2 = opcode.operands[1];
+                                        value = this_1.operandStack.pop();
+                                        if (!value) return [3 /*break*/, 178];
+                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
+                                    case 177:
+                                        _g.sent();
+                                        _g.label = 178;
+                                    case 178: return [3 /*break*/, 179];
+                                    case 179: return [2 /*return*/];
                                 }
                             });
                         };
@@ -2899,6 +2906,15 @@ var Frame = /** @class */ (function () {
                         operands: [code.getUint8(), code.getUint8()]
                     });
                     id += 2;
+                    break;
+                }
+                // arraylength
+                case 0xbe: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
                     break;
                 }
                 // checkcast

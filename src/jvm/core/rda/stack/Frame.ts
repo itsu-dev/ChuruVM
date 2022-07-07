@@ -1336,6 +1336,12 @@ export class Frame {
                         break;
                     }
 
+                    // arraylength
+                    case 0xbe: {
+                        this.operandStack.push((this.operandStack.pop() as Array<any>).length)
+                        break;
+                    }
+
                     // multianewarray
                     case 0xc5: {
                         const branchByte1 = opcode.operands[0];
@@ -2854,6 +2860,16 @@ export class Frame {
                         operands: [code.getUint8(), code.getUint8()]
                     });
                     id += 2;
+                    break;
+                }
+
+                // arraylength
+                case 0xbe: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
                     break;
                 }
 
