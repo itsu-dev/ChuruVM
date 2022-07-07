@@ -1330,8 +1330,29 @@ export class Frame {
                         const branchByte1 = opcode.operands[0];
                         const branchByte2 = opcode.operands[1];
                         const count = this.operandStack.pop();
+                        // TODO
                         // const module = await import("../../../lib/" + readUtf8FromConstantPool(this.constantPool, classRef.nameIndex) + ".js")
                         this.operandStack.push(new Array<any>(count).fill(null));
+                        break;
+                    }
+
+                    // multianewarray
+                    case 0xc5: {
+                        const branchByte1 = opcode.operands[0];
+                        const branchByte2 = opcode.operands[1];
+                        const dimension = opcode.operands[2];
+
+                        const createMultiDimensionalArray = (n: number) => {
+                            if (n > 0) {
+                                return new Array<any>(this.operandStack.pop()).fill(createMultiDimensionalArray(n - 1));
+                            } else {
+                                return null;
+                            }
+                        }
+
+                        // TODO
+                        // const module = await import("../../../lib/" + readUtf8FromConstantPool(this.constantPool, classRef.nameIndex) + ".js")
+                        this.operandStack.push(createMultiDimensionalArray(dimension));
                         break;
                     }
 
@@ -2844,6 +2865,17 @@ export class Frame {
                         operands: [code.getUint8(), code.getUint8()]
                     });
                     id += 2;
+                    break;
+                }
+
+                // multianewarray
+                case 0xc5: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8(), code.getUint8(), code.getUint8()]
+                    });
+                    id += 3;
                     break;
                 }
 
