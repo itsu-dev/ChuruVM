@@ -22,7 +22,7 @@ export class PrintStream extends FilterOutputStream {
     print(s: string);
 
     print(arg?: any) {
-        this.write(new TextEncoder().encode(String(arg ? arg : "")))
+        this.write(new TextEncoder().encode(String(arg == null ? "null" : arg)))
     }
 
     println();
@@ -32,7 +32,7 @@ export class PrintStream extends FilterOutputStream {
     println(s: string);
 
     println(arg?: any) {
-        this.write(new TextEncoder().encode(String(arg == null ? "" : arg) + "\n"))
+        this.write(new TextEncoder().encode(String(arg == null ? "null" : arg) + "\n"))
     }
 
     toString(): string {

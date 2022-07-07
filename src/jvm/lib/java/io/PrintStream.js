@@ -25,10 +25,10 @@ var PrintStream = /** @class */ (function (_super) {
         return _this;
     }
     PrintStream.prototype.print = function (arg) {
-        this.write(new TextEncoder().encode(String(arg ? arg : "")));
+        this.write(new TextEncoder().encode(String(arg == null ? "null" : arg)));
     };
     PrintStream.prototype.println = function (arg) {
-        this.write(new TextEncoder().encode(String(arg == null ? "" : arg) + "\n"));
+        this.write(new TextEncoder().encode(String(arg == null ? "null" : arg) + "\n"));
     };
     PrintStream.prototype.toString = function () {
         return "java.io.PrintStream";
