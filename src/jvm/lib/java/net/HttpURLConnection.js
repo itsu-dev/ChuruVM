@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -49,8 +50,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import URLConnection from "./URLConnection.js";
-import ByteArrayInputStream from "../io/ByteArrayInputStream.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+var URLConnection_js_1 = require("./URLConnection.js");
+var ByteArrayInputStream_js_1 = require("../io/ByteArrayInputStream.js");
 var HttpURLConnection = /** @class */ (function (_super) {
     __extends(HttpURLConnection, _super);
     function HttpURLConnection(u) {
@@ -82,7 +84,7 @@ var HttpURLConnection = /** @class */ (function (_super) {
                         text = _a.sent();
                         this.responseCode = response.status;
                         this.responseMessage = response.statusText;
-                        this.inputStream = new ByteArrayInputStream(new TextEncoder().encode(text));
+                        this.inputStream = new ByteArrayInputStream_js_1.default(new TextEncoder().encode(text));
                         _a.label = 3;
                     case 3: return [2 /*return*/];
                 }
@@ -131,6 +133,6 @@ var HttpURLConnection = /** @class */ (function (_super) {
     HttpURLConnection.HTTP_USE_PROXY = 305;
     HttpURLConnection.HTTP_VERSION = 505;
     return HttpURLConnection;
-}(URLConnection));
-export default HttpURLConnection;
+}(URLConnection_js_1.default));
+exports.default = HttpURLConnection;
 //# sourceMappingURL=HttpURLConnection.js.map

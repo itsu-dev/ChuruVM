@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,7 +14,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { JavaObject } from "../lang/JavaObject.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OutputStream = void 0;
+var JavaObject_js_1 = require("../lang/JavaObject.js");
 var OutputStream = /** @class */ (function (_super) {
     __extends(OutputStream, _super);
     function OutputStream() {
@@ -32,6 +35,6 @@ var OutputStream = /** @class */ (function (_super) {
         return "java.io.OutputStream";
     };
     return OutputStream;
-}(JavaObject));
-export { OutputStream };
+}(JavaObject_js_1.JavaObject));
+exports.OutputStream = OutputStream;
 //# sourceMappingURL=OutputStream.js.map

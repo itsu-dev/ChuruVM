@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,8 +14,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { JavaObject } from "../../lang/JavaObject.js";
-import JDocument from "../JDocument.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+var JavaObject_js_1 = require("../../lang/JavaObject.js");
+var JDocument_js_1 = require("../JDocument.js");
 var JNode = /** @class */ (function (_super) {
     __extends(JNode, _super);
     function JNode(ref) {
@@ -57,9 +59,9 @@ var JNode = /** @class */ (function (_super) {
         this.ref.nodeValue = value;
     };
     JNode.prototype.getOwnerDocument = function () {
-        return this.ref.ownerDocument == null ? null : JDocument._valueOf(this.ref.ownerDocument);
+        return this.ref.ownerDocument == null ? null : JDocument_js_1.default._valueOf(this.ref.ownerDocument);
     };
     return JNode;
-}(JavaObject));
-export default JNode;
+}(JavaObject_js_1.JavaObject));
+exports.default = JNode;
 //# sourceMappingURL=JNode.js.map

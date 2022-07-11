@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,7 +14,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { Throwable } from "./Throwable.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Error = void 0;
+var Throwable_js_1 = require("./Throwable.js");
 var Error = /** @class */ (function (_super) {
     __extends(Error, _super);
     function Error(message) {
@@ -25,6 +28,6 @@ var Error = /** @class */ (function (_super) {
         return "java.lang.Error: ".concat(this.message);
     };
     return Error;
-}(Throwable));
-export { Error };
+}(Throwable_js_1.Throwable));
+exports.Error = Error;
 //# sourceMappingURL=Error.js.map

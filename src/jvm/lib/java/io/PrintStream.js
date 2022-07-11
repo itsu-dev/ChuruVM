@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,13 +14,15 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { FilterOutputStream } from "./FilterOutputStream.js";
-import { OutputStream } from "./OutputStream.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PrintStream = void 0;
+var FilterOutputStream_js_1 = require("./FilterOutputStream.js");
+var OutputStream_js_1 = require("./OutputStream.js");
 var PrintStream = /** @class */ (function (_super) {
     __extends(PrintStream, _super);
     function PrintStream(o) {
         var _this = _super.call(this) || this;
-        _this.out = new OutputStream();
+        _this.out = new OutputStream_js_1.OutputStream();
         if (!o)
             _this.out = o;
         return _this;
@@ -34,6 +37,6 @@ var PrintStream = /** @class */ (function (_super) {
         return "java.io.PrintStream";
     };
     return PrintStream;
-}(FilterOutputStream));
-export { PrintStream };
+}(FilterOutputStream_js_1.FilterOutputStream));
+exports.PrintStream = PrintStream;
 //# sourceMappingURL=PrintStream.js.map

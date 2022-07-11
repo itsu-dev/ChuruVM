@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,8 +14,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import JNode from "./JNode.js";
-import JDocument from "../JDocument.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+var JNode_js_1 = require("./JNode.js");
+var JDocument_js_1 = require("../JDocument.js");
 var JElement = /** @class */ (function (_super) {
     __extends(JElement, _super);
     function JElement(ref) {
@@ -63,7 +65,7 @@ var JElement = /** @class */ (function (_super) {
         return this._get().namespaceURI;
     };
     JElement.prototype.getOwnerDocument = function () {
-        return this._get().ownerDocument == null ? null : JDocument._valueOf(this._get().ownerDocument);
+        return this._get().ownerDocument == null ? null : JDocument_js_1.default._valueOf(this._get().ownerDocument);
     };
     JElement.prototype.getPrefix = function () {
         return this._get().prefix == null ? null : this._get().prefix;
@@ -141,6 +143,6 @@ var JElement = /** @class */ (function (_super) {
         return this._get().webkitMatchesSelector(selectors);
     };
     return JElement;
-}(JNode));
-export default JElement;
+}(JNode_js_1.default));
+exports.default = JElement;
 //# sourceMappingURL=JElement.js.map

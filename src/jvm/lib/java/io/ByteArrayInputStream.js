@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,7 +14,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import InputStream from "./InputStream.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+var InputStream_js_1 = require("./InputStream.js");
 var ByteArrayInputStream = /** @class */ (function (_super) {
     __extends(ByteArrayInputStream, _super);
     function ByteArrayInputStream(buf, offset, length) {
@@ -67,6 +69,6 @@ var ByteArrayInputStream = /** @class */ (function (_super) {
         return k;
     };
     return ByteArrayInputStream;
-}(InputStream));
-export default ByteArrayInputStream;
+}(InputStream_js_1.default));
+exports.default = ByteArrayInputStream;
 //# sourceMappingURL=ByteArrayInputStream.js.map

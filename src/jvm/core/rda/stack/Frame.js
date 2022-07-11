@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,13 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { CONSTANT_DOUBLE, CONSTANT_FLOAT, CONSTANT_INTEGER, CONSTANT_LONG, CONSTANT_STRING, isConstantFieldRefInfo, readUtf8FromConstantPool } from "../../../models/info/ConstantPoolInfo.js";
-import { AnyVariable, DoubleVariable, FloatVariable, IntVariable, LongVariable } from "../../../models/Variable.js";
-import { NoSuchFieldError } from "../../../lib/java/lang/NoSuchFieldError.js";
-import { ByteBuffer } from "../../../utils/ByteBuffer.js";
-import { System } from "../../../lib/java/lang/System.js";
-import { throwErrorOrException } from "../../../jvm.js";
-import { getConstantPoolInfo, getArgumentsAndReturnType } from "../../cfl/ClassFileLoader.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Frame = void 0;
+var ConstantPoolInfo_js_1 = require("../../../models/info/ConstantPoolInfo.js");
+var Variable_js_1 = require("../../../models/Variable.js");
+var NoSuchFieldError_js_1 = require("../../../lib/java/lang/NoSuchFieldError.js");
+var ByteBuffer_js_1 = require("../../../utils/ByteBuffer.js");
+var System_js_1 = require("../../../lib/java/lang/System.js");
+var jvm_js_1 = require("../../../jvm.js");
+var ClassFileLoader_js_1 = require("../../cfl/ClassFileLoader.js");
 var Frame = /** @class */ (function () {
     function Frame(thread, method, classFile, localSize, constantPool, args) {
         var _this = this;
@@ -52,7 +55,7 @@ var Frame = /** @class */ (function () {
         this.classFile = classFile;
         this.locals = new Array(localSize);
         this.constantPool = constantPool;
-        args.forEach(function (arg) { return _this.locals.push(new IntVariable(arg)); });
+        args.forEach(function (arg) { return _this.locals.push(new Variable_js_1.IntVariable(arg)); });
     }
     Frame.prototype.execute = function () {
         this.executeOpcodes(0);
@@ -260,35 +263,35 @@ var Frame = /** @class */ (function () {
                                     case 2:
                                         indexByte1 = opcode.operands[0];
                                         indexByte2 = opcode.operands[1];
-                                        constantPoolInfo = getConstantPoolInfo(this_1.constantPool, (indexByte1 << 8) | indexByte2);
-                                        if (!constantPoolInfo || !isConstantFieldRefInfo(constantPoolInfo.info)) {
-                                            throwErrorOrException(new NoSuchFieldError());
+                                        constantPoolInfo = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2);
+                                        if (!constantPoolInfo || !(0, ConstantPoolInfo_js_1.isConstantFieldRefInfo)(constantPoolInfo.info)) {
+                                            (0, jvm_js_1.throwErrorOrException)(new NoSuchFieldError_js_1.NoSuchFieldError());
                                             return [2 /*return*/, { value: void 0 }];
                                         }
                                         fieldRef = constantPoolInfo.info;
-                                        classRef = getConstantPoolInfo(this_1.constantPool, fieldRef.classIndex).info;
-                                        fieldNameAndTypeRef = getConstantPoolInfo(this_1.constantPool, fieldRef.nameAndTypeIndex).info;
-                                        return [4 /*yield*/, import("../../../lib/" + readUtf8FromConstantPool(this_1.constantPool, classRef.nameIndex) + ".js")];
+                                        classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.classIndex).info;
+                                        fieldNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.nameAndTypeIndex).info;
+                                        return [4 /*yield*/, Promise.resolve().then(function () { return require("../../../lib/" + (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex) + ".js"); })];
                                     case 3:
                                         module_1 = _g.sent();
-                                        fieldClassFileName = readUtf8FromConstantPool(this_1.constantPool, fieldNameAndTypeRef.nameIndex);
-                                        this_1.operandStack.push(module_1[this_1.getClassName(readUtf8FromConstantPool(this_1.constantPool, classRef.nameIndex))][fieldClassFileName]);
+                                        fieldClassFileName = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, fieldNameAndTypeRef.nameIndex);
+                                        this_1.operandStack.push(module_1[this_1.getClassName((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex))][fieldClassFileName]);
                                         return [3 /*break*/, 179];
                                     case 4:
                                         {
                                             index_1 = opcode.operands[0];
-                                            info = getConstantPoolInfo(this_1.constantPool, index_1).info;
-                                            if (info.tag === CONSTANT_STRING) {
-                                                this_1.operandStack.push(readUtf8FromConstantPool(this_1.constantPool, info.stringIndex));
+                                            info = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, index_1).info;
+                                            if (info.tag === ConstantPoolInfo_js_1.CONSTANT_STRING) {
+                                                this_1.operandStack.push((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, info.stringIndex));
                                             }
-                                            else if (info.tag === CONSTANT_INTEGER) {
-                                                dataView = new ByteBuffer(new ArrayBuffer(32));
+                                            else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_INTEGER) {
+                                                dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(32));
                                                 dataView.setInt32(info.bytes);
                                                 dataView.resetOffset();
                                                 this_1.operandStack.push(dataView.getInt8());
                                             }
-                                            else if (info.tag === CONSTANT_FLOAT) {
-                                                dataView = new ByteBuffer(new ArrayBuffer(32));
+                                            else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_FLOAT) {
+                                                dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(32));
                                                 dataView.setUint32(info.bytes);
                                                 dataView.resetOffset();
                                                 this_1.operandStack.push(dataView.getFloat32());
@@ -300,16 +303,16 @@ var Frame = /** @class */ (function () {
                                         {
                                             indexByte1 = opcode.operands[0];
                                             indexByte2 = opcode.operands[1];
-                                            info = getConstantPoolInfo(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
-                                            if (info.tag === CONSTANT_LONG) {
-                                                dataView = new ByteBuffer(new ArrayBuffer(64));
+                                            info = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                                            if (info.tag === ConstantPoolInfo_js_1.CONSTANT_LONG) {
+                                                dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(64));
                                                 dataView.setUint32(info.highBytes);
                                                 dataView.setUint32(info.lowBytes);
                                                 dataView.resetOffset();
                                                 this_1.operandStack.push((dataView.getUint32() << 32) + dataView.getUint32());
                                             }
-                                            else if (info.tag === CONSTANT_DOUBLE) {
-                                                dataView = new ByteBuffer(new ArrayBuffer(64));
+                                            else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_DOUBLE) {
+                                                dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(64));
                                                 dataView.setUint32(info.highBytes);
                                                 dataView.setUint32(info.lowBytes);
                                                 dataView.resetOffset();
@@ -322,12 +325,12 @@ var Frame = /** @class */ (function () {
                                         {
                                             indexByte1 = opcode.operands[0];
                                             indexByte2 = opcode.operands[1];
-                                            methodRef = getConstantPoolInfo(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
-                                            methodNameAndTypeRef = getConstantPoolInfo(this_1.constantPool, methodRef.nameAndTypeIndex).info;
-                                            clazz = getConstantPoolInfo(this_1.constantPool, methodRef.classIndex).info;
-                                            className = readUtf8FromConstantPool(this_1.constantPool, clazz.nameIndex);
-                                            invokeMethodName = readUtf8FromConstantPool(this_1.constantPool, methodNameAndTypeRef.nameIndex);
-                                            argumentsAndReturnType = getArgumentsAndReturnType(readUtf8FromConstantPool(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
+                                            methodRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                                            methodNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.nameAndTypeIndex).info;
+                                            clazz = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.classIndex).info;
+                                            className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, clazz.nameIndex);
+                                            invokeMethodName = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.nameIndex);
+                                            argumentsAndReturnType = (0, ClassFileLoader_js_1.getArgumentsAndReturnType)((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
                                             methodArgs = [];
                                             for (i_1 = 0; i_1 < argumentsAndReturnType[0].length; i_1++) {
                                                 methodArgs.push(this_1.operandStack.pop());
@@ -605,10 +608,10 @@ var Frame = /** @class */ (function () {
                                         {
                                             index_8 = opcode.operands[0];
                                             if (this_1.locals.length - 1 < index_8) {
-                                                this_1.locals.push(new IntVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.IntVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(index_8, 0, new IntVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(index_8, 0, new Variable_js_1.IntVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -617,10 +620,10 @@ var Frame = /** @class */ (function () {
                                         {
                                             index_9 = opcode.operands[0];
                                             if (this_1.locals.length - 1 < index_9) {
-                                                this_1.locals.push(new LongVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.LongVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(index_9, 0, new LongVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(index_9, 0, new Variable_js_1.LongVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -629,10 +632,10 @@ var Frame = /** @class */ (function () {
                                         {
                                             index_10 = opcode.operands[0];
                                             if (this_1.locals.length - 1 < index_10) {
-                                                this_1.locals.push(new FloatVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(index_10, 0, new FloatVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(index_10, 0, new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -641,10 +644,10 @@ var Frame = /** @class */ (function () {
                                         {
                                             index_11 = opcode.operands[0];
                                             if (this_1.locals.length - 1 < index_11) {
-                                                this_1.locals.push(new DoubleVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(index_11, 0, new DoubleVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(index_11, 0, new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -653,10 +656,10 @@ var Frame = /** @class */ (function () {
                                         {
                                             index_12 = opcode.operands[0];
                                             if (this_1.locals.length - 1 < index_12) {
-                                                this_1.locals.push(new AnyVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(index_12, 0, new AnyVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(index_12, 0, new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -664,10 +667,10 @@ var Frame = /** @class */ (function () {
                                     case 53:
                                         {
                                             if (this_1.locals.length - 1 < 0) {
-                                                this_1.locals.push(new IntVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.IntVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(0, 0, new IntVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(0, 0, new Variable_js_1.IntVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -675,10 +678,10 @@ var Frame = /** @class */ (function () {
                                     case 54:
                                         {
                                             if (this_1.locals.length - 1 < 1) {
-                                                this_1.locals.push(new IntVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.IntVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(1, 0, new IntVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(1, 0, new Variable_js_1.IntVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -686,10 +689,10 @@ var Frame = /** @class */ (function () {
                                     case 55:
                                         {
                                             if (this_1.locals.length - 1 < 2) {
-                                                this_1.locals.push(new IntVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.IntVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(2, 0, new IntVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(2, 0, new Variable_js_1.IntVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -697,10 +700,10 @@ var Frame = /** @class */ (function () {
                                     case 56:
                                         {
                                             if (this_1.locals.length - 1 < 3) {
-                                                this_1.locals.push(new IntVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.IntVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(3, 0, new IntVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(3, 0, new Variable_js_1.IntVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -708,10 +711,10 @@ var Frame = /** @class */ (function () {
                                     case 57:
                                         {
                                             if (this_1.locals.length - 1 < 0) {
-                                                this_1.locals.push(new LongVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.LongVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(0, 0, new LongVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(0, 0, new Variable_js_1.LongVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -719,10 +722,10 @@ var Frame = /** @class */ (function () {
                                     case 58:
                                         {
                                             if (this_1.locals.length - 1 < 1) {
-                                                this_1.locals.push(new LongVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.LongVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(1, 0, new LongVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(1, 0, new Variable_js_1.LongVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -730,10 +733,10 @@ var Frame = /** @class */ (function () {
                                     case 59:
                                         {
                                             if (this_1.locals.length - 1 < 2) {
-                                                this_1.locals.push(new LongVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.LongVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(2, 0, new LongVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(2, 0, new Variable_js_1.LongVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -741,10 +744,10 @@ var Frame = /** @class */ (function () {
                                     case 60:
                                         {
                                             if (this_1.locals.length - 1 < 3) {
-                                                this_1.locals.push(new LongVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.LongVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(3, 0, new LongVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(3, 0, new Variable_js_1.LongVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -752,10 +755,10 @@ var Frame = /** @class */ (function () {
                                     case 61:
                                         {
                                             if (this_1.locals.length - 1 < 0) {
-                                                this_1.locals.push(new FloatVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(0, 0, new FloatVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(0, 0, new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -763,10 +766,10 @@ var Frame = /** @class */ (function () {
                                     case 62:
                                         {
                                             if (this_1.locals.length - 1 < 1) {
-                                                this_1.locals.push(new FloatVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(1, 0, new FloatVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(1, 0, new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -774,10 +777,10 @@ var Frame = /** @class */ (function () {
                                     case 63:
                                         {
                                             if (this_1.locals.length - 1 < 2) {
-                                                this_1.locals.push(new FloatVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(2, 0, new FloatVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(2, 0, new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -785,10 +788,10 @@ var Frame = /** @class */ (function () {
                                     case 64:
                                         {
                                             if (this_1.locals.length - 1 < 3) {
-                                                this_1.locals.push(new FloatVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(3, 0, new FloatVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(3, 0, new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -796,10 +799,10 @@ var Frame = /** @class */ (function () {
                                     case 65:
                                         {
                                             if (this_1.locals.length - 1 < 0) {
-                                                this_1.locals.push(new DoubleVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(0, 0, new DoubleVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(0, 0, new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -807,10 +810,10 @@ var Frame = /** @class */ (function () {
                                     case 66:
                                         {
                                             if (this_1.locals.length - 1 < 1) {
-                                                this_1.locals.push(new DoubleVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(1, 0, new DoubleVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(1, 0, new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -818,10 +821,10 @@ var Frame = /** @class */ (function () {
                                     case 67:
                                         {
                                             if (this_1.locals.length - 1 < 2) {
-                                                this_1.locals.push(new DoubleVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(2, 0, new DoubleVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(2, 0, new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -829,10 +832,10 @@ var Frame = /** @class */ (function () {
                                     case 68:
                                         {
                                             if (this_1.locals.length - 1 < 3) {
-                                                this_1.locals.push(new DoubleVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(3, 0, new DoubleVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(3, 0, new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -840,10 +843,10 @@ var Frame = /** @class */ (function () {
                                     case 69:
                                         {
                                             if (this_1.locals.length - 1 < 0) {
-                                                this_1.locals.push(new AnyVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(0, 0, new AnyVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(0, 0, new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -851,10 +854,10 @@ var Frame = /** @class */ (function () {
                                     case 70:
                                         {
                                             if (this_1.locals.length - 1 < 1) {
-                                                this_1.locals.push(new AnyVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(1, 0, new AnyVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(1, 0, new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -862,10 +865,10 @@ var Frame = /** @class */ (function () {
                                     case 71:
                                         {
                                             if (this_1.locals.length - 1 < 2) {
-                                                this_1.locals.push(new AnyVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(2, 0, new AnyVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(2, 0, new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -873,10 +876,10 @@ var Frame = /** @class */ (function () {
                                     case 72:
                                         {
                                             if (this_1.locals.length - 1 < 3) {
-                                                this_1.locals.push(new AnyVariable(this_1.operandStack.pop()));
+                                                this_1.locals.push(new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
                                             }
                                             else {
-                                                this_1.locals.splice(3, 0, new AnyVariable(this_1.operandStack.pop()));
+                                                this_1.locals.splice(3, 0, new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
                                             }
                                             return [3 /*break*/, 179];
                                         }
@@ -893,8 +896,8 @@ var Frame = /** @class */ (function () {
                                     case 74:
                                         {
                                             data = this_1.operandStack.pop();
-                                            if (data instanceof DoubleVariable || data instanceof LongVariable) {
-                                                System.err.println("Illegal operation: pop with category 2.");
+                                            if (data instanceof Variable_js_1.DoubleVariable || data instanceof Variable_js_1.LongVariable) {
+                                                System_js_1.System.err.println("Illegal operation: pop with category 2.");
                                                 return [2 /*return*/, { value: void 0 }];
                                             }
                                             return [3 /*break*/, 179];
@@ -902,8 +905,8 @@ var Frame = /** @class */ (function () {
                                         _g.label = 75;
                                     case 75:
                                         {
-                                            isCategory1 = function (data) { return data instanceof IntVariable || data instanceof FloatVariable; };
-                                            isCategory2 = function (data) { return data instanceof DoubleVariable || data instanceof LongVariable; };
+                                            isCategory1 = function (data) { return data instanceof Variable_js_1.IntVariable || data instanceof Variable_js_1.FloatVariable; };
+                                            isCategory2 = function (data) { return data instanceof Variable_js_1.DoubleVariable || data instanceof Variable_js_1.LongVariable; };
                                             value1 = this_1.operandStack.pop();
                                             if (isCategory2(value1))
                                                 return [3 /*break*/, 179];
@@ -912,7 +915,7 @@ var Frame = /** @class */ (function () {
                                                 if (isCategory1(value2))
                                                     return [3 /*break*/, 179];
                                                 else {
-                                                    System.err.println("Illegal operation: pop2 with category 1.");
+                                                    System_js_1.System.err.println("Illegal operation: pop2 with category 1.");
                                                     return [2 /*return*/, { value: void 0 }];
                                                 }
                                             }
@@ -1414,9 +1417,9 @@ var Frame = /** @class */ (function () {
                                         {
                                             indexByte1 = opcode.operands[0];
                                             indexByte2 = opcode.operands[1];
-                                            methodRef = getConstantPoolInfo(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
-                                            methodNameAndTypeRef = getConstantPoolInfo(this_1.constantPool, methodRef.nameAndTypeIndex).info;
-                                            argumentsAndReturnType = getArgumentsAndReturnType(readUtf8FromConstantPool(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
+                                            methodRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                                            methodNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.nameAndTypeIndex).info;
+                                            argumentsAndReturnType = (0, ClassFileLoader_js_1.getArgumentsAndReturnType)((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
                                             argumentsCount = argumentsAndReturnType[0].length;
                                             methodArgs = [];
                                             for (i_2 = 0; i_2 < argumentsCount; i_2++) {
@@ -1429,12 +1432,12 @@ var Frame = /** @class */ (function () {
                                     case 161:
                                         indexByte1 = opcode.operands[0];
                                         indexByte2 = opcode.operands[1];
-                                        methodRef = getConstantPoolInfo(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
-                                        methodNameAndTypeRef = getConstantPoolInfo(this_1.constantPool, methodRef.nameAndTypeIndex).info;
-                                        clazz = getConstantPoolInfo(this_1.constantPool, methodRef.classIndex).info;
-                                        className = readUtf8FromConstantPool(this_1.constantPool, clazz.nameIndex);
-                                        invokeMethodName = readUtf8FromConstantPool(this_1.constantPool, methodNameAndTypeRef.nameIndex);
-                                        argumentsAndReturnType = getArgumentsAndReturnType(readUtf8FromConstantPool(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
+                                        methodRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                                        methodNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.nameAndTypeIndex).info;
+                                        clazz = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.classIndex).info;
+                                        className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, clazz.nameIndex);
+                                        invokeMethodName = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.nameIndex);
+                                        argumentsAndReturnType = (0, ClassFileLoader_js_1.getArgumentsAndReturnType)((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
                                         argumentsCount = argumentsAndReturnType[0].length;
                                         methodArgs = [];
                                         for (i_3 = 0; i_3 < argumentsCount; i_3++) {
@@ -1444,7 +1447,7 @@ var Frame = /** @class */ (function () {
                                         _g.label = 162;
                                     case 162:
                                         _g.trys.push([162, 164, , 165]);
-                                        return [4 /*yield*/, import("../../../lib/" + className + ".js")];
+                                        return [4 /*yield*/, Promise.resolve().then(function () { return require("../../../lib/" + className + ".js"); })];
                                     case 163:
                                         module_2 = _g.sent();
                                         this_1.operandStack.push((_f = module_2.default)[invokeMethodName].apply(_f, methodArgs));
@@ -1457,10 +1460,10 @@ var Frame = /** @class */ (function () {
                                     case 166:
                                         indexByte1 = opcode.operands[0];
                                         indexByte2 = opcode.operands[1];
-                                        classRef = getConstantPoolInfo(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
-                                        className = readUtf8FromConstantPool(this_1.constantPool, classRef.nameIndex);
+                                        classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                                        className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex);
                                         module_3 = void 0;
-                                        return [4 /*yield*/, import("../../../lib/" + className + ".js")];
+                                        return [4 /*yield*/, Promise.resolve().then(function () { return require("../../../lib/" + className + ".js"); })];
                                     case 167:
                                         module_3 = _g.sent();
                                         this_1.operandStack.push(module_3.default);
@@ -1524,7 +1527,7 @@ var Frame = /** @class */ (function () {
                                         {
                                             branchByte1 = opcode.operands[0];
                                             branchByte2 = opcode.operands[1];
-                                            ref = getConstantPoolInfo(this_1.constantPool, (branchByte1 << 8) | branchByte2);
+                                            ref = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (branchByte1 << 8) | branchByte2);
                                             // TODO
                                             return [3 /*break*/, 179];
                                         }
@@ -1579,7 +1582,7 @@ var Frame = /** @class */ (function () {
     };
     Frame.prototype.loadOpcodes = function () {
         var _this = this;
-        var codeAttributes = this.method.attributes.filter(function (attribute) { return readUtf8FromConstantPool(_this.constantPool, attribute.attributeNameIndex) === "Code"; });
+        var codeAttributes = this.method.attributes.filter(function (attribute) { return (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(_this.constantPool, attribute.attributeNameIndex) === "Code"; });
         if (!codeAttributes || codeAttributes.length == 0)
             return;
         var codeAttribute = codeAttributes[0];
@@ -2973,5 +2976,5 @@ var Frame = /** @class */ (function () {
     };
     return Frame;
 }());
-export { Frame };
+exports.Frame = Frame;
 //# sourceMappingURL=Frame.js.map

@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,7 +14,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import JElement from "./JElement.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+var JElement_js_1 = require("./JElement.js");
 var JHTMLElement = /** @class */ (function (_super) {
     __extends(JHTMLElement, _super);
     function JHTMLElement(ref) {
@@ -81,7 +83,7 @@ var JHTMLElement = /** @class */ (function (_super) {
         return this._get().offsetLeft;
     };
     JHTMLElement.prototype.getOffsetParent = function () {
-        return this._get().offsetParent == null ? null : JElement._valueOf(this._get().offsetParent);
+        return this._get().offsetParent == null ? null : JElement_js_1.default._valueOf(this._get().offsetParent);
     };
     JHTMLElement.prototype.getOffsetTop = function () {
         return this._get().offsetTop;
@@ -111,6 +113,6 @@ var JHTMLElement = /** @class */ (function (_super) {
         this._get().click();
     };
     return JHTMLElement;
-}(JElement));
-export default JHTMLElement;
+}(JElement_js_1.default));
+exports.default = JHTMLElement;
 //# sourceMappingURL=JHTMLElement.js.map

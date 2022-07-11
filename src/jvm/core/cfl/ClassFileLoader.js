@@ -1,6 +1,9 @@
-import { CONSTANT_CLASS, CONSTANT_DOUBLE, CONSTANT_FIELD_REF, CONSTANT_FLOAT, CONSTANT_INTEGER, CONSTANT_INTERFACE_METHOD_REF, CONSTANT_INVOKE_DYNAMIC, CONSTANT_LONG, CONSTANT_METHOD_HANDLE, CONSTANT_METHOD_REF, CONSTANT_METHOD_TYPE, CONSTANT_NAME_AND_TYPE, CONSTANT_STRING, CONSTANT_UTF8 } from "../../models/info/ConstantPoolInfo.js";
-import { ByteBuffer } from "../../utils/ByteBuffer.js";
-import { readAttributes } from "../../models/info/AttributeInfo.js";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getArgumentsAndReturnType = exports.parseDescriptor = exports.getConstantPoolInfo = void 0;
+var ConstantPoolInfo_js_1 = require("../../models/info/ConstantPoolInfo.js");
+var ByteBuffer_js_1 = require("../../utils/ByteBuffer.js");
+var AttributeInfo_js_1 = require("../../models/info/AttributeInfo.js");
 var ClassFileLoader = /** @class */ (function () {
     function ClassFileLoader() {
     }
@@ -14,63 +17,63 @@ var ClassFileLoader = /** @class */ (function () {
             var tag = buffer.getUint8();
             var info = void 0;
             switch (tag) {
-                case CONSTANT_CLASS:
+                case ConstantPoolInfo_js_1.CONSTANT_CLASS:
                     info = {
                         tag: tag,
                         nameIndex: buffer.getUint16()
                     };
                     break;
-                case CONSTANT_FIELD_REF:
-                case CONSTANT_METHOD_REF:
-                case CONSTANT_INTERFACE_METHOD_REF:
+                case ConstantPoolInfo_js_1.CONSTANT_FIELD_REF:
+                case ConstantPoolInfo_js_1.CONSTANT_METHOD_REF:
+                case ConstantPoolInfo_js_1.CONSTANT_INTERFACE_METHOD_REF:
                     info = {
                         tag: tag,
                         classIndex: buffer.getUint16(),
                         nameAndTypeIndex: buffer.getUint16()
                     };
                     break;
-                case CONSTANT_STRING:
+                case ConstantPoolInfo_js_1.CONSTANT_STRING:
                     info = {
                         tag: tag,
                         stringIndex: buffer.getUint16()
                     };
                     break;
-                case CONSTANT_INTEGER:
+                case ConstantPoolInfo_js_1.CONSTANT_INTEGER:
                     info = {
                         tag: tag,
                         bytes: buffer.getInt32()
                     };
                     break;
-                case CONSTANT_FLOAT:
+                case ConstantPoolInfo_js_1.CONSTANT_FLOAT:
                     info = {
                         tag: tag,
                         bytes: buffer.getUint32()
                     };
                     break;
-                case CONSTANT_LONG:
+                case ConstantPoolInfo_js_1.CONSTANT_LONG:
                     info = {
                         tag: tag,
                         highBytes: buffer.getUint32(),
                         lowBytes: buffer.getUint32()
                     };
                     break;
-                case CONSTANT_DOUBLE:
+                case ConstantPoolInfo_js_1.CONSTANT_DOUBLE:
                     info = {
                         tag: tag,
                         highBytes: buffer.getUint32(),
                         lowBytes: buffer.getUint32()
                     };
                     break;
-                case CONSTANT_NAME_AND_TYPE:
+                case ConstantPoolInfo_js_1.CONSTANT_NAME_AND_TYPE:
                     info = {
                         tag: tag,
                         nameIndex: buffer.getUint16(),
                         descriptorIndex: buffer.getUint16()
                     };
                     break;
-                case CONSTANT_UTF8:
+                case ConstantPoolInfo_js_1.CONSTANT_UTF8:
                     var length_1 = buffer.getUint16();
-                    var utf8Buffer = new ByteBuffer(new ArrayBuffer(length_1));
+                    var utf8Buffer = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(length_1));
                     for (var j = 0; j < length_1; j++) {
                         utf8Buffer.setUint8(buffer.getUint8());
                     }
@@ -80,20 +83,20 @@ var ClassFileLoader = /** @class */ (function () {
                         bytes: utf8Buffer
                     };
                     break;
-                case CONSTANT_METHOD_HANDLE:
+                case ConstantPoolInfo_js_1.CONSTANT_METHOD_HANDLE:
                     info = {
                         tag: tag,
                         referenceKind: buffer.getUint8(),
                         referenceIndex: buffer.getUint16()
                     };
                     break;
-                case CONSTANT_METHOD_TYPE:
+                case ConstantPoolInfo_js_1.CONSTANT_METHOD_TYPE:
                     info = {
                         tag: tag,
                         descriptorIndex: buffer.getUint16()
                     };
                     break;
-                case CONSTANT_INVOKE_DYNAMIC:
+                case ConstantPoolInfo_js_1.CONSTANT_INVOKE_DYNAMIC:
                     info = {
                         tag: tag,
                         bootstrapMethodAttrIndex: buffer.getUint16(),
@@ -106,7 +109,7 @@ var ClassFileLoader = /** @class */ (function () {
                 id: i,
                 info: info
             });
-            if (tag === CONSTANT_LONG || tag === CONSTANT_DOUBLE)
+            if (tag === ConstantPoolInfo_js_1.CONSTANT_LONG || tag === ConstantPoolInfo_js_1.CONSTANT_DOUBLE)
                 i += 1;
         }
         var accessFlags = buffer.getUint16();
@@ -124,7 +127,7 @@ var ClassFileLoader = /** @class */ (function () {
             var nameIndex = buffer.getUint16();
             var descriptorIndex = buffer.getUint16();
             var attributesCount = buffer.getUint16();
-            var attributes = readAttributes(constantPool, attributesCount, buffer);
+            var attributes = (0, AttributeInfo_js_1.readAttributes)(constantPool, attributesCount, buffer);
             fields.push({
                 accessFlags: accessFlags_1,
                 nameIndex: nameIndex,
@@ -140,7 +143,7 @@ var ClassFileLoader = /** @class */ (function () {
             var nameIndex = buffer.getUint16();
             var descriptorIndex = buffer.getUint16();
             var attributeCount = buffer.getUint16();
-            var attributes = readAttributes(constantPool, attributeCount, buffer);
+            var attributes = (0, AttributeInfo_js_1.readAttributes)(constantPool, attributeCount, buffer);
             methods.push({
                 accessFlags: accessFlags_2,
                 nameIndex: nameIndex,
@@ -174,11 +177,12 @@ var ClassFileLoader = /** @class */ (function () {
     };
     return ClassFileLoader;
 }());
-export default ClassFileLoader;
-export var getConstantPoolInfo = function (constantPool, index) {
+exports.default = ClassFileLoader;
+var getConstantPoolInfo = function (constantPool, index) {
     return constantPool.filter(function (constant) { return constant.id === index; })[0];
 };
-export var parseDescriptor = function (descriptor) {
+exports.getConstantPoolInfo = getConstantPoolInfo;
+var parseDescriptor = function (descriptor) {
     var _a;
     var temp = (_a = descriptor.match("(?<=\\()[^\\(\\)]+(?=\\))")) === null || _a === void 0 ? void 0 : _a[0];
     if (temp == null)
@@ -218,8 +222,10 @@ export var parseDescriptor = function (descriptor) {
     });
     return args;
 };
-export var getArgumentsAndReturnType = function (descriptor) {
+exports.parseDescriptor = parseDescriptor;
+var getArgumentsAndReturnType = function (descriptor) {
     var returnTypeSplit = descriptor.split(")");
-    return [parseDescriptor(descriptor), returnTypeSplit[returnTypeSplit.length - 1]];
+    return [(0, exports.parseDescriptor)(descriptor), returnTypeSplit[returnTypeSplit.length - 1]];
 };
+exports.getArgumentsAndReturnType = getArgumentsAndReturnType;
 //# sourceMappingURL=ClassFileLoader.js.map

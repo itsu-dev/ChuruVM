@@ -1,33 +1,37 @@
-import { ByteBuffer } from "../../utils/ByteBuffer.js";
-import { readUtf8FromConstantPool } from "./ConstantPoolInfo.js";
-export var readAttributes = function (constantPool, length, buffer) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.processStackMapAttribute = exports.processLineNumberAttribute = exports.processCodeAttribute = exports.readAttributes = void 0;
+var ByteBuffer_js_1 = require("../../utils/ByteBuffer.js");
+var ConstantPoolInfo_js_1 = require("./ConstantPoolInfo.js");
+var readAttributes = function (constantPool, length, buffer) {
     var result = [];
     for (var j = 0; j < length; j++) {
         var attributeNameIndex = buffer.getUint16();
         var attributeLength = buffer.getUint32();
-        var name_1 = readUtf8FromConstantPool(constantPool, attributeNameIndex);
+        var name_1 = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(constantPool, attributeNameIndex);
         switch (name_1) {
             case "Code": {
-                result.push(processCodeAttribute(constantPool, attributeNameIndex, attributeLength, buffer));
+                result.push((0, exports.processCodeAttribute)(constantPool, attributeNameIndex, attributeLength, buffer));
                 break;
             }
             case "LineNumberTable": {
-                result.push(processLineNumberAttribute(attributeNameIndex, attributeLength, buffer));
+                result.push((0, exports.processLineNumberAttribute)(attributeNameIndex, attributeLength, buffer));
                 break;
             }
             case "StackMapTable": {
-                result.push(processStackMapAttribute(attributeNameIndex, attributeLength, buffer));
+                result.push((0, exports.processStackMapAttribute)(attributeNameIndex, attributeLength, buffer));
                 break;
             }
         }
     }
     return result;
 };
-export var processCodeAttribute = function (constantPool, attributeNameIndex, attributeLength, buffer) {
+exports.readAttributes = readAttributes;
+var processCodeAttribute = function (constantPool, attributeNameIndex, attributeLength, buffer) {
     var maxStack = buffer.getUint16();
     var maxLocals = buffer.getUint16();
     var codeLength = buffer.getUint32();
-    var code = new ByteBuffer(new ArrayBuffer(codeLength));
+    var code = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(codeLength));
     for (var i = 0; i < codeLength; i++) {
         code.setUint8(buffer.getUint8());
     }
@@ -44,7 +48,7 @@ export var processCodeAttribute = function (constantPool, attributeNameIndex, at
     var attributesCount = buffer.getUint16();
     var attributes = [];
     if (attributesCount > 0) {
-        attributes = readAttributes(constantPool, attributesCount, buffer);
+        attributes = (0, exports.readAttributes)(constantPool, attributesCount, buffer);
     }
     return {
         attributeNameIndex: attributeNameIndex,
@@ -60,7 +64,8 @@ export var processCodeAttribute = function (constantPool, attributeNameIndex, at
         attributes: attributes
     };
 };
-export var processLineNumberAttribute = function (attributeNameIndex, attributeLength, buffer) {
+exports.processCodeAttribute = processCodeAttribute;
+var processLineNumberAttribute = function (attributeNameIndex, attributeLength, buffer) {
     var lineNumberTableLength = buffer.getUint16();
     var lineNumberTable = [];
     for (var i = 0; i < lineNumberTableLength; i++) {
@@ -77,7 +82,8 @@ export var processLineNumberAttribute = function (attributeNameIndex, attributeL
         lineNumberTable: lineNumberTable
     };
 };
-export var processStackMapAttribute = function (attributeNameIndex, attributeLength, buffer) {
+exports.processLineNumberAttribute = processLineNumberAttribute;
+var processStackMapAttribute = function (attributeNameIndex, attributeLength, buffer) {
     var numberOfEntries = buffer.getUint16();
     var entries = [];
     var getVerificationTypeInfo = function (tag) {
@@ -208,4 +214,5 @@ export var processStackMapAttribute = function (attributeNameIndex, attributeLen
         entries: entries
     };
 };
+exports.processStackMapAttribute = processStackMapAttribute;
 //# sourceMappingURL=AttributeInfo.js.map

@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Throwable = void 0;
 var Throwable = /** @class */ (function () {
     function Throwable(message) {
         this.message = message ? message : ".js";
@@ -10,5 +13,5 @@ var Throwable = /** @class */ (function () {
     };
     return Throwable;
 }());
-export { Throwable };
+exports.Throwable = Throwable;
 //# sourceMappingURL=Throwable.js.map

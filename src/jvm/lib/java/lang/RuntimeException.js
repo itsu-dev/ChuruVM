@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,7 +14,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import Exception from "./Exception.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Exception_js_1 = require("./Exception.js");
 var RuntimeException = /** @class */ (function (_super) {
     __extends(RuntimeException, _super);
     function RuntimeException(message) {
@@ -25,6 +27,6 @@ var RuntimeException = /** @class */ (function (_super) {
         return "java.lang.RuntimeException: ".concat(this.message);
     };
     return RuntimeException;
-}(Exception));
-export default RuntimeException;
+}(Exception_js_1.default));
+exports.default = RuntimeException;
 //# sourceMappingURL=RuntimeException.js.map

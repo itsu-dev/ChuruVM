@@ -1,4 +1,6 @@
-import Thread from "./stack/Thread.js";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Thread_js_1 = require("./stack/Thread.js");
 var RuntimeDataArea = /** @class */ (function () {
     function RuntimeDataArea() {
         this.threadId = 1;
@@ -8,7 +10,7 @@ var RuntimeDataArea = /** @class */ (function () {
     RuntimeDataArea.prototype.createThread = function (stackSize) {
         var _this = this;
         this.stackArea[this.threadId] = new Promise(function (resolve) {
-            resolve(new Thread(_this, stackSize, _this.threadId));
+            resolve(new Thread_js_1.default(_this, stackSize, _this.threadId));
         });
         this.pcRegisters[this.threadId] = 0;
         this.threadId++;
@@ -28,5 +30,5 @@ var RuntimeDataArea = /** @class */ (function () {
     };
     return RuntimeDataArea;
 }());
-export default RuntimeDataArea;
+exports.default = RuntimeDataArea;
 //# sourceMappingURL=RuntimeDataArea.js.map

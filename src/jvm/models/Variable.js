@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PrimitiveArrayVariable = exports.AnyVariable = exports.DoubleVariable = exports.FloatVariable = exports.LongVariable = exports.IntVariable = void 0;
 var IntVariable = /** @class */ (function () {
     function IntVariable(value) {
         this.value = value;
@@ -13,7 +16,7 @@ var IntVariable = /** @class */ (function () {
     };
     return IntVariable;
 }());
-export { IntVariable };
+exports.IntVariable = IntVariable;
 var LongVariable = /** @class */ (function () {
     function LongVariable(value) {
         this.value = value;
@@ -29,7 +32,7 @@ var LongVariable = /** @class */ (function () {
     };
     return LongVariable;
 }());
-export { LongVariable };
+exports.LongVariable = LongVariable;
 var FloatVariable = /** @class */ (function () {
     function FloatVariable(value) {
         this.value = value;
@@ -45,7 +48,7 @@ var FloatVariable = /** @class */ (function () {
     };
     return FloatVariable;
 }());
-export { FloatVariable };
+exports.FloatVariable = FloatVariable;
 var DoubleVariable = /** @class */ (function () {
     function DoubleVariable(value) {
         this.value = value;
@@ -61,7 +64,7 @@ var DoubleVariable = /** @class */ (function () {
     };
     return DoubleVariable;
 }());
-export { DoubleVariable };
+exports.DoubleVariable = DoubleVariable;
 var AnyVariable = /** @class */ (function () {
     function AnyVariable(value) {
         this.value = value;
@@ -77,7 +80,7 @@ var AnyVariable = /** @class */ (function () {
     };
     return AnyVariable;
 }());
-export { AnyVariable };
+exports.AnyVariable = AnyVariable;
 var PrimitiveArrayVariable = /** @class */ (function () {
     function PrimitiveArrayVariable(type, value) {
         this.type = type;
@@ -94,5 +97,5 @@ var PrimitiveArrayVariable = /** @class */ (function () {
     };
     return PrimitiveArrayVariable;
 }());
-export { PrimitiveArrayVariable };
+exports.PrimitiveArrayVariable = PrimitiveArrayVariable;
 //# sourceMappingURL=Variable.js.map

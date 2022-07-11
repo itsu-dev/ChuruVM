@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,7 +14,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { LinkageError } from "./LinkageError.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NoSuchFieldError = void 0;
+var LinkageError_js_1 = require("./LinkageError.js");
 var NoSuchFieldError = /** @class */ (function (_super) {
     __extends(NoSuchFieldError, _super);
     function NoSuchFieldError(message) {
@@ -25,6 +28,6 @@ var NoSuchFieldError = /** @class */ (function (_super) {
         return "java.lang.NoSuchFieldError: ".concat(this.message);
     };
     return NoSuchFieldError;
-}(LinkageError));
-export { NoSuchFieldError };
+}(LinkageError_js_1.LinkageError));
+exports.NoSuchFieldError = NoSuchFieldError;
 //# sourceMappingURL=NoSuchFieldError.js.map

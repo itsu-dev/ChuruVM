@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,13 +14,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { JavaObject } from "../lang/JavaObject.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+var JavaObject_js_1 = require("../lang/JavaObject.js");
 var URLStreamHandler = /** @class */ (function (_super) {
     __extends(URLStreamHandler, _super);
     function URLStreamHandler() {
         return _super.call(this) || this;
     }
     return URLStreamHandler;
-}(JavaObject));
-export default URLStreamHandler;
+}(JavaObject_js_1.JavaObject));
+exports.default = URLStreamHandler;
 //# sourceMappingURL=URLStreamHandler.js.map

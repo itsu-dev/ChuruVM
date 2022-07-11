@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ByteBuffer = void 0;
 var ByteBuffer = /** @class */ (function () {
     function ByteBuffer(array) {
         this.offset = 0;
@@ -88,5 +91,5 @@ var ByteBuffer = /** @class */ (function () {
     };
     return ByteBuffer;
 }());
-export { ByteBuffer };
+exports.ByteBuffer = ByteBuffer;
 //# sourceMappingURL=ByteBuffer.js.map

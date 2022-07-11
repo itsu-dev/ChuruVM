@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,7 +14,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import JNode from "./JNode.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+var JNode_js_1 = require("./JNode.js");
 var JChildNode = /** @class */ (function (_super) {
     __extends(JChildNode, _super);
     function JChildNode(ref) {
@@ -23,6 +25,6 @@ var JChildNode = /** @class */ (function (_super) {
         return new JChildNode(ref);
     };
     return JChildNode;
-}(JNode));
-export default JChildNode;
+}(JNode_js_1.default));
+exports.default = JChildNode;
 //# sourceMappingURL=JChildNode.js.map

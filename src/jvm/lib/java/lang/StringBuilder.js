@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,7 +14,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { JavaObject } from "./JavaObject.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StringBuilder = void 0;
+var JavaObject_js_1 = require("./JavaObject.js");
 var StringBuilder = /** @class */ (function (_super) {
     __extends(StringBuilder, _super);
     function StringBuilder() {
@@ -29,6 +32,6 @@ var StringBuilder = /** @class */ (function (_super) {
         return this.value;
     };
     return StringBuilder;
-}(JavaObject));
-export { StringBuilder };
+}(JavaObject_js_1.JavaObject));
+exports.StringBuilder = StringBuilder;
 //# sourceMappingURL=StringBuilder.js.map

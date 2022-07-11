@@ -1,58 +1,68 @@
-import { getConstantPoolInfo } from "../../core/cfl/ClassFileLoader.js";
-export var CONSTANT_CLASS = 7;
-export var CONSTANT_FIELD_REF = 9;
-export var CONSTANT_METHOD_REF = 10;
-export var CONSTANT_INTERFACE_METHOD_REF = 11;
-export var CONSTANT_STRING = 8;
-export var CONSTANT_INTEGER = 3;
-export var CONSTANT_FLOAT = 4;
-export var CONSTANT_LONG = 5;
-export var CONSTANT_DOUBLE = 6;
-export var CONSTANT_NAME_AND_TYPE = 12;
-export var CONSTANT_UTF8 = 1;
-export var CONSTANT_METHOD_HANDLE = 15;
-export var CONSTANT_METHOD_TYPE = 16;
-export var CONSTANT_INVOKE_DYNAMIC = 18;
-export var isConstantFieldRefInfo = function (arg) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.readUtf8FromConstantPool = exports.isConstantDoubleInfo = exports.isConstantLongInfo = exports.isConstantFloatInfo = exports.isConstantIntegerInfo = exports.isConstantStringInfo = exports.isConstantFieldRefInfo = exports.CONSTANT_INVOKE_DYNAMIC = exports.CONSTANT_METHOD_TYPE = exports.CONSTANT_METHOD_HANDLE = exports.CONSTANT_UTF8 = exports.CONSTANT_NAME_AND_TYPE = exports.CONSTANT_DOUBLE = exports.CONSTANT_LONG = exports.CONSTANT_FLOAT = exports.CONSTANT_INTEGER = exports.CONSTANT_STRING = exports.CONSTANT_INTERFACE_METHOD_REF = exports.CONSTANT_METHOD_REF = exports.CONSTANT_FIELD_REF = exports.CONSTANT_CLASS = void 0;
+var ClassFileLoader_js_1 = require("../../core/cfl/ClassFileLoader.js");
+exports.CONSTANT_CLASS = 7;
+exports.CONSTANT_FIELD_REF = 9;
+exports.CONSTANT_METHOD_REF = 10;
+exports.CONSTANT_INTERFACE_METHOD_REF = 11;
+exports.CONSTANT_STRING = 8;
+exports.CONSTANT_INTEGER = 3;
+exports.CONSTANT_FLOAT = 4;
+exports.CONSTANT_LONG = 5;
+exports.CONSTANT_DOUBLE = 6;
+exports.CONSTANT_NAME_AND_TYPE = 12;
+exports.CONSTANT_UTF8 = 1;
+exports.CONSTANT_METHOD_HANDLE = 15;
+exports.CONSTANT_METHOD_TYPE = 16;
+exports.CONSTANT_INVOKE_DYNAMIC = 18;
+var isConstantFieldRefInfo = function (arg) {
     return typeof arg === "object" &&
         arg !== null &&
         typeof arg.tag === "number" &&
         typeof arg.classIndex === "number" &&
         typeof arg.nameAndTypeIndex === "number";
 };
-export var isConstantStringInfo = function (arg) {
+exports.isConstantFieldRefInfo = isConstantFieldRefInfo;
+var isConstantStringInfo = function (arg) {
     return typeof arg === "object" &&
         arg !== null &&
         typeof arg.tag === "number" &&
         typeof arg.stringIndex === "number";
 };
-export var isConstantIntegerInfo = function (arg) {
+exports.isConstantStringInfo = isConstantStringInfo;
+var isConstantIntegerInfo = function (arg) {
     return typeof arg === "object" &&
         arg !== null &&
         typeof arg.tag === "number" &&
         typeof arg.bytes === "number";
 };
-export var isConstantFloatInfo = function (arg) {
+exports.isConstantIntegerInfo = isConstantIntegerInfo;
+var isConstantFloatInfo = function (arg) {
     return typeof arg === "object" &&
         arg !== null &&
         typeof arg.tag === "number" &&
         typeof arg.bytes === "number";
 };
-export var isConstantLongInfo = function (arg) {
+exports.isConstantFloatInfo = isConstantFloatInfo;
+var isConstantLongInfo = function (arg) {
     return typeof arg === "object" &&
         arg !== null &&
         typeof arg.tag === "number" &&
         typeof arg.highBytes === "number" &&
         typeof arg.lowBytes === "number";
 };
-export var isConstantDoubleInfo = function (arg) {
+exports.isConstantLongInfo = isConstantLongInfo;
+var isConstantDoubleInfo = function (arg) {
     return typeof arg === "object" &&
         arg !== null &&
         typeof arg.tag === "number" &&
         typeof arg.highBytes === "number" &&
         typeof arg.lowBytes === "number";
 };
-export var readUtf8FromConstantPool = function (constantPool, index) {
-    return new TextDecoder("utf-8").decode(getConstantPoolInfo(constantPool, index).info.bytes.view);
+exports.isConstantDoubleInfo = isConstantDoubleInfo;
+var readUtf8FromConstantPool = function (constantPool, index) {
+    return new TextDecoder("utf-8").decode((0, ClassFileLoader_js_1.getConstantPoolInfo)(constantPool, index).info.bytes.view);
 };
+exports.readUtf8FromConstantPool = readUtf8FromConstantPool;
 //# sourceMappingURL=ConstantPoolInfo.js.map
