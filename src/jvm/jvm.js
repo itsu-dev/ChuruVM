@@ -35,14 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.throwErrorOrException = exports.JVM = void 0;
 var ByteBuffer_js_1 = require("./utils/ByteBuffer.js");
-var RuntimeDataArea_js_1 = require("./core/rda/RuntimeDataArea.js");
-var ClassFileLoader_js_1 = require("./core/cfl/ClassFileLoader.js");
+var RuntimeDataArea_js_1 = __importDefault(require("./core/rda/RuntimeDataArea.js"));
+var ClassFileLoader_js_1 = __importDefault(require("./core/cfl/ClassFileLoader.js"));
 var fflate_1 = require("fflate");
-// import node_zip from "node-zip";
-// import AdmZip from "adm-zip";
 var JVM = /** @class */ (function () {
     function JVM(array, jvmArgs, args) {
         this.buffer = new ByteBuffer_js_1.ByteBuffer(array);
@@ -51,45 +52,62 @@ var JVM = /** @class */ (function () {
         this.runtimeDataArea = new RuntimeDataArea_js_1.default();
     }
     JVM.prototype.load = function () {
-        if (!this.buffer) {
-            console.error("buffer must not be undefined!");
-            return;
-        }
-        if (this.isClassFile()) {
-            this.processClassFile();
-        }
-        else {
-            this.processJarFile();
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var classFile;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.buffer) {
+                            console.error("buffer must not be undefined!");
+                            return [2 /*return*/];
+                        }
+                        if (!!this.isClassFile()) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.processJarFile()];
+                    case 1:
+                        _a.sent();
+                        _a.label = 2;
+                    case 2:
+                        classFile = ClassFileLoader_js_1.default.loadClassFile(this.buffer);
+                        console.log(classFile);
+                        this.runtimeDataArea
+                            .createThread(this.jvmArgs["Xss"])
+                            .then(function (thread) { return thread.invokeMethod("main", classFile, _this.args); });
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     JVM.prototype.isClassFile = function () {
         var magic = this.buffer.getUint32();
         this.buffer.offset = 0;
         return magic == 0xCAFEBABE;
     };
-    JVM.prototype.processClassFile = function () {
-        var _this = this;
-        var classFile = ClassFileLoader_js_1.default.loadClassFile(this.buffer);
-        console.log(classFile);
-        this.runtimeDataArea
-            .createThread(this.jvmArgs["Xss"])
-            .then(function (thread) { return thread.invokeMethod("main", classFile, _this.args); });
-    };
     JVM.prototype.processJarFile = function () {
-        var _this = this;
-        this.buffer.offset = 0;
-        (function () { return __awaiter(_this, void 0, void 0, function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, (0, fflate_1.unzip)(new Uint8Array(this.buffer.view.buffer), (function (err, data) {
-                            console.log(data);
-                        }))];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+                this.buffer.offset = 0;
+                (0, fflate_1.unzip)(new Uint8Array(this.buffer.view.buffer), (function (err, data) {
+                    var manifest = _this.loadManifest(data);
+                    console.log(manifest);
+                    var mainClass = manifest["Main-Class"];
+                    _this.buffer = new ByteBuffer_js_1.ByteBuffer(data[mainClass.replaceAll(".", "/") + ".class"].buffer);
+                }));
+                return [2 /*return*/];
             });
-        }); })();
+        });
+    };
+    JVM.prototype.loadManifest = function (data) {
+        var manifest = new TextDecoder().decode(data["META-INF/MANIFEST.MF"]);
+        var manifestData = {};
+        for (var _i = 0, _a = manifest.split("\r\n"); _i < _a.length; _i++) {
+            var line = _a[_i];
+            var _b = line.split(": "), key = _b[0], value = _b[1];
+            if (!(value == null))
+                manifestData[key] = value;
+        }
+        return manifestData;
     };
     return JVM;
 }());

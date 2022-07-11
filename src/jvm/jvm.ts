@@ -2,9 +2,7 @@ import {ByteBuffer} from "./utils/ByteBuffer.js";
 import {Throwable} from "./lib/java/lang/Throwable.js";
 import RuntimeDataArea from "./core/rda/RuntimeDataArea.js";
 import ClassFileLoader from "./core/cfl/ClassFileLoader.js";
-import {unzip} from "fflate";
-// import node_zip from "node-zip";
-// import AdmZip from "adm-zip";
+import {unzip, Unzipped} from "fflate";
 
 export class JVM {
 
@@ -20,17 +18,21 @@ export class JVM {
         this.runtimeDataArea = new RuntimeDataArea();
     }
 
-    load() {
+    async load() {
         if (!this.buffer) {
             console.error("buffer must not be undefined!");
             return;
         }
 
-        if (this.isClassFile()) {
-            this.processClassFile();
-        } else {
-            this.processJarFile();
+        if (!this.isClassFile()) {
+            await this.processJarFile();
         }
+
+        const classFile = ClassFileLoader.loadClassFile(this.buffer);
+        console.log(classFile);
+        this.runtimeDataArea
+            .createThread(this.jvmArgs["Xss"])
+            .then(thread => thread.invokeMethod("main", classFile, this.args));
 
     }
 
@@ -40,21 +42,24 @@ export class JVM {
         return magic == 0xCAFEBABE;
     }
 
-    processClassFile() {
-        const classFile = ClassFileLoader.loadClassFile(this.buffer);
-        console.log(classFile);
-        this.runtimeDataArea
-            .createThread(this.jvmArgs["Xss"])
-            .then(thread => thread.invokeMethod("main", classFile, this.args));
+    async processJarFile() {
+        this.buffer.offset = 0;
+        unzip(new Uint8Array(this.buffer.view.buffer), ((err, data) => {
+            let manifest = this.loadManifest(data);
+            console.log(manifest);
+            let mainClass = manifest["Main-Class"];
+            this.buffer = new ByteBuffer(data[mainClass.replaceAll(".", "/") + ".class"].buffer);
+        }));
     }
 
-    processJarFile() {
-        this.buffer.offset = 0;
-        (async () => {
-            await unzip(new Uint8Array(this.buffer.view.buffer), ((err, data) => {
-                console.log(data);
-            }));
-        })();
+    loadManifest(data: Unzipped) {
+        let manifest = new TextDecoder().decode(data["META-INF/MANIFEST.MF"]);
+        let manifestData = {};
+        for (const line of manifest.split("\r\n")) {
+            let [key, value] = line.split(": ");
+            if (!(value == null)) manifestData[key] = value;
+        }
+        return manifestData;
     }
 
 }
