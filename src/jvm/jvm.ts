@@ -24,6 +24,9 @@ export class JVM {
         }
 
         const classFile = ClassFileLoader.loadClassFile(this.buffer);
+
+        console.log(classFile)
+
         this.runtimeDataArea
             .createThread(this.jvmArgs["Xss"])
             .then(thread => thread.invokeMethod("main", classFile, this.args));

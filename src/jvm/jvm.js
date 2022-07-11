@@ -15,6 +15,7 @@ var JVM = /** @class */ (function () {
             return;
         }
         var classFile = ClassFileLoader.loadClassFile(this.buffer);
+        console.log(classFile);
         this.runtimeDataArea
             .createThread(this.jvmArgs["Xss"])
             .then(function (thread) { return thread.invokeMethod("main", classFile, _this.args); });
