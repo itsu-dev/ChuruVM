@@ -22,7 +22,7 @@ var NoSuchFieldError = /** @class */ (function (_super) {
         return _this;
     }
     NoSuchFieldError.prototype.toString = function () {
-        return "java.lang.NoSuchFieldError: " + this.message;
+        return "java.lang.NoSuchFieldError: ".concat(this.message);
     };
     return NoSuchFieldError;
 }(LinkageError));

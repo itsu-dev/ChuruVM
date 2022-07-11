@@ -6,7 +6,7 @@ var Throwable = /** @class */ (function () {
         console.error(toString());
     };
     Throwable.prototype.toString = function () {
-        return "java.lang.Throwable: " + this.message;
+        return "java.lang.Throwable: ".concat(this.message);
     };
     return Throwable;
 }());

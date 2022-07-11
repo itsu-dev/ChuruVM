@@ -22,7 +22,7 @@ var Exception = /** @class */ (function (_super) {
         return _this;
     }
     Exception.prototype.toString = function () {
-        return "java.lang.Exception: " + this.message;
+        return "java.lang.Exception: ".concat(this.message);
     };
     return Exception;
 }(Throwable));

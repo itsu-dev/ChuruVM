@@ -69,7 +69,7 @@ var Frame = /** @class */ (function () {
                         }
                         index = this.getOpcodeIndexById(id);
                         _loop_1 = function (i) {
-                            var _b, indexByte1, indexByte2, constantPoolInfo, fieldRef, classRef, fieldNameAndTypeRef, module, fieldClassFileName, index_1, info, dataView, dataView, indexByte1, indexByte2, info, dataView, dataView, indexByte1, indexByte2, methodRef, methodNameAndTypeRef, clazz, className, invokeMethodName, argumentsAndReturnType, methodArgs, i_1, result, data, index_2, index_3, index_4, index_5, index_6, index_7, array, index_8, index_9, index_10, index_11, index_12, value, index_13, array, data, isCategory1, isCategory2, value1, value2, original, copied, copied2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, index_14, vConst, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, indexByte1, indexByte2, methodRef, methodNameAndTypeRef, argumentsAndReturnType, argumentsCount, methodArgs, i_2, indexByte1, indexByte2, methodRef, methodNameAndTypeRef, clazz, className, invokeMethodName, argumentsAndReturnType, argumentsCount, methodArgs, i_3, module, e_1, indexByte1, indexByte2, classRef, className, module, type, count, array, branchByte1, branchByte2, count, branchByte1, branchByte2, dimension, createMultiDimensionalArray_1, branchByte1, branchByte2, ref, branchByte1, branchByte2, value, branchByte1, branchByte2, value;
+                            var _b, indexByte1, indexByte2, constantPoolInfo, fieldRef, classRef, fieldNameAndTypeRef, module_1, fieldClassFileName, index_1, info, dataView, dataView, indexByte1, indexByte2, info, dataView, dataView, indexByte1, indexByte2, methodRef, methodNameAndTypeRef, clazz, className, invokeMethodName, argumentsAndReturnType, methodArgs, i_1, result, data, index_2, index_3, index_4, index_5, index_6, index_7, array, index_8, index_9, index_10, index_11, index_12, value, index_13, array, data, isCategory1, isCategory2, value1, value2, original, copied, copied2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, index_14, vConst, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, indexByte1, indexByte2, methodRef, methodNameAndTypeRef, argumentsAndReturnType, argumentsCount, methodArgs, i_2, indexByte1, indexByte2, methodRef, methodNameAndTypeRef, clazz, className, invokeMethodName, argumentsAndReturnType, argumentsCount, methodArgs, i_3, module_2, e_1, indexByte1, indexByte2, classRef, className, module_3, type, count, array, branchByte1, branchByte2, count, branchByte1, branchByte2, dimension, createMultiDimensionalArray_1, branchByte1, branchByte2, ref, branchByte1, branchByte2, value, branchByte1, branchByte2, value;
                             var _c, _d, _e, _f;
                             return __generator(this, function (_g) {
                                 switch (_g.label) {
@@ -270,9 +270,9 @@ var Frame = /** @class */ (function () {
                                         fieldNameAndTypeRef = getConstantPoolInfo(this_1.constantPool, fieldRef.nameAndTypeIndex).info;
                                         return [4 /*yield*/, import("../../../lib/" + readUtf8FromConstantPool(this_1.constantPool, classRef.nameIndex) + ".js")];
                                     case 3:
-                                        module = _g.sent();
+                                        module_1 = _g.sent();
                                         fieldClassFileName = readUtf8FromConstantPool(this_1.constantPool, fieldNameAndTypeRef.nameIndex);
-                                        this_1.operandStack.push(module[this_1.getClassName(readUtf8FromConstantPool(this_1.constantPool, classRef.nameIndex))][fieldClassFileName]);
+                                        this_1.operandStack.push(module_1[this_1.getClassName(readUtf8FromConstantPool(this_1.constantPool, classRef.nameIndex))][fieldClassFileName]);
                                         return [3 /*break*/, 179];
                                     case 4:
                                         {
@@ -1440,14 +1440,14 @@ var Frame = /** @class */ (function () {
                                         for (i_3 = 0; i_3 < argumentsCount; i_3++) {
                                             methodArgs.push(this_1.operandStack.pop());
                                         }
-                                        module = void 0;
+                                        module_2 = void 0;
                                         _g.label = 162;
                                     case 162:
                                         _g.trys.push([162, 164, , 165]);
                                         return [4 /*yield*/, import("../../../lib/" + className + ".js")];
                                     case 163:
-                                        module = _g.sent();
-                                        this_1.operandStack.push((_f = module.default)[invokeMethodName].apply(_f, methodArgs));
+                                        module_2 = _g.sent();
+                                        this_1.operandStack.push((_f = module_2.default)[invokeMethodName].apply(_f, methodArgs));
                                         return [3 /*break*/, 165];
                                     case 164:
                                         e_1 = _g.sent();
@@ -1459,11 +1459,11 @@ var Frame = /** @class */ (function () {
                                         indexByte2 = opcode.operands[1];
                                         classRef = getConstantPoolInfo(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
                                         className = readUtf8FromConstantPool(this_1.constantPool, classRef.nameIndex);
-                                        module = void 0;
+                                        module_3 = void 0;
                                         return [4 /*yield*/, import("../../../lib/" + className + ".js")];
                                     case 167:
-                                        module = _g.sent();
-                                        this_1.operandStack.push(module.default);
+                                        module_3 = _g.sent();
+                                        this_1.operandStack.push(module_3.default);
                                         return [3 /*break*/, 179];
                                     case 168:
                                         {

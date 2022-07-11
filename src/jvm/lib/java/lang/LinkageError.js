@@ -22,7 +22,7 @@ var LinkageError = /** @class */ (function (_super) {
         return _this;
     }
     LinkageError.prototype.toString = function () {
-        return "java.lang.LinkageError: " + this.message;
+        return "java.lang.LinkageError: ".concat(this.message);
     };
     return LinkageError;
 }(Error));

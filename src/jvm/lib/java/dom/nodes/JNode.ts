@@ -32,7 +32,8 @@ export default class JNode extends JavaObject {
     }
 
     getNamespaceURI(): string | null {
-        return this.ref.namespaceURI;
+        // TODO return this.ref.namespaceURI;
+        return "";
     }
 
     getNextSibling(): JChildNode | null {

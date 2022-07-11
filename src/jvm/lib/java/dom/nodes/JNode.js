@@ -38,7 +38,8 @@ var JNode = /** @class */ (function (_super) {
         return this.ref.lastChild == null ? null : JNode._valueOf(this.ref.lastChild);
     };
     JNode.prototype.getNamespaceURI = function () {
-        return this.ref.namespaceURI;
+        // TODO return this.ref.namespaceURI;
+        return "";
     };
     JNode.prototype.getNextSibling = function () {
         return this.ref.nextSibling == null ? null : JNode._valueOf(this.ref.nextSibling);

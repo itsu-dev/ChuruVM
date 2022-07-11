@@ -134,7 +134,7 @@ export default class JElement extends JNode implements JInnerHTML {
     }
 
     msGetRegionContent(): any {
-        return this._get().msGetRegionContent();
+        // TODO return this._get().msGetRegionContent();
     }
 
     releasePointerCapture(pointerId: number) {

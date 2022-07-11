@@ -22,7 +22,7 @@ var RuntimeException = /** @class */ (function (_super) {
         return _this;
     }
     RuntimeException.prototype.toString = function () {
-        return "java.lang.RuntimeException: " + this.message;
+        return "java.lang.RuntimeException: ".concat(this.message);
     };
     return RuntimeException;
 }(Exception));

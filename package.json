@@ -1,0 +1,37 @@
+{
+  "name": "jvm-on-typescript",
+  "version": "1.0.0",
+  "description": "JVM on TypeScript",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "ts-node src/main.ts",
+    "dev:watch": "ts-node-dev --respawn src/main.ts",
+    "clean": "rimraf dist/",
+    "tsc": "tsc",
+    "build": "webpack",
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itsu-dev/jvm-on-typescript.git"
+  },
+  "author": "itsu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/itsu-dev/jvm-on-typescript/issues"
+  },
+  "homepage": "https://github.com/itsu-dev/jvm-on-typescript#readme",
+  "devDependencies": {
+    "@types/node": "^14.18.21",
+    "npm-run-all": "^4.1.5",
+    "ts-loader": "^9.3.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.7.4",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "dependencies": {
+    "ts-node": "^10.8.2"
+  }
+}

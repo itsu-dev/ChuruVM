@@ -22,7 +22,7 @@ var IllegalStateException = /** @class */ (function (_super) {
         return _this;
     }
     IllegalStateException.prototype.toString = function () {
-        return "java.lang.IllegalStateException: " + this.message;
+        return "java.lang.IllegalStateException: ".concat(this.message);
     };
     return IllegalStateException;
 }(RuntimeException));

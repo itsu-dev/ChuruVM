@@ -114,7 +114,7 @@ var JElement = /** @class */ (function (_super) {
         return this._get().matches(selectors);
     };
     JElement.prototype.msGetRegionContent = function () {
-        return this._get().msGetRegionContent();
+        // TODO return this._get().msGetRegionContent();
     };
     JElement.prototype.releasePointerCapture = function (pointerId) {
         this._get().releasePointerCapture(pointerId);

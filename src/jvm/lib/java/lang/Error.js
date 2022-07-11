@@ -22,7 +22,7 @@ var Error = /** @class */ (function (_super) {
         return _this;
     }
     Error.prototype.toString = function () {
-        return "java.lang.Error: " + this.message;
+        return "java.lang.Error: ".concat(this.message);
     };
     return Error;
 }(Throwable));
