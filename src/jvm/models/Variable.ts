@@ -114,11 +114,13 @@ export class AnyVariable implements Variable {
 
 }
 
-export class ArrayVariable implements Variable {
+export class PrimitiveArrayVariable implements Variable {
 
+    type: number;
     value: Array<any>;
 
-    constructor(value: Array<any>) {
+    constructor(type: number, value: Array<any>) {
+        this.type = type;
         this.value = value;
     }
 

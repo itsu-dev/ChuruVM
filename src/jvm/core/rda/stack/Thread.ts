@@ -3,7 +3,7 @@ import {throwErrorOrException} from "../../../jvm.js";
 import {ConstantPoolInfo, readUtf8FromConstantPool} from "../../../models/info/ConstantPoolInfo.js";
 import {MethodInfo} from "../../../models/info/MethodInfo.js";
 import {CodeAttribute} from "../../../models/info/AttributeInfo.js";
-import {ArrayVariable} from "../../../models/Variable.js";
+import {PrimitiveArrayVariable} from "../../../models/Variable.js";
 import {ClassFile} from "../../cfl/ClassFile.js";
 import {System} from "../../../lib/java/lang/System.js";
 import RuntimeDataArea from "../RuntimeDataArea.js";
@@ -29,7 +29,7 @@ export default class Thread {
 
     invokeMethod(methodName: string, classFile: ClassFile, args: Array<any>) {
         const constantPool = classFile.constantPool;
-        const method = classFile.methods.filter(value => readUtf8FromConstantPool(constantPool, value.nameIndex) === methodName)[0]
+        const method = classFile.methods.filter(value => readUtf8FromConstantPool(constantPool, value.nameIndex) === methodName)[0];
         const codeAttributes =
             method.attributes.filter(attribute => readUtf8FromConstantPool(constantPool, attribute.attributeNameIndex) === "Code");
         if (!codeAttributes || codeAttributes.length == 0) return;

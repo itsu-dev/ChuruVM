@@ -78,20 +78,21 @@ var AnyVariable = /** @class */ (function () {
     return AnyVariable;
 }());
 export { AnyVariable };
-var ArrayVariable = /** @class */ (function () {
-    function ArrayVariable(value) {
+var PrimitiveArrayVariable = /** @class */ (function () {
+    function PrimitiveArrayVariable(type, value) {
+        this.type = type;
         this.value = value;
     }
-    ArrayVariable.prototype.setValue = function (value) {
+    PrimitiveArrayVariable.prototype.setValue = function (value) {
         this.value = value;
     };
-    ArrayVariable.prototype.getValue = function () {
+    PrimitiveArrayVariable.prototype.getValue = function () {
         return this.value;
     };
-    ArrayVariable.prototype.getCategory = function () {
+    PrimitiveArrayVariable.prototype.getCategory = function () {
         return 0;
     };
-    return ArrayVariable;
+    return PrimitiveArrayVariable;
 }());
-export { ArrayVariable };
+export { PrimitiveArrayVariable };
 //# sourceMappingURL=Variable.js.map
