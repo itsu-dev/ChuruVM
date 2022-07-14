@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processStackMapAttribute = exports.processLineNumberAttribute = exports.processCodeAttribute = exports.readAttributes = void 0;
+exports.processLocalVariableAttribute = exports.processStackMapAttribute = exports.processLineNumberAttribute = exports.processCodeAttribute = exports.readAttributes = void 0;
 var ByteBuffer_js_1 = require("../../utils/ByteBuffer.js");
 var ConstantPoolInfo_js_1 = require("./ConstantPoolInfo.js");
 var readAttributes = function (constantPool, length, buffer) {
@@ -20,6 +20,10 @@ var readAttributes = function (constantPool, length, buffer) {
             }
             case "StackMapTable": {
                 result.push((0, exports.processStackMapAttribute)(attributeNameIndex, attributeLength, buffer));
+                break;
+            }
+            case "LocalVariableTable": {
+                result.push((0, exports.processLocalVariableAttribute)(attributeNameIndex, attributeLength, buffer));
                 break;
             }
         }
@@ -215,4 +219,25 @@ var processStackMapAttribute = function (attributeNameIndex, attributeLength, bu
     };
 };
 exports.processStackMapAttribute = processStackMapAttribute;
+var processLocalVariableAttribute = function (attributeNameIndex, attributeLength, buffer) {
+    var localVariableTableLength = buffer.getUint16();
+    var localVariableTable = [];
+    for (var i = 0; i < localVariableTableLength; i++) {
+        localVariableTable.push({
+            startPc: buffer.getUint16(),
+            length: buffer.getUint16(),
+            nameIndex: buffer.getUint16(),
+            descriptorIndex: buffer.getUint16(),
+            index: buffer.getUint16()
+        });
+    }
+    return {
+        attributeNameIndex: attributeNameIndex,
+        attributeLength: attributeLength,
+        localVariableTable: localVariableTable,
+        localVariableTableLength: localVariableTableLength,
+        info: []
+    };
+};
+exports.processLocalVariableAttribute = processLocalVariableAttribute;
 //# sourceMappingURL=AttributeInfo.js.map

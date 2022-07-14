@@ -199,6 +199,11 @@ export const readAttributes = (constantPool: ConstantPoolInfo[], length: number,
                 result.push(processStackMapAttribute(attributeNameIndex, attributeLength, buffer));
                 break;
             }
+
+            case "LocalVariableTable": {
+                result.push(processLocalVariableAttribute(attributeNameIndex, attributeLength, buffer));
+                break;
+            }
         }
     }
 
@@ -412,4 +417,25 @@ export const processStackMapAttribute = (attributeNameIndex: number, attributeLe
         entries: entries
     }
 
+}
+
+export const processLocalVariableAttribute = (attributeNameIndex: number, attributeLength: number, buffer: ByteBuffer): LocalVariableTableAttribute => {
+    const localVariableTableLength = buffer.getUint16();
+    const localVariableTable: LocalVariableTable[] = [];
+    for (let i = 0; i < localVariableTableLength; i++) {
+        localVariableTable.push({
+            startPc: buffer.getUint16(),
+            length: buffer.getUint16(),
+            nameIndex: buffer.getUint16(),
+            descriptorIndex: buffer.getUint16(),
+            index: buffer.getUint16()
+        })
+    }
+    return  {
+        attributeNameIndex: attributeNameIndex,
+        attributeLength: attributeLength,
+        localVariableTable: localVariableTable,
+        localVariableTableLength: localVariableTableLength,
+        info: []
+    }
 }

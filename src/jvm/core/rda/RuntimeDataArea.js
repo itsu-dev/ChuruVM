@@ -1,6 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var Thread_js_1 = require("./stack/Thread.js");
+var Thread_js_1 = __importDefault(require("./stack/Thread.js"));
 var RuntimeDataArea = /** @class */ (function () {
     function RuntimeDataArea() {
         this.threadId = 1;

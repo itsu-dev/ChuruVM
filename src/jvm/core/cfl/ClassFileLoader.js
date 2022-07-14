@@ -7,7 +7,7 @@ var AttributeInfo_js_1 = require("../../models/info/AttributeInfo.js");
 var ClassFileLoader = /** @class */ (function () {
     function ClassFileLoader() {
     }
-    ClassFileLoader.loadClassFile = function (buffer) {
+    ClassFileLoader.loadClassFile = function (path, buffer) {
         var magic = buffer.getUint32();
         var minorVersion = buffer.getUint16();
         var majorVersion = buffer.getUint16();
@@ -152,7 +152,7 @@ var ClassFileLoader = /** @class */ (function () {
                 attributes: attributes
             });
         }
-        return {
+        var classFile = {
             magic: magic,
             minorVersion: minorVersion,
             majorVersion: majorVersion,
@@ -170,11 +170,14 @@ var ClassFileLoader = /** @class */ (function () {
             attributesCount: 0,
             attributes: []
         };
+        ClassFileLoader.loadedClassFiles[path] = (classFile);
+        return classFile;
     };
     ClassFileLoader.getClassName = function (packageName) {
         var split = packageName.split("/");
         return split[split.length - 1];
     };
+    ClassFileLoader.loadedClassFiles = {};
     return ClassFileLoader;
 }());
 exports.default = ClassFileLoader;

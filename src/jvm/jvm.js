@@ -53,8 +53,6 @@ var JVM = /** @class */ (function () {
     }
     JVM.prototype.load = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var classFile;
-            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -62,18 +60,14 @@ var JVM = /** @class */ (function () {
                             console.error("buffer must not be undefined!");
                             return [2 /*return*/];
                         }
-                        if (!!this.isClassFile()) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.processJarFile()];
-                    case 1:
-                        _a.sent();
-                        _a.label = 2;
+                        if (!this.isClassFile()) return [3 /*break*/, 1];
+                        this.processClassFile();
+                        return [3 /*break*/, 3];
+                    case 1: return [4 /*yield*/, this.processJarFile()];
                     case 2:
-                        classFile = ClassFileLoader_js_1.default.loadClassFile(this.buffer);
-                        console.log(classFile);
-                        this.runtimeDataArea
-                            .createThread(this.jvmArgs["Xss"])
-                            .then(function (thread) { return thread.invokeMethod("main", classFile, _this.args); });
-                        return [2 /*return*/];
+                        _a.sent();
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -83,22 +77,50 @@ var JVM = /** @class */ (function () {
         this.buffer.offset = 0;
         return magic == 0xCAFEBABE;
     };
+    JVM.prototype.processClassFile = function () {
+        var _this = this;
+        var classFile = ClassFileLoader_js_1.default.loadClassFile(".", this.buffer);
+        console.log(classFile);
+        this.runtimeDataArea
+            .createThread(this.jvmArgs["Xss"])
+            .then(function (thread) { return thread.invokeMethod("main", classFile, _this.args); });
+    };
     JVM.prototype.processJarFile = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
                 this.buffer.offset = 0;
                 (0, fflate_1.unzip)(new Uint8Array(this.buffer.view.buffer), (function (err, data) {
-                    var manifest = _this.loadManifest(data);
-                    console.log(manifest);
+                    var manifest = JVM.loadManifest(data);
                     var mainClass = manifest["Main-Class"];
                     _this.buffer = new ByteBuffer_js_1.ByteBuffer(data[mainClass.replaceAll(".", "/") + ".class"].buffer);
+                    JVM.loadedJars.push({
+                        manifest: manifest,
+                        unzipped: data
+                    });
+                    var classFile = ClassFileLoader_js_1.default.loadClassFile(mainClass.replaceAll(".", "/"), _this.buffer);
+                    console.log(classFile);
+                    _this.runtimeDataArea
+                        .createThread(_this.jvmArgs["Xss"])
+                        .then(function (thread) { return thread.invokeMethod("main", classFile, _this.args); });
                 }));
                 return [2 /*return*/];
             });
         });
     };
-    JVM.prototype.loadManifest = function (data) {
+    JVM.getClassFile = function (path) {
+        if (!(ClassFileLoader_js_1.default.loadedClassFiles[path] == null)) {
+            return ClassFileLoader_js_1.default.loadedClassFiles[path];
+        }
+        for (var _i = 0, _a = JVM.loadedJars; _i < _a.length; _i++) {
+            var jarFile = _a[_i];
+            if (!(jarFile.unzipped[path + ".class"] == null)) {
+                return ClassFileLoader_js_1.default.loadClassFile(path, new ByteBuffer_js_1.ByteBuffer(jarFile.unzipped[path + ".class"].buffer));
+            }
+        }
+        return null;
+    };
+    JVM.loadManifest = function (data) {
         var manifest = new TextDecoder().decode(data["META-INF/MANIFEST.MF"]);
         var manifestData = {};
         for (var _i = 0, _a = manifest.split("\r\n"); _i < _a.length; _i++) {
@@ -109,6 +131,7 @@ var JVM = /** @class */ (function () {
         }
         return manifestData;
     };
+    JVM.loadedJars = [];
     return JVM;
 }());
 exports.JVM = JVM;

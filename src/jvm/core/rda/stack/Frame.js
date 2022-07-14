@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -271,7 +294,7 @@ var Frame = /** @class */ (function () {
                                         fieldRef = constantPoolInfo.info;
                                         classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.classIndex).info;
                                         fieldNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.nameAndTypeIndex).info;
-                                        return [4 /*yield*/, Promise.resolve().then(function () { return require("../../../lib/" + (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex) + ".js"); })];
+                                        return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require("../../../lib/" + (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex) + ".js")); })];
                                     case 3:
                                         module_1 = _g.sent();
                                         fieldClassFileName = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, fieldNameAndTypeRef.nameIndex);
@@ -1447,7 +1470,7 @@ var Frame = /** @class */ (function () {
                                         _g.label = 162;
                                     case 162:
                                         _g.trys.push([162, 164, , 165]);
-                                        return [4 /*yield*/, Promise.resolve().then(function () { return require("../../../lib/" + className + ".js"); })];
+                                        return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require("../../../lib/" + className + ".js")); })];
                                     case 163:
                                         module_2 = _g.sent();
                                         this_1.operandStack.push((_f = module_2.default)[invokeMethodName].apply(_f, methodArgs));
@@ -1463,7 +1486,8 @@ var Frame = /** @class */ (function () {
                                         classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
                                         className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex);
                                         module_3 = void 0;
-                                        return [4 /*yield*/, Promise.resolve().then(function () { return require("../../../lib/" + className + ".js"); })];
+                                        console.log(jvm_js_1.JVM.getClassFile(className));
+                                        return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require("../../../lib/" + className + ".js")); })];
                                     case 167:
                                         module_3 = _g.sent();
                                         this_1.operandStack.push(module_3.default);

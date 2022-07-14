@@ -29,7 +29,7 @@ import {MethodInfo} from "../../../models/info/MethodInfo.js";
 import {NoSuchFieldError} from "../../../lib/java/lang/NoSuchFieldError.js";
 import {ByteBuffer} from "../../../utils/ByteBuffer.js";
 import {System} from "../../../lib/java/lang/System.js";
-import {throwErrorOrException} from "../../../jvm.js";
+import {JVM, throwErrorOrException} from "../../../jvm.js";
 import Thread from "./Thread.js";
 import {ClassFile} from "../../cfl/ClassFile.js";
 import {getConstantPoolInfo, getArgumentsAndReturnType} from "../../cfl/ClassFileLoader.js";
@@ -1298,6 +1298,8 @@ export class Frame {
                         const classRef = getConstantPoolInfo(this.constantPool, (indexByte1 << 8) | indexByte2).info as ConstantClassInfo;
                         const className = readUtf8FromConstantPool(this.constantPool, classRef.nameIndex);
                         let module: any
+
+                        console.log(JVM.getClassFile(className));
 
                         module = await import("../../../lib/" + className + ".js");
 
