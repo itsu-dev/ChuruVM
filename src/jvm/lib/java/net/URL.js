@@ -14,10 +14,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var JavaObject_js_1 = require("../lang/JavaObject.js");
-var URLStreamHandler_js_1 = require("./URLStreamHandler.js");
-var HttpURLConnection_js_1 = require("./HttpURLConnection.js");
+var URLStreamHandler_js_1 = __importDefault(require("./URLStreamHandler.js"));
+var HttpURLConnection_js_1 = __importDefault(require("./HttpURLConnection.js"));
 var URL = /** @class */ (function (_super) {
     __extends(URL, _super);
     function URL(spec) {

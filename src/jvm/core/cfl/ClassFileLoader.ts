@@ -19,11 +19,12 @@ import {ByteBuffer} from "../../utils/ByteBuffer.js";
 import {FieldInfo} from "../../models/info/FieldInfo.js";
 import {Attribute, readAttributes} from "../../models/info/AttributeInfo.js";
 import {MethodInfo} from "../../models/info/MethodInfo.js";
-import {Throwable} from "../../lib/java/lang/Throwable.js";
 
 export default class ClassFileLoader {
+
+    static loadedClassFiles: {[key: string]: ClassFile} = {};
     
-    static loadClassFile(buffer: ByteBuffer): ClassFile {
+    static loadClassFile(path: string, buffer: ByteBuffer): ClassFile {
         const magic = buffer.getUint32();
         const minorVersion = buffer.getUint16();
         const majorVersion = buffer.getUint16();
@@ -194,7 +195,7 @@ export default class ClassFileLoader {
             })
         }
 
-        return {
+        let classFile = {
             magic: magic,
             minorVersion: minorVersion,
             majorVersion: majorVersion,
@@ -212,6 +213,10 @@ export default class ClassFileLoader {
             attributesCount: 0,
             attributes: []
         }
+
+        ClassFileLoader.loadedClassFiles[path] = (classFile);
+
+        return classFile;
     }
     
     
