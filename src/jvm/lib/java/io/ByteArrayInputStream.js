@@ -14,8 +14,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var InputStream_js_1 = require("./InputStream.js");
+var InputStream_js_1 = __importDefault(require("./InputStream.js"));
 var ByteArrayInputStream = /** @class */ (function (_super) {
     __extends(ByteArrayInputStream, _super);
     function ByteArrayInputStream(buf, offset, length) {

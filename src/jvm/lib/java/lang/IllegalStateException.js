@@ -14,9 +14,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IllegalStateException = void 0;
-var RuntimeException_js_1 = require("./RuntimeException.js");
+var RuntimeException_js_1 = __importDefault(require("./RuntimeException.js"));
 var IllegalStateException = /** @class */ (function (_super) {
     __extends(IllegalStateException, _super);
     function IllegalStateException(message) {

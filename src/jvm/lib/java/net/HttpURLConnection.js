@@ -50,9 +50,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var URLConnection_js_1 = require("./URLConnection.js");
-var ByteArrayInputStream_js_1 = require("../io/ByteArrayInputStream.js");
+var URLConnection_js_1 = __importDefault(require("./URLConnection.js"));
+var ByteArrayInputStream_js_1 = __importDefault(require("../io/ByteArrayInputStream.js"));
 var HttpURLConnection = /** @class */ (function (_super) {
     __extends(HttpURLConnection, _super);
     function HttpURLConnection(u) {

@@ -14,8 +14,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var JElement_js_1 = require("./JElement.js");
+var JElement_js_1 = __importDefault(require("./JElement.js"));
 var JHTMLElement = /** @class */ (function (_super) {
     __extends(JHTMLElement, _super);
     function JHTMLElement(ref) {

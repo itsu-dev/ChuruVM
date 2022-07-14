@@ -14,10 +14,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var JNode_js_1 = require("./nodes/JNode.js");
-var JHTMLElement_js_1 = require("./nodes/JHTMLElement.js");
-var JNodeListOf_js_1 = require("./collection/JNodeListOf.js");
+var JNode_js_1 = __importDefault(require("./nodes/JNode.js"));
+var JHTMLElement_js_1 = __importDefault(require("./nodes/JHTMLElement.js"));
+var JNodeListOf_js_1 = __importDefault(require("./collection/JNodeListOf.js"));
 var JDocument = /** @class */ (function (_super) {
     __extends(JDocument, _super);
     function JDocument(ref) {
