@@ -1,6 +1,11 @@
 # jvm-on-typescript
 A tiny JVM (Java Virtual Machine) program written in TypeScript.  
-This virtual machine specification compliants [Java Virtual Machine Specification (Java 8 Edition)](https://docs.oracle.com/javase/specs/jvms/se8/html/index.html).
+This virtual machine specification complaints [Java Virtual Machine Specification (Java SE 8 Edition)](https://docs.oracle.com/javase/specs/jvms/se8/html/index.html).
+  
+This project is for research purpose, and we aim at understanding the structure of JVM and 
+proposing a new way to develop web frontend. For these reason, we will not accept any PRs
+targeting codes in this repository. As a result of this project, this VM will support
+all features of JVM defined at the specification. 
 
 ## Usage
 ### Instant Run
@@ -32,7 +37,7 @@ jvm.load();  // Load class file and invoke main method.
 |Mnemonic|Opcode|isImplemented|
 |--------|------|-------------|
 |nop|0x00|✓|
-|aconst_null|0x01||
+|aconst_null|0x01|✓|
 |iconst_m1|0x02|✓|
 |iconst_0|0x03|✓|
 |iconst_1|0x04|✓|
@@ -50,8 +55,8 @@ jvm.load();  // Load class file and invoke main method.
 |bipush|0x10|✓|
 |sipush|0x11||
 |ldc|0x12|✓|
-|ldc_w|0x13||
-|ldc2_w|0x14||
+|ldc_w|0x13|✓|
+|ldc2_w|0x14|✓|
 |iload|0x15|✓|
 |lload|0x16|✓|
 |fload|0x17|✓|
@@ -198,21 +203,21 @@ jvm.load();  // Load class file and invoke main method.
 |if_icmple|0xa4|✓|
 |if_acmpeq|0xa5|✓|
 |if_acmpne|0xa6|✓|
-|goto|0xa7||
-|jsr|0xa8||
+|goto|0xa7|✓|
+|jsr|0xa8|✓
 |ret|0xa9||
 |tableswitch|0xaa||
 |lookupswitch|0xab||
 |ireturn|0xac|✓|
-|lreturn|0xad||
-|freturn|0xae||
-|dreturn|0xaf||
-|areturn|0xb0||
+|lreturn|0xad|✓|
+|freturn|0xae|✓|
+|dreturn|0xaf|✓|
+|areturn|0xb0|✓|
 |return|0xb1|✓|
 |getstatic|0xb2|✓|
-|putstatic|0xb3||
-|getfield|0xb4||
-|putfield|0xb5||
+|putstatic|0xb3|✓|
+|getfield|0xb4|✓|
+|putfield|0xb5|✓|
 |invokevirtual|0xb6|✓|
 |invokespecial|0xb7|✓|
 |invokestatic|0xb8|✓|
@@ -222,7 +227,7 @@ jvm.load();  // Load class file and invoke main method.
 |newarray|0xbc|✓|
 |anewarray|0xbd|✓|
 |arraylength|0xbe|✓|
-|athrow|0xbf||
+|athrow|0xbf|✓|
 |checkcast|0xc0||
 |instanceof|0xc1||
 |monitorenter|0xc2||

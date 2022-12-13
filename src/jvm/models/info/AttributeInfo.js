@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.processLocalVariableAttribute = exports.processStackMapAttribute = exports.processLineNumberAttribute = exports.processCodeAttribute = exports.readAttributes = void 0;
+exports.processEnclosingMethodAttribute = exports.processLocalVariableAttribute = exports.processStackMapAttribute = exports.processBootstrapMethodsAttribute = exports.processInnerClassesAttribute = exports.processLineNumberAttribute = exports.processCodeAttribute = exports.readAttributes = void 0;
 var ByteBuffer_js_1 = require("../../utils/ByteBuffer.js");
 var ConstantPoolInfo_js_1 = require("./ConstantPoolInfo.js");
 var readAttributes = function (constantPool, length, buffer) {
@@ -25,6 +25,21 @@ var readAttributes = function (constantPool, length, buffer) {
             case "LocalVariableTable": {
                 result.push((0, exports.processLocalVariableAttribute)(attributeNameIndex, attributeLength, buffer));
                 break;
+            }
+            case "InnerClasses": {
+                result.push((0, exports.processInnerClassesAttribute)(attributeNameIndex, attributeLength, buffer));
+                break;
+            }
+            case "BootstrapMethods": {
+                result.push((0, exports.processBootstrapMethodsAttribute)(attributeNameIndex, attributeLength, buffer));
+                break;
+            }
+            case "EnclosingMethod": {
+                result.push((0, exports.processEnclosingMethodAttribute)(attributeNameIndex, attributeLength, buffer));
+                break;
+            }
+            default: {
+                buffer.offset += attributeLength;
             }
         }
     }
@@ -87,6 +102,51 @@ var processLineNumberAttribute = function (attributeNameIndex, attributeLength, 
     };
 };
 exports.processLineNumberAttribute = processLineNumberAttribute;
+var processInnerClassesAttribute = function (attributeNameIndex, attributeLength, buffer) {
+    var numberOfClasses = buffer.getUint16();
+    var innerClasses = [];
+    for (var i = 0; i < numberOfClasses; i++) {
+        innerClasses.push({
+            innerClassInfoIndex: buffer.getUint16(),
+            outerClassInfoIndex: buffer.getUint16(),
+            innerNameIndex: buffer.getUint16(),
+            innerClassAccessFlags: buffer.getUint16()
+        });
+    }
+    return {
+        attributeNameIndex: attributeNameIndex,
+        attributeLength: attributeLength,
+        info: [],
+        classes: innerClasses,
+        numberOfClasses: numberOfClasses
+    };
+};
+exports.processInnerClassesAttribute = processInnerClassesAttribute;
+var processBootstrapMethodsAttribute = function (attributeNameIndex, attributeLength, buffer) {
+    var numBootstrapMethods = buffer.getUint16();
+    var methods = [];
+    for (var i = 0; i < numBootstrapMethods; i++) {
+        var bootstrapMethodRef = buffer.getUint16();
+        var numBootstrapMethods_1 = buffer.getUint16();
+        var args = [];
+        for (var j = 0; j < numBootstrapMethods_1; j++) {
+            args.push(buffer.getUint16());
+        }
+        methods.push({
+            bootstrapMethodRef: bootstrapMethodRef,
+            numBootstrapMethods: numBootstrapMethods_1,
+            bootstrapArguments: args
+        });
+    }
+    return {
+        attributeNameIndex: attributeNameIndex,
+        attributeLength: attributeLength,
+        info: [],
+        bootstrapMethods: methods,
+        numBootstrapMethods: numBootstrapMethods
+    };
+};
+exports.processBootstrapMethodsAttribute = processBootstrapMethodsAttribute;
 var processStackMapAttribute = function (attributeNameIndex, attributeLength, buffer) {
     var numberOfEntries = buffer.getUint16();
     var entries = [];
@@ -240,4 +300,16 @@ var processLocalVariableAttribute = function (attributeNameIndex, attributeLengt
     };
 };
 exports.processLocalVariableAttribute = processLocalVariableAttribute;
+var processEnclosingMethodAttribute = function (attributeNameIndex, attributeLength, buffer) {
+    var classIndex = buffer.getUint16();
+    var methodIndex = buffer.getUint16();
+    return {
+        attributeNameIndex: attributeNameIndex,
+        attributeLength: attributeLength,
+        classIndex: classIndex,
+        methodIndex: methodIndex,
+        info: []
+    };
+};
+exports.processEnclosingMethodAttribute = processEnclosingMethodAttribute;
 //# sourceMappingURL=AttributeInfo.js.map

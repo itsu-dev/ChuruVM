@@ -63,24 +63,12 @@ export const isConstantStringInfo = (arg: unknown) : arg is ConstantStringInfo =
     typeof (arg as ConstantStringInfo).stringIndex === "number";
 
 export interface ConstantIntegerInfo extends Constant {
-    bytes: number
+    bytes: Array<number>;
 }
-
-export const isConstantIntegerInfo = (arg: unknown) : arg is ConstantIntegerInfo =>
-    typeof arg === "object" &&
-    arg !== null &&
-    typeof (arg as ConstantIntegerInfo).tag === "number" &&
-    typeof (arg as ConstantIntegerInfo).bytes === "number";
 
 export interface ConstantFloatInfo extends Constant {
-    bytes: number
+    bytes: Array<number>;
 }
-
-export const isConstantFloatInfo = (arg: unknown) : arg is ConstantFloatInfo =>
-    typeof arg === "object" &&
-    arg !== null &&
-    typeof (arg as ConstantFloatInfo).tag === "number" &&
-    typeof (arg as ConstantFloatInfo).bytes === "number";
 
 export interface ConstantLongInfo extends Constant {
     highBytes: number,

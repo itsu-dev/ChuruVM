@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readUtf8FromConstantPool = exports.isConstantDoubleInfo = exports.isConstantLongInfo = exports.isConstantFloatInfo = exports.isConstantIntegerInfo = exports.isConstantStringInfo = exports.isConstantFieldRefInfo = exports.CONSTANT_INVOKE_DYNAMIC = exports.CONSTANT_METHOD_TYPE = exports.CONSTANT_METHOD_HANDLE = exports.CONSTANT_UTF8 = exports.CONSTANT_NAME_AND_TYPE = exports.CONSTANT_DOUBLE = exports.CONSTANT_LONG = exports.CONSTANT_FLOAT = exports.CONSTANT_INTEGER = exports.CONSTANT_STRING = exports.CONSTANT_INTERFACE_METHOD_REF = exports.CONSTANT_METHOD_REF = exports.CONSTANT_FIELD_REF = exports.CONSTANT_CLASS = void 0;
+exports.readUtf8FromConstantPool = exports.isConstantDoubleInfo = exports.isConstantLongInfo = exports.isConstantStringInfo = exports.isConstantFieldRefInfo = exports.CONSTANT_INVOKE_DYNAMIC = exports.CONSTANT_METHOD_TYPE = exports.CONSTANT_METHOD_HANDLE = exports.CONSTANT_UTF8 = exports.CONSTANT_NAME_AND_TYPE = exports.CONSTANT_DOUBLE = exports.CONSTANT_LONG = exports.CONSTANT_FLOAT = exports.CONSTANT_INTEGER = exports.CONSTANT_STRING = exports.CONSTANT_INTERFACE_METHOD_REF = exports.CONSTANT_METHOD_REF = exports.CONSTANT_FIELD_REF = exports.CONSTANT_CLASS = void 0;
 var ClassFileLoader_js_1 = require("../../core/cfl/ClassFileLoader.js");
 exports.CONSTANT_CLASS = 7;
 exports.CONSTANT_FIELD_REF = 9;
@@ -31,20 +31,6 @@ var isConstantStringInfo = function (arg) {
         typeof arg.stringIndex === "number";
 };
 exports.isConstantStringInfo = isConstantStringInfo;
-var isConstantIntegerInfo = function (arg) {
-    return typeof arg === "object" &&
-        arg !== null &&
-        typeof arg.tag === "number" &&
-        typeof arg.bytes === "number";
-};
-exports.isConstantIntegerInfo = isConstantIntegerInfo;
-var isConstantFloatInfo = function (arg) {
-    return typeof arg === "object" &&
-        arg !== null &&
-        typeof arg.tag === "number" &&
-        typeof arg.bytes === "number";
-};
-exports.isConstantFloatInfo = isConstantFloatInfo;
 var isConstantLongInfo = function (arg) {
     return typeof arg === "object" &&
         arg !== null &&

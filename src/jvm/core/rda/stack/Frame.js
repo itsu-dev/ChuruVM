@@ -1,1608 +1,1553 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Frame = void 0;
 var ConstantPoolInfo_js_1 = require("../../../models/info/ConstantPoolInfo.js");
-var Variable_js_1 = require("../../../models/Variable.js");
-var NoSuchFieldError_js_1 = require("../../../lib/java/lang/NoSuchFieldError.js");
 var ByteBuffer_js_1 = require("../../../utils/ByteBuffer.js");
-var System_js_1 = require("../../../lib/java/lang/System.js");
-var jvm_js_1 = require("../../../jvm.js");
 var ClassFileLoader_js_1 = require("../../cfl/ClassFileLoader.js");
+var BootstrapClassLoader_1 = __importDefault(require("../../BootstrapClassLoader"));
+var types_1 = require("../../cfl/types");
+var Utils_1 = require("../../../utils/Utils");
+var JavaObject_1 = require("../../../lib/java/lang/JavaObject");
+var ExceptionHandler_1 = require("../../../utils/ExceptionHandler");
 var Frame = /** @class */ (function () {
-    function Frame(thread, method, classFile, localSize, constantPool, args) {
+    function Frame(thread, runtimeDataArea, method, javaClass, localSize, constantPool, args, javaObject) {
         var _this = this;
-        this.operandStack = [];
         this.opcodes = new Array();
         this.isRunning = true;
+        this.operandStack = [];
         this.thread = thread;
+        this.runtimeDataArea = runtimeDataArea;
         this.method = method;
-        this.classFile = classFile;
+        this.javaClass = javaClass;
         this.locals = new Array(localSize);
         this.constantPool = constantPool;
-        args.forEach(function (arg) { return _this.locals.push(new Variable_js_1.IntVariable(arg)); });
+        this.javaObject = javaObject;
+        // create this object on object heap
+        var offset = 0;
+        if (!(this.javaObject == null)) {
+            this.locals[0] = new types_1.JavaVariable(this.javaClass.name, this.javaObject);
+            offset++;
+        }
+        var argsData = (0, ClassFileLoader_js_1.getArgumentsAndReturnType)((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(javaClass.constantPool, this.method.descriptorIndex))[0];
+        args.reverse().forEach(function (arg, index) {
+            _this.locals[index + offset] = new types_1.JavaVariable(argsData[index].split("/").join("."), arg);
+        });
     }
     Frame.prototype.execute = function () {
-        this.executeOpcodes(0);
+        return this.executeOpcodes(0);
     };
     Frame.prototype.executeOpcodes = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var opcode, index, _loop_1, this_1, i, state_1;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (this.opcodes[this.opcodes.length - 1].id < id) {
-                            id = id - 65536;
-                        }
-                        index = this.getOpcodeIndexById(id);
-                        _loop_1 = function (i) {
-                            var _b, indexByte1, indexByte2, constantPoolInfo, fieldRef, classRef, fieldNameAndTypeRef, module_1, fieldClassFileName, index_1, info, dataView, dataView, indexByte1, indexByte2, info, dataView, dataView, indexByte1, indexByte2, methodRef, methodNameAndTypeRef, clazz, className, invokeMethodName, argumentsAndReturnType, methodArgs, i_1, result, data, index_2, index_3, index_4, index_5, index_6, index_7, array, index_8, index_9, index_10, index_11, index_12, value, index_13, array, data, isCategory1, isCategory2, value1, value2, original, copied, copied2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, index_14, vConst, value2, value1, value2, value1, value2, value1, value2, value1, value2, value1, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, value2, value1, branchByte1, branchByte2, indexByte1, indexByte2, methodRef, methodNameAndTypeRef, argumentsAndReturnType, argumentsCount, methodArgs, i_2, indexByte1, indexByte2, methodRef, methodNameAndTypeRef, clazz, className, invokeMethodName, argumentsAndReturnType, argumentsCount, methodArgs, i_3, module_2, e_1, indexByte1, indexByte2, classRef, className, module_3, type, count, array, branchByte1, branchByte2, count, branchByte1, branchByte2, dimension, createMultiDimensionalArray_1, branchByte1, branchByte2, ref, branchByte1, branchByte2, value, branchByte1, branchByte2, value;
-                            var _c, _d, _e, _f;
-                            return __generator(this, function (_g) {
-                                switch (_g.label) {
-                                    case 0:
-                                        opcode = this_1.opcodes[i];
-                                        if (!this_1.isRunning || !opcode)
-                                            return [2 /*return*/, "break"];
-                                        _b = opcode.opcode;
-                                        switch (_b) {
-                                            case 0x00: return [3 /*break*/, 1];
-                                            case 0xb2: return [3 /*break*/, 2];
-                                            case 0x12: return [3 /*break*/, 4];
-                                            case 0x14: return [3 /*break*/, 5];
-                                            case 0xb6: return [3 /*break*/, 6];
-                                            case 0x02: return [3 /*break*/, 7];
-                                            case 0x03: return [3 /*break*/, 8];
-                                            case 0x04: return [3 /*break*/, 9];
-                                            case 0x05: return [3 /*break*/, 10];
-                                            case 0x06: return [3 /*break*/, 11];
-                                            case 0x07: return [3 /*break*/, 12];
-                                            case 0x08: return [3 /*break*/, 13];
-                                            case 0x09: return [3 /*break*/, 14];
-                                            case 0x0a: return [3 /*break*/, 15];
-                                            case 0x0b: return [3 /*break*/, 16];
-                                            case 0x0c: return [3 /*break*/, 17];
-                                            case 0x0d: return [3 /*break*/, 18];
-                                            case 0x0e: return [3 /*break*/, 19];
-                                            case 0x0f: return [3 /*break*/, 20];
-                                            case 0x10: return [3 /*break*/, 21];
-                                            case 0x15: return [3 /*break*/, 22];
-                                            case 0x16: return [3 /*break*/, 23];
-                                            case 0x17: return [3 /*break*/, 24];
-                                            case 0x18: return [3 /*break*/, 25];
-                                            case 0x19: return [3 /*break*/, 26];
-                                            case 0x1a: return [3 /*break*/, 27];
-                                            case 0x1b: return [3 /*break*/, 28];
-                                            case 0x1c: return [3 /*break*/, 29];
-                                            case 0x1d: return [3 /*break*/, 30];
-                                            case 0x1e: return [3 /*break*/, 31];
-                                            case 0x1f: return [3 /*break*/, 32];
-                                            case 0x20: return [3 /*break*/, 33];
-                                            case 0x21: return [3 /*break*/, 34];
-                                            case 0x22: return [3 /*break*/, 35];
-                                            case 0x23: return [3 /*break*/, 36];
-                                            case 0x24: return [3 /*break*/, 37];
-                                            case 0x25: return [3 /*break*/, 38];
-                                            case 0x26: return [3 /*break*/, 39];
-                                            case 0x27: return [3 /*break*/, 40];
-                                            case 0x28: return [3 /*break*/, 41];
-                                            case 0x29: return [3 /*break*/, 42];
-                                            case 0x2a: return [3 /*break*/, 43];
-                                            case 0x2b: return [3 /*break*/, 44];
-                                            case 0x2c: return [3 /*break*/, 45];
-                                            case 0x2d: return [3 /*break*/, 46];
-                                            case 0x2e: return [3 /*break*/, 47];
-                                            case 0x2f: return [3 /*break*/, 47];
-                                            case 0x30: return [3 /*break*/, 47];
-                                            case 0x31: return [3 /*break*/, 47];
-                                            case 0x32: return [3 /*break*/, 47];
-                                            case 0x33: return [3 /*break*/, 47];
-                                            case 0x34: return [3 /*break*/, 47];
-                                            case 0x35: return [3 /*break*/, 47];
-                                            case 0x36: return [3 /*break*/, 48];
-                                            case 0x37: return [3 /*break*/, 49];
-                                            case 0x38: return [3 /*break*/, 50];
-                                            case 0x39: return [3 /*break*/, 51];
-                                            case 0x3a: return [3 /*break*/, 52];
-                                            case 0x3b: return [3 /*break*/, 53];
-                                            case 0x3c: return [3 /*break*/, 54];
-                                            case 0x3d: return [3 /*break*/, 55];
-                                            case 0x3e: return [3 /*break*/, 56];
-                                            case 0x3f: return [3 /*break*/, 57];
-                                            case 0x40: return [3 /*break*/, 58];
-                                            case 0x41: return [3 /*break*/, 59];
-                                            case 0x42: return [3 /*break*/, 60];
-                                            case 0x43: return [3 /*break*/, 61];
-                                            case 0x44: return [3 /*break*/, 62];
-                                            case 0x45: return [3 /*break*/, 63];
-                                            case 0x46: return [3 /*break*/, 64];
-                                            case 0x47: return [3 /*break*/, 65];
-                                            case 0x48: return [3 /*break*/, 66];
-                                            case 0x48: return [3 /*break*/, 67];
-                                            case 0x4a: return [3 /*break*/, 68];
-                                            case 0x4b: return [3 /*break*/, 69];
-                                            case 0x4c: return [3 /*break*/, 70];
-                                            case 0x4d: return [3 /*break*/, 71];
-                                            case 0x4e: return [3 /*break*/, 72];
-                                            case 0x4f: return [3 /*break*/, 73];
-                                            case 0x50: return [3 /*break*/, 73];
-                                            case 0x51: return [3 /*break*/, 73];
-                                            case 0x52: return [3 /*break*/, 73];
-                                            case 0x53: return [3 /*break*/, 73];
-                                            case 0x54: return [3 /*break*/, 73];
-                                            case 0x55: return [3 /*break*/, 73];
-                                            case 0x56: return [3 /*break*/, 73];
-                                            case 0x57: return [3 /*break*/, 74];
-                                            case 0x58: return [3 /*break*/, 75];
-                                            case 0x59: return [3 /*break*/, 76];
-                                            case 0x60: return [3 /*break*/, 77];
-                                            case 0x61: return [3 /*break*/, 78];
-                                            case 0x62: return [3 /*break*/, 79];
-                                            case 0x63: return [3 /*break*/, 80];
-                                            case 0x64: return [3 /*break*/, 81];
-                                            case 0x65: return [3 /*break*/, 82];
-                                            case 0x66: return [3 /*break*/, 83];
-                                            case 0x67: return [3 /*break*/, 84];
-                                            case 0x68: return [3 /*break*/, 85];
-                                            case 0x69: return [3 /*break*/, 86];
-                                            case 0x6a: return [3 /*break*/, 87];
-                                            case 0x6b: return [3 /*break*/, 88];
-                                            case 0x6c: return [3 /*break*/, 89];
-                                            case 0x6d: return [3 /*break*/, 90];
-                                            case 0x6e: return [3 /*break*/, 91];
-                                            case 0x6f: return [3 /*break*/, 92];
-                                            case 0x70: return [3 /*break*/, 93];
-                                            case 0x71: return [3 /*break*/, 94];
-                                            case 0x72: return [3 /*break*/, 95];
-                                            case 0x73: return [3 /*break*/, 96];
-                                            case 0x74: return [3 /*break*/, 97];
-                                            case 0x75: return [3 /*break*/, 98];
-                                            case 0x76: return [3 /*break*/, 99];
-                                            case 0x77: return [3 /*break*/, 100];
-                                            case 0x78: return [3 /*break*/, 101];
-                                            case 0x79: return [3 /*break*/, 102];
-                                            case 0x7a: return [3 /*break*/, 103];
-                                            case 0x7b: return [3 /*break*/, 104];
-                                            case 0x7c: return [3 /*break*/, 105];
-                                            case 0x7d: return [3 /*break*/, 106];
-                                            case 0x7e: return [3 /*break*/, 107];
-                                            case 0x7f: return [3 /*break*/, 108];
-                                            case 0x80: return [3 /*break*/, 109];
-                                            case 0x81: return [3 /*break*/, 110];
-                                            case 0x82: return [3 /*break*/, 111];
-                                            case 0x83: return [3 /*break*/, 112];
-                                            case 0x84: return [3 /*break*/, 113];
-                                            case 0x85: return [3 /*break*/, 114];
-                                            case 0x86: return [3 /*break*/, 114];
-                                            case 0x87: return [3 /*break*/, 114];
-                                            case 0x88: return [3 /*break*/, 114];
-                                            case 0x89: return [3 /*break*/, 114];
-                                            case 0x8a: return [3 /*break*/, 114];
-                                            case 0x8b: return [3 /*break*/, 114];
-                                            case 0x8c: return [3 /*break*/, 114];
-                                            case 0x8d: return [3 /*break*/, 114];
-                                            case 0x8e: return [3 /*break*/, 114];
-                                            case 0x8f: return [3 /*break*/, 114];
-                                            case 0x90: return [3 /*break*/, 114];
-                                            case 0x91: return [3 /*break*/, 114];
-                                            case 0x92: return [3 /*break*/, 114];
-                                            case 0x93: return [3 /*break*/, 114];
-                                            case 0x94: return [3 /*break*/, 115];
-                                            case 0x95: return [3 /*break*/, 116];
-                                            case 0x96: return [3 /*break*/, 117];
-                                            case 0x97: return [3 /*break*/, 118];
-                                            case 0x98: return [3 /*break*/, 119];
-                                            case 0x99: return [3 /*break*/, 120];
-                                            case 0x9a: return [3 /*break*/, 123];
-                                            case 0x9b: return [3 /*break*/, 126];
-                                            case 0x9c: return [3 /*break*/, 129];
-                                            case 0x9d: return [3 /*break*/, 132];
-                                            case 0x9e: return [3 /*break*/, 135];
-                                            case 0x9f: return [3 /*break*/, 138];
-                                            case 0xa0: return [3 /*break*/, 141];
-                                            case 0xa1: return [3 /*break*/, 144];
-                                            case 0xa2: return [3 /*break*/, 147];
-                                            case 0xa3: return [3 /*break*/, 150];
-                                            case 0xa4: return [3 /*break*/, 153];
-                                            case 0xa7: return [3 /*break*/, 156];
-                                            case 0xac: return [3 /*break*/, 158];
-                                            case 0xb1: return [3 /*break*/, 159];
-                                            case 0xb7: return [3 /*break*/, 160];
-                                            case 0xb8: return [3 /*break*/, 161];
-                                            case 0xbb: return [3 /*break*/, 166];
-                                            case 0xbc: return [3 /*break*/, 168];
-                                            case 0xbd: return [3 /*break*/, 169];
-                                            case 0xbe: return [3 /*break*/, 170];
-                                            case 0xc5: return [3 /*break*/, 171];
-                                            case 0xc6: return [3 /*break*/, 172];
-                                            case 0xc6: return [3 /*break*/, 173];
-                                            case 0xc7: return [3 /*break*/, 176];
-                                        }
-                                        return [3 /*break*/, 179];
-                                    case 1:
-                                        {
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 2;
-                                    case 2:
-                                        indexByte1 = opcode.operands[0];
-                                        indexByte2 = opcode.operands[1];
-                                        constantPoolInfo = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2);
-                                        if (!constantPoolInfo || !(0, ConstantPoolInfo_js_1.isConstantFieldRefInfo)(constantPoolInfo.info)) {
-                                            (0, jvm_js_1.throwErrorOrException)(new NoSuchFieldError_js_1.NoSuchFieldError());
-                                            return [2 /*return*/, { value: void 0 }];
-                                        }
-                                        fieldRef = constantPoolInfo.info;
-                                        classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.classIndex).info;
-                                        fieldNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.nameAndTypeIndex).info;
-                                        return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require("../../../lib/" + (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex) + ".js")); })];
-                                    case 3:
-                                        module_1 = _g.sent();
-                                        fieldClassFileName = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, fieldNameAndTypeRef.nameIndex);
-                                        this_1.operandStack.push(module_1[this_1.getClassName((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex))][fieldClassFileName]);
-                                        return [3 /*break*/, 179];
-                                    case 4:
-                                        {
-                                            index_1 = opcode.operands[0];
-                                            info = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, index_1).info;
-                                            if (info.tag === ConstantPoolInfo_js_1.CONSTANT_STRING) {
-                                                this_1.operandStack.push((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, info.stringIndex));
-                                            }
-                                            else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_INTEGER) {
-                                                dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(32));
-                                                dataView.setInt32(info.bytes);
-                                                dataView.resetOffset();
-                                                this_1.operandStack.push(dataView.getInt8());
-                                            }
-                                            else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_FLOAT) {
-                                                dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(32));
-                                                dataView.setUint32(info.bytes);
-                                                dataView.resetOffset();
-                                                this_1.operandStack.push(dataView.getFloat32());
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 5;
-                                    case 5:
-                                        {
-                                            indexByte1 = opcode.operands[0];
-                                            indexByte2 = opcode.operands[1];
-                                            info = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
-                                            if (info.tag === ConstantPoolInfo_js_1.CONSTANT_LONG) {
-                                                dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(64));
-                                                dataView.setUint32(info.highBytes);
-                                                dataView.setUint32(info.lowBytes);
-                                                dataView.resetOffset();
-                                                this_1.operandStack.push((dataView.getUint32() << 32) + dataView.getUint32());
-                                            }
-                                            else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_DOUBLE) {
-                                                dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(64));
-                                                dataView.setUint32(info.highBytes);
-                                                dataView.setUint32(info.lowBytes);
-                                                dataView.resetOffset();
-                                                this_1.operandStack.push(dataView.getFloat64());
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 6;
-                                    case 6:
-                                        {
-                                            indexByte1 = opcode.operands[0];
-                                            indexByte2 = opcode.operands[1];
-                                            methodRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
-                                            methodNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.nameAndTypeIndex).info;
-                                            clazz = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.classIndex).info;
-                                            className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, clazz.nameIndex);
-                                            invokeMethodName = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.nameIndex);
-                                            argumentsAndReturnType = (0, ClassFileLoader_js_1.getArgumentsAndReturnType)((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
-                                            methodArgs = [];
-                                            for (i_1 = 0; i_1 < argumentsAndReturnType[0].length; i_1++) {
-                                                methodArgs.push(this_1.operandStack.pop());
-                                            }
-                                            if (argumentsAndReturnType[1] !== "V") {
-                                                result = (_c = this_1.operandStack.pop())[invokeMethodName].apply(_c, methodArgs);
-                                                if (typeof result === "object") {
-                                                    this_1.operandStack.push(result);
-                                                }
-                                                else {
-                                                    this_1.operandStack.push(result);
-                                                }
-                                            }
-                                            else {
-                                                (_d = this_1.operandStack.pop())[invokeMethodName].apply(_d, methodArgs);
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 7;
-                                    case 7:
-                                        {
-                                            this_1.operandStack.push(-1);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 8;
-                                    case 8:
-                                        {
-                                            this_1.operandStack.push(0);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 9;
-                                    case 9:
-                                        {
-                                            this_1.operandStack.push(1);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 10;
-                                    case 10:
-                                        {
-                                            this_1.operandStack.push(2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 11;
-                                    case 11:
-                                        {
-                                            this_1.operandStack.push(3);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 12;
-                                    case 12:
-                                        {
-                                            this_1.operandStack.push(4);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 13;
-                                    case 13:
-                                        {
-                                            this_1.operandStack.push(5);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 14;
-                                    case 14:
-                                        {
-                                            this_1.operandStack.push(1);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 15;
-                                    case 15:
-                                        {
-                                            this_1.operandStack.push(2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 16;
-                                    case 16:
-                                        {
-                                            this_1.operandStack.push(0.0);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 17;
-                                    case 17:
-                                        {
-                                            this_1.operandStack.push(1.0);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 18;
-                                    case 18:
-                                        {
-                                            this_1.operandStack.push(2.0);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 19;
-                                    case 19:
-                                        {
-                                            this_1.operandStack.push(0.0);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 20;
-                                    case 20:
-                                        {
-                                            this_1.operandStack.push(1.0);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 21;
-                                    case 21:
-                                        {
-                                            data = opcode.operands[0];
-                                            this_1.operandStack.push(data);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 22;
-                                    case 22:
-                                        {
-                                            index_2 = opcode.operands[0];
-                                            this_1.operandStack.push(this_1.locals[index_2].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 23;
-                                    case 23:
-                                        {
-                                            index_3 = opcode.operands[0];
-                                            this_1.operandStack.push(this_1.locals[index_3].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 24;
-                                    case 24:
-                                        {
-                                            index_4 = opcode.operands[0];
-                                            this_1.operandStack.push(this_1.locals[index_4].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 25;
-                                    case 25:
-                                        {
-                                            index_5 = opcode.operands[0];
-                                            this_1.operandStack.push(this_1.locals[index_5].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 26;
-                                    case 26:
-                                        {
-                                            index_6 = opcode.operands[0];
-                                            this_1.operandStack.push(this_1.locals[index_6].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 27;
-                                    case 27:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[0].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 28;
-                                    case 28:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[1].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 29;
-                                    case 29:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[2].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 30;
-                                    case 30:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[3].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 31;
-                                    case 31:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[0].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 32;
-                                    case 32:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[1].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 33;
-                                    case 33:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[2].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 34;
-                                    case 34:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[3].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 35;
-                                    case 35:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[0].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 36;
-                                    case 36:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[1].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 37;
-                                    case 37:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[2].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 38;
-                                    case 38:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[3].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 39;
-                                    case 39:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[0].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 40;
-                                    case 40:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[1].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 41;
-                                    case 41:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[2].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 42;
-                                    case 42:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[3].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 43;
-                                    case 43:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[0].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 44;
-                                    case 44:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[1].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 45;
-                                    case 45:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[2].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 46;
-                                    case 46:
-                                        {
-                                            this_1.operandStack.push(this_1.locals[3].getValue());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 47;
-                                    case 47:
-                                        {
-                                            index_7 = this_1.operandStack.pop();
-                                            array = this_1.operandStack.pop();
-                                            this_1.operandStack.push(array[index_7]);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 48;
-                                    case 48:
-                                        {
-                                            index_8 = opcode.operands[0];
-                                            if (this_1.locals.length - 1 < index_8) {
-                                                this_1.locals.push(new Variable_js_1.IntVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(index_8, 0, new Variable_js_1.IntVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 49;
-                                    case 49:
-                                        {
-                                            index_9 = opcode.operands[0];
-                                            if (this_1.locals.length - 1 < index_9) {
-                                                this_1.locals.push(new Variable_js_1.LongVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(index_9, 0, new Variable_js_1.LongVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 50;
-                                    case 50:
-                                        {
-                                            index_10 = opcode.operands[0];
-                                            if (this_1.locals.length - 1 < index_10) {
-                                                this_1.locals.push(new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(index_10, 0, new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 51;
-                                    case 51:
-                                        {
-                                            index_11 = opcode.operands[0];
-                                            if (this_1.locals.length - 1 < index_11) {
-                                                this_1.locals.push(new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(index_11, 0, new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 52;
-                                    case 52:
-                                        {
-                                            index_12 = opcode.operands[0];
-                                            if (this_1.locals.length - 1 < index_12) {
-                                                this_1.locals.push(new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(index_12, 0, new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 53;
-                                    case 53:
-                                        {
-                                            if (this_1.locals.length - 1 < 0) {
-                                                this_1.locals.push(new Variable_js_1.IntVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(0, 0, new Variable_js_1.IntVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 54;
-                                    case 54:
-                                        {
-                                            if (this_1.locals.length - 1 < 1) {
-                                                this_1.locals.push(new Variable_js_1.IntVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(1, 0, new Variable_js_1.IntVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 55;
-                                    case 55:
-                                        {
-                                            if (this_1.locals.length - 1 < 2) {
-                                                this_1.locals.push(new Variable_js_1.IntVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(2, 0, new Variable_js_1.IntVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 56;
-                                    case 56:
-                                        {
-                                            if (this_1.locals.length - 1 < 3) {
-                                                this_1.locals.push(new Variable_js_1.IntVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(3, 0, new Variable_js_1.IntVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 57;
-                                    case 57:
-                                        {
-                                            if (this_1.locals.length - 1 < 0) {
-                                                this_1.locals.push(new Variable_js_1.LongVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(0, 0, new Variable_js_1.LongVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 58;
-                                    case 58:
-                                        {
-                                            if (this_1.locals.length - 1 < 1) {
-                                                this_1.locals.push(new Variable_js_1.LongVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(1, 0, new Variable_js_1.LongVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 59;
-                                    case 59:
-                                        {
-                                            if (this_1.locals.length - 1 < 2) {
-                                                this_1.locals.push(new Variable_js_1.LongVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(2, 0, new Variable_js_1.LongVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 60;
-                                    case 60:
-                                        {
-                                            if (this_1.locals.length - 1 < 3) {
-                                                this_1.locals.push(new Variable_js_1.LongVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(3, 0, new Variable_js_1.LongVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 61;
-                                    case 61:
-                                        {
-                                            if (this_1.locals.length - 1 < 0) {
-                                                this_1.locals.push(new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(0, 0, new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 62;
-                                    case 62:
-                                        {
-                                            if (this_1.locals.length - 1 < 1) {
-                                                this_1.locals.push(new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(1, 0, new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 63;
-                                    case 63:
-                                        {
-                                            if (this_1.locals.length - 1 < 2) {
-                                                this_1.locals.push(new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(2, 0, new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 64;
-                                    case 64:
-                                        {
-                                            if (this_1.locals.length - 1 < 3) {
-                                                this_1.locals.push(new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(3, 0, new Variable_js_1.FloatVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 65;
-                                    case 65:
-                                        {
-                                            if (this_1.locals.length - 1 < 0) {
-                                                this_1.locals.push(new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(0, 0, new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 66;
-                                    case 66:
-                                        {
-                                            if (this_1.locals.length - 1 < 1) {
-                                                this_1.locals.push(new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(1, 0, new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 67;
-                                    case 67:
-                                        {
-                                            if (this_1.locals.length - 1 < 2) {
-                                                this_1.locals.push(new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(2, 0, new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 68;
-                                    case 68:
-                                        {
-                                            if (this_1.locals.length - 1 < 3) {
-                                                this_1.locals.push(new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(3, 0, new Variable_js_1.DoubleVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 69;
-                                    case 69:
-                                        {
-                                            if (this_1.locals.length - 1 < 0) {
-                                                this_1.locals.push(new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(0, 0, new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 70;
-                                    case 70:
-                                        {
-                                            if (this_1.locals.length - 1 < 1) {
-                                                this_1.locals.push(new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(1, 0, new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 71;
-                                    case 71:
-                                        {
-                                            if (this_1.locals.length - 1 < 2) {
-                                                this_1.locals.push(new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(2, 0, new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 72;
-                                    case 72:
-                                        {
-                                            if (this_1.locals.length - 1 < 3) {
-                                                this_1.locals.push(new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
-                                            }
-                                            else {
-                                                this_1.locals.splice(3, 0, new Variable_js_1.AnyVariable(this_1.operandStack.pop()));
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 73;
-                                    case 73:
-                                        {
-                                            value = this_1.operandStack.pop();
-                                            index_13 = this_1.operandStack.pop();
-                                            array = this_1.operandStack.pop();
-                                            array[index_13] = value;
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 74;
-                                    case 74:
-                                        {
-                                            data = this_1.operandStack.pop();
-                                            if (data instanceof Variable_js_1.DoubleVariable || data instanceof Variable_js_1.LongVariable) {
-                                                System_js_1.System.err.println("Illegal operation: pop with category 2.");
-                                                return [2 /*return*/, { value: void 0 }];
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 75;
-                                    case 75:
-                                        {
-                                            isCategory1 = function (data) { return data instanceof Variable_js_1.IntVariable || data instanceof Variable_js_1.FloatVariable; };
-                                            isCategory2 = function (data) { return data instanceof Variable_js_1.DoubleVariable || data instanceof Variable_js_1.LongVariable; };
-                                            value1 = this_1.operandStack.pop();
-                                            if (isCategory2(value1))
-                                                return [3 /*break*/, 179];
-                                            else if (isCategory1(value1)) {
-                                                value2 = this_1.operandStack.pop();
-                                                if (isCategory1(value2))
-                                                    return [3 /*break*/, 179];
-                                                else {
-                                                    System_js_1.System.err.println("Illegal operation: pop2 with category 1.");
-                                                    return [2 /*return*/, { value: void 0 }];
-                                                }
-                                            }
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 76;
-                                    case 76:
-                                        {
-                                            original = this_1.operandStack.pop();
-                                            copied = Object.assign(Object.create(Object.getPrototypeOf(original)), original);
-                                            copied2 = Object.assign(Object.create(Object.getPrototypeOf(original)), original);
-                                            this_1.operandStack.push(copied);
-                                            this_1.operandStack.push(copied2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 77;
-                                    case 77:
-                                        {
-                                            this_1.operandStack.push(this_1.operandStack.pop() + this_1.operandStack.pop());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 78;
-                                    case 78:
-                                        {
-                                            this_1.operandStack.push(this_1.operandStack.pop() + this_1.operandStack.pop());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 79;
-                                    case 79:
-                                        {
-                                            this_1.operandStack.push(this_1.operandStack.pop() + this_1.operandStack.pop());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 80;
-                                    case 80:
-                                        {
-                                            this_1.operandStack.push(this_1.operandStack.pop() + this_1.operandStack.pop());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 81;
-                                    case 81:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(this_1.operandStack.pop() - value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 82;
-                                    case 82:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(this_1.operandStack.pop() - value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 83;
-                                    case 83:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(this_1.operandStack.pop() - value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 84;
-                                    case 84:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(this_1.operandStack.pop() - value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 85;
-                                    case 85:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(this_1.operandStack.pop() * value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 86;
-                                    case 86:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(this_1.operandStack.pop() * value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 87;
-                                    case 87:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(this_1.operandStack.pop() * value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 88;
-                                    case 88:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(this_1.operandStack.pop() * value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 89;
-                                    case 89:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(this_1.operandStack.pop() / value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 90;
-                                    case 90:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(this_1.operandStack.pop() / value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 91;
-                                    case 91:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(this_1.operandStack.pop() / value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 92;
-                                    case 92:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(this_1.operandStack.pop() / value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 93;
-                                    case 93:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 % value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 94;
-                                    case 94:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 % value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 95;
-                                    case 95:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 % value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 96;
-                                    case 96:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 % value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 97;
-                                    case 97:
-                                        {
-                                            this_1.operandStack.push(-this_1.operandStack.pop());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 98;
-                                    case 98:
-                                        {
-                                            this_1.operandStack.push(-this_1.operandStack.pop());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 99;
-                                    case 99:
-                                        {
-                                            this_1.operandStack.push(-this_1.operandStack.pop());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 100;
-                                    case 100:
-                                        {
-                                            this_1.operandStack.push(-this_1.operandStack.pop());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 101;
-                                    case 101:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 << value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 102;
-                                    case 102:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 << value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 103;
-                                    case 103:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 >> value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 104;
-                                    case 104:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 >> value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 105;
-                                    case 105:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 >> value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 106;
-                                    case 106:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 >> value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 107;
-                                    case 107:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 & value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 108;
-                                    case 108:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 & value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 109;
-                                    case 109:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 | value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 110;
-                                    case 110:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 | value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 111;
-                                    case 111:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 ^ value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 112;
-                                    case 112:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            this_1.operandStack.push(value1 ^ value2);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 113;
-                                    case 113:
-                                        {
-                                            index_14 = opcode.operands[0];
-                                            vConst = opcode.operands[1];
-                                            this_1.locals[index_14].setValue(this_1.locals[index_14].getValue() + vConst);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 114;
-                                    case 114: return [3 /*break*/, 179];
-                                    case 115:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            if (value2 < value1)
-                                                this_1.operandStack.push(1);
-                                            else if (value2 == value1)
-                                                this_1.operandStack.push(0);
-                                            else
-                                                this_1.operandStack.push(-1);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 116;
-                                    case 116:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            if (isNaN(value1) || isNaN(value2))
-                                                this_1.operandStack.push(-1);
-                                            else if (value2 < value1)
-                                                this_1.operandStack.push(1);
-                                            else if (value2 == value1)
-                                                this_1.operandStack.push(0);
-                                            else
-                                                this_1.operandStack.push(-1);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 117;
-                                    case 117:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            if (isNaN(value1) || isNaN(value2))
-                                                this_1.operandStack.push(-1);
-                                            else if (value2 < value1)
-                                                this_1.operandStack.push(1);
-                                            else if (value2 == value1)
-                                                this_1.operandStack.push(0);
-                                            else
-                                                this_1.operandStack.push(1);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 118;
-                                    case 118:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            if (isNaN(value1) || isNaN(value2))
-                                                this_1.operandStack.push(-1);
-                                            else if (value2 < value1)
-                                                this_1.operandStack.push(1);
-                                            else if (value2 == value1)
-                                                this_1.operandStack.push(0);
-                                            else
-                                                this_1.operandStack.push(-1);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 119;
-                                    case 119:
-                                        {
-                                            value2 = this_1.operandStack.pop();
-                                            value1 = this_1.operandStack.pop();
-                                            if (isNaN(value1) || isNaN(value2))
-                                                this_1.operandStack.push(-1);
-                                            else if (value2 < value1)
-                                                this_1.operandStack.push(1);
-                                            else if (value2 == value1)
-                                                this_1.operandStack.push(0);
-                                            else
-                                                this_1.operandStack.push(1);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 120;
-                                    case 120:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        if (!(this_1.operandStack.pop() === 0)) return [3 /*break*/, 122];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 121:
-                                        _g.sent();
-                                        _g.label = 122;
-                                    case 122: return [3 /*break*/, 179];
-                                    case 123:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        if (!(this_1.operandStack.pop() !== 0)) return [3 /*break*/, 125];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 124:
-                                        _g.sent();
-                                        return [2 /*return*/, "break-mainloop"];
-                                    case 125: return [3 /*break*/, 179];
-                                    case 126:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        if (!(this_1.operandStack.pop() < 0)) return [3 /*break*/, 128];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 127:
-                                        _g.sent();
-                                        _g.label = 128;
-                                    case 128: return [3 /*break*/, 179];
-                                    case 129:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        if (!(this_1.operandStack.pop() >= 0)) return [3 /*break*/, 131];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 130:
-                                        _g.sent();
-                                        _g.label = 131;
-                                    case 131: return [3 /*break*/, 179];
-                                    case 132:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        if (!(this_1.operandStack.pop() > 0)) return [3 /*break*/, 134];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 133:
-                                        _g.sent();
-                                        _g.label = 134;
-                                    case 134: return [3 /*break*/, 179];
-                                    case 135:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        if (!(this_1.operandStack.pop() <= 0)) return [3 /*break*/, 137];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 136:
-                                        _g.sent();
-                                        _g.label = 137;
-                                    case 137: return [3 /*break*/, 179];
-                                    case 138:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        value2 = this_1.operandStack.pop();
-                                        value1 = this_1.operandStack.pop();
-                                        if (!(value1 === value2)) return [3 /*break*/, 140];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 139:
-                                        _g.sent();
-                                        _g.label = 140;
-                                    case 140: return [3 /*break*/, 179];
-                                    case 141:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        value2 = this_1.operandStack.pop();
-                                        value1 = this_1.operandStack.pop();
-                                        if (!(value1 !== value2)) return [3 /*break*/, 143];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 142:
-                                        _g.sent();
-                                        _g.label = 143;
-                                    case 143: return [3 /*break*/, 179];
-                                    case 144:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        value2 = this_1.operandStack.pop();
-                                        value1 = this_1.operandStack.pop();
-                                        if (!(value1 < value2)) return [3 /*break*/, 146];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 145:
-                                        _g.sent();
-                                        _g.label = 146;
-                                    case 146: return [3 /*break*/, 179];
-                                    case 147:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        value2 = this_1.operandStack.pop();
-                                        value1 = this_1.operandStack.pop();
-                                        if (!(value1 >= value2)) return [3 /*break*/, 149];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 148:
-                                        _g.sent();
-                                        _g.label = 149;
-                                    case 149: return [3 /*break*/, 179];
-                                    case 150:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        value2 = this_1.operandStack.pop();
-                                        value1 = this_1.operandStack.pop();
-                                        if (!(value1 > value2)) return [3 /*break*/, 152];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 151:
-                                        _g.sent();
-                                        _g.label = 152;
-                                    case 152: return [3 /*break*/, 179];
-                                    case 153:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        value2 = this_1.operandStack.pop();
-                                        value1 = this_1.operandStack.pop();
-                                        if (!(value1 <= value2)) return [3 /*break*/, 155];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 154:
-                                        _g.sent();
-                                        _g.label = 155;
-                                    case 155: return [3 /*break*/, 179];
-                                    case 156:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 157:
-                                        _g.sent();
-                                        return [3 /*break*/, 179];
-                                    case 158:
-                                        {
-                                            this_1.thread.stack[this_1.thread.runtimeDataArea.getPCRegister(this_1.thread.id) - 2].operandStack.push(this_1.operandStack.pop());
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 159;
-                                    case 159:
-                                        {
-                                            this_1.isRunning = false;
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 160;
-                                    case 160:
-                                        {
-                                            indexByte1 = opcode.operands[0];
-                                            indexByte2 = opcode.operands[1];
-                                            methodRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
-                                            methodNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.nameAndTypeIndex).info;
-                                            argumentsAndReturnType = (0, ClassFileLoader_js_1.getArgumentsAndReturnType)((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
-                                            argumentsCount = argumentsAndReturnType[0].length;
-                                            methodArgs = [];
-                                            for (i_2 = 0; i_2 < argumentsCount; i_2++) {
-                                                methodArgs.push(this_1.operandStack.pop());
-                                            }
-                                            this_1.operandStack.push((_e = this_1.operandStack.pop())["constructor"].apply(_e, methodArgs));
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 161;
-                                    case 161:
-                                        indexByte1 = opcode.operands[0];
-                                        indexByte2 = opcode.operands[1];
-                                        methodRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
-                                        methodNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.nameAndTypeIndex).info;
-                                        clazz = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.classIndex).info;
-                                        className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, clazz.nameIndex);
-                                        invokeMethodName = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.nameIndex);
-                                        argumentsAndReturnType = (0, ClassFileLoader_js_1.getArgumentsAndReturnType)((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
-                                        argumentsCount = argumentsAndReturnType[0].length;
-                                        methodArgs = [];
-                                        for (i_3 = 0; i_3 < argumentsCount; i_3++) {
-                                            methodArgs.push(this_1.operandStack.pop());
-                                        }
-                                        module_2 = void 0;
-                                        _g.label = 162;
-                                    case 162:
-                                        _g.trys.push([162, 164, , 165]);
-                                        return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require("../../../lib/" + className + ".js")); })];
-                                    case 163:
-                                        module_2 = _g.sent();
-                                        this_1.operandStack.push((_f = module_2.default)[invokeMethodName].apply(_f, methodArgs));
-                                        return [3 /*break*/, 165];
-                                    case 164:
-                                        e_1 = _g.sent();
-                                        this_1.thread.invokeMethod(invokeMethodName, this_1.classFile, methodArgs);
-                                        return [3 /*break*/, 165];
-                                    case 165: return [3 /*break*/, 179];
-                                    case 166:
-                                        indexByte1 = opcode.operands[0];
-                                        indexByte2 = opcode.operands[1];
-                                        classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
-                                        className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex);
-                                        module_3 = void 0;
-                                        console.log(jvm_js_1.JVM.getClassFile(className));
-                                        return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require("../../../lib/" + className + ".js")); })];
-                                    case 167:
-                                        module_3 = _g.sent();
-                                        this_1.operandStack.push(module_3.default);
-                                        return [3 /*break*/, 179];
-                                    case 168:
-                                        {
-                                            type = opcode.operands[0];
-                                            count = this_1.operandStack.pop();
-                                            array = void 0;
-                                            switch (type) {
-                                                case 4: {
-                                                    // TODO JavaではJava標準の配列オブジェクトを持つのでは？
-                                                    array = new Array(count).fill(false);
-                                                    break;
-                                                }
-                                                default: {
-                                                    array = new Array(count).fill(0);
-                                                }
-                                            }
-                                            this_1.operandStack.push(array);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 169;
-                                    case 169:
-                                        {
-                                            branchByte1 = opcode.operands[0];
-                                            branchByte2 = opcode.operands[1];
-                                            count = this_1.operandStack.pop();
-                                            // TODO
-                                            // const module = await import("../../../lib/" + readUtf8FromConstantPool(this.constantPool, classRef.nameIndex) + ".js")
-                                            this_1.operandStack.push(new Array(count).fill(null));
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 170;
-                                    case 170:
-                                        {
-                                            this_1.operandStack.push(this_1.operandStack.pop().length);
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 171;
-                                    case 171:
-                                        {
-                                            branchByte1 = opcode.operands[0];
-                                            branchByte2 = opcode.operands[1];
-                                            dimension = opcode.operands[2];
-                                            createMultiDimensionalArray_1 = function (n) {
-                                                if (n > 0) {
-                                                    return new Array(_this.operandStack.pop()).fill(createMultiDimensionalArray_1(n - 1));
-                                                }
-                                                else {
-                                                    return null;
-                                                }
-                                            };
-                                            // TODO
-                                            // const module = await import("../../../lib/" + readUtf8FromConstantPool(this.constantPool, classRef.nameIndex) + ".js")
-                                            this_1.operandStack.push(createMultiDimensionalArray_1(dimension));
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 172;
-                                    case 172:
-                                        {
-                                            branchByte1 = opcode.operands[0];
-                                            branchByte2 = opcode.operands[1];
-                                            ref = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (branchByte1 << 8) | branchByte2);
-                                            // TODO
-                                            return [3 /*break*/, 179];
-                                        }
-                                        _g.label = 173;
-                                    case 173:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        value = this_1.operandStack.pop();
-                                        if (!(value == null)) return [3 /*break*/, 175];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 174:
-                                        _g.sent();
-                                        _g.label = 175;
-                                    case 175: return [3 /*break*/, 179];
-                                    case 176:
-                                        branchByte1 = opcode.operands[0];
-                                        branchByte2 = opcode.operands[1];
-                                        value = this_1.operandStack.pop();
-                                        if (!value) return [3 /*break*/, 178];
-                                        return [4 /*yield*/, this_1.executeOpcodes(opcode.id + ((branchByte1 << 8) | branchByte2))];
-                                    case 177:
-                                        _g.sent();
-                                        _g.label = 178;
-                                    case 178: return [3 /*break*/, 179];
-                                    case 179: return [2 /*return*/];
-                                }
-                            });
-                        };
-                        this_1 = this;
-                        i = index;
-                        _a.label = 1;
-                    case 1:
-                        if (!(i < this.opcodes.length)) return [3 /*break*/, 4];
-                        return [5 /*yield**/, _loop_1(i)];
-                    case 2:
-                        state_1 = _a.sent();
-                        if (typeof state_1 === "object")
-                            return [2 /*return*/, state_1.value];
-                        if (state_1 === "break")
-                            return [3 /*break*/, 4];
-                        switch (state_1) {
-                            case "break-mainloop": return [3 /*break*/, 4];
-                        }
-                        _a.label = 3;
-                    case 3:
-                        i++;
-                        return [3 /*break*/, 1];
-                    case 4: return [2 /*return*/];
+        var _this = this;
+        // TODO
+        var name = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this.constantPool, this.method.nameIndex);
+        if (name === "newInstance") {
+            var klazz = (0, Utils_1.getString)(this.runtimeDataArea, this.runtimeDataArea.objectHeap[this.locals[0].value.heapIndex].filter(function (v) { return v.name === "name"; })[0].value);
+            var obj = this.javaClass.getSimpleName() == "Array" ? this.runtimeDataArea.createAArray(klazz, this.locals[0].value) : this.runtimeDataArea.createObject(klazz);
+            obj.init(this.runtimeDataArea);
+            this.thread.invokeMethod("<init>", "()V", obj.type, [], obj);
+            return obj;
+        }
+        // TODO
+        if (name == "clone") {
+            return Object.assign(Object.create(Object.getPrototypeOf(this.javaObject)), this.javaObject);
+        }
+        // TODO
+        if (name == "checkForTypeAlias" || name == "checkSlotCount")
+            return;
+        if (name == "parameterSlotCount")
+            return 0;
+        if (name == "referenceKindIsConsistent" || name == "vminfoIsConsistent" || name == "verifyConstants")
+            return true;
+        if (this.javaClass.name == "java.lang.ref.Reference" && name == "<clinit>")
+            return;
+        if (this.opcodes[this.opcodes.length - 1].id < id) {
+            id = id - 65536;
+        }
+        var index = this.getOpcodeIndexById(id);
+        var _loop_1 = function (i) {
+            this_1.opcode = this_1.opcodes[i];
+            if (!this_1.isRunning || !this_1.opcode)
+                return "break";
+            if (((23 <= this_1.opcode.id && this_1.opcode.id <= 38) || (115 <= this_1.opcode.id && this_1.opcode.id <= 123) || (138 <= this_1.opcode.id && this_1.opcode.id <= 138)) && name === "initializeSystemClass")
+                return "continue";
+            switch (this_1.opcode.opcode) {
+                // nop
+                case 0x00: {
+                    break;
                 }
-            });
-        });
+                // aconst_null
+                case 0x01: {
+                    this_1.operandStack.push(null);
+                    break;
+                }
+                // getstatic
+                case 0xb2: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var constantPoolInfo = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2);
+                    var fieldRef = constantPoolInfo.info;
+                    var classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.classIndex).info;
+                    var fieldNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.nameAndTypeIndex).info;
+                    var klass = BootstrapClassLoader_1.default.getInstance().findClass((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex).split("/").join("."));
+                    klass.initStatic(this_1.thread);
+                    var field = klass.getDeclaredField((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, fieldNameAndTypeRef.nameIndex));
+                    this_1.operandStack.push(field.staticValue);
+                    break;
+                }
+                // putstatic
+                case 0xb3: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var constantPoolInfo = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2);
+                    var fieldRef = constantPoolInfo.info;
+                    var classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.classIndex).info;
+                    var fieldNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.nameAndTypeIndex).info;
+                    // const fieldClassFileName = readUtf8FromConstantPool(this.constantPool, fieldNameAndTypeRef.nameIndex).split("/").join(".");
+                    var klass = BootstrapClassLoader_1.default.getInstance().findClass((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex).split("/").join("."));
+                    klass.initStatic(this_1.thread);
+                    var field = klass.getDeclaredField((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, fieldNameAndTypeRef.nameIndex));
+                    field.staticValue = this_1.operandStack.pop();
+                    break;
+                }
+                // getfield
+                case 0xb4: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var constantPoolInfo = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2);
+                    var fieldRef = constantPoolInfo.info;
+                    var classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.classIndex).info;
+                    var fieldNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.nameAndTypeIndex).info;
+                    var fieldName_1 = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, fieldNameAndTypeRef.nameIndex);
+                    var obj = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.runtimeDataArea.objectHeap[obj.heapIndex]
+                        .filter(function (variable) { return variable.name === fieldName_1; })[0]
+                        .value);
+                    break;
+                }
+                // putfield
+                case 0xb5: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var constantPoolInfo = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2);
+                    var fieldRef = constantPoolInfo.info;
+                    var classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.classIndex).info;
+                    var fieldNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, fieldRef.nameAndTypeIndex).info;
+                    var fieldName_2 = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, fieldNameAndTypeRef.nameIndex);
+                    var value = this_1.operandStack.pop();
+                    var obj = this_1.operandStack.pop();
+                    this_1.runtimeDataArea.objectHeap[obj.heapIndex]
+                        .filter(function (variable) { return variable.name === fieldName_2; })[0]
+                        .value = value;
+                    break;
+                }
+                // ldc
+                case 0x12: {
+                    var index_1 = this_1.opcode.operands[0];
+                    var info = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, index_1).info;
+                    if (info.tag === ConstantPoolInfo_js_1.CONSTANT_STRING) {
+                        var object = this_1.runtimeDataArea.createStringObject(this_1.thread, (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, info.stringIndex));
+                        this_1.operandStack.push(object);
+                    }
+                    else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_INTEGER) {
+                        var dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(32));
+                        dataView.setUint8(info.bytes[0]);
+                        dataView.setUint8(info.bytes[1]);
+                        dataView.setUint8(info.bytes[2]);
+                        dataView.setUint8(info.bytes[3]);
+                        dataView.resetOffset();
+                        this_1.operandStack.push(info.bytes[0] << 24 | info.bytes[1] << 16 | info.bytes[2] << 8 | info.bytes[3]);
+                    }
+                    else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_FLOAT) {
+                        var dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(32));
+                        dataView.setUint8(info.bytes[0]);
+                        dataView.setUint8(info.bytes[1]);
+                        dataView.setUint8(info.bytes[2]);
+                        dataView.setUint8(info.bytes[3]);
+                        dataView.resetOffset();
+                        this_1.operandStack.push(dataView.getFloat32());
+                    }
+                    else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_CLASS) {
+                        var classRef = info;
+                        var obj = this_1.runtimeDataArea.createClassObject(this_1.thread, BootstrapClassLoader_1.default.getInstance().findClass((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex).split("/").join(".")));
+                        this_1.operandStack.push(obj);
+                    }
+                    break;
+                }
+                // ldc_w
+                case 0x13: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var info = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                    if (info.tag === ConstantPoolInfo_js_1.CONSTANT_STRING) {
+                        var object = this_1.runtimeDataArea.createStringObject(this_1.thread, (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, info.stringIndex));
+                        this_1.operandStack.push(object);
+                    }
+                    else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_INTEGER) {
+                        var dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(32));
+                        dataView.setUint8(info.bytes[0]);
+                        dataView.setUint8(info.bytes[1]);
+                        dataView.setUint8(info.bytes[2]);
+                        dataView.setUint8(info.bytes[3]);
+                        dataView.resetOffset();
+                        this_1.operandStack.push(dataView.getInt32());
+                    }
+                    else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_FLOAT) {
+                        var dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(32));
+                        dataView.setUint8(info.bytes[0]);
+                        dataView.setUint8(info.bytes[1]);
+                        dataView.setUint8(info.bytes[2]);
+                        dataView.setUint8(info.bytes[3]);
+                        dataView.resetOffset();
+                        this_1.operandStack.push(dataView.getFloat32());
+                    }
+                    else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_CLASS) {
+                        var classRef = info;
+                        var obj = this_1.runtimeDataArea.createClassObject(this_1.thread, BootstrapClassLoader_1.default.getInstance().findClass((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex).split("/").join(".")));
+                        this_1.operandStack.push(obj);
+                    }
+                    break;
+                }
+                // ldc2_w
+                case 0x14: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var info = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                    if (info.tag === ConstantPoolInfo_js_1.CONSTANT_LONG) {
+                        var dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(64));
+                        dataView.setUint32(info.highBytes);
+                        dataView.setUint32(info.lowBytes);
+                        dataView.resetOffset();
+                        this_1.operandStack.push(dataView.getBigInt64());
+                    }
+                    else if (info.tag === ConstantPoolInfo_js_1.CONSTANT_DOUBLE) {
+                        var dataView = new ByteBuffer_js_1.ByteBuffer(new ArrayBuffer(64));
+                        dataView.setUint32(info.highBytes);
+                        dataView.setUint32(info.lowBytes);
+                        dataView.resetOffset();
+                        this_1.operandStack.push(dataView.getFloat64());
+                    }
+                    break;
+                }
+                // invokevirtual
+                case 0xb6: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var methodRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                    var methodNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.nameAndTypeIndex).info;
+                    var clazz = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.classIndex).info;
+                    var className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, clazz.nameIndex);
+                    var descriptor = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex);
+                    var invokeMethodName = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.nameIndex);
+                    var argumentsAndReturnType = (0, ClassFileLoader_js_1.getArgumentsAndReturnType)((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
+                    var methodArgs = [];
+                    for (var i_1 = 0; i_1 < argumentsAndReturnType[0].length; i_1++) {
+                        methodArgs.push(this_1.operandStack.pop());
+                    }
+                    var javaObject = this_1.operandStack.pop();
+                    if (javaObject == null) {
+                        (0, ExceptionHandler_1.throwException)("java.lang.NullPointerException", this_1.runtimeDataArea);
+                        this_1.isRunning = false;
+                        return { value: void 0 };
+                    }
+                    var result = this_1.thread.invokeMethod(invokeMethodName, descriptor, javaObject.type, methodArgs, javaObject);
+                    if (result !== undefined) {
+                        this_1.operandStack.push(result);
+                    }
+                    break;
+                }
+                // iconst_m1
+                case 0x02: {
+                    this_1.operandStack.push(-1);
+                    break;
+                }
+                // iconst_0
+                case 0x03: {
+                    this_1.operandStack.push(0);
+                    break;
+                }
+                // iconst_1
+                case 0x04: {
+                    this_1.operandStack.push(1);
+                    break;
+                }
+                // iconst_2
+                case 0x05: {
+                    this_1.operandStack.push(2);
+                    break;
+                }
+                // iconst_3
+                case 0x06: {
+                    this_1.operandStack.push(3);
+                    break;
+                }
+                // iconst_4
+                case 0x07: {
+                    this_1.operandStack.push(4);
+                    break;
+                }
+                // iconst_5
+                case 0x08: {
+                    this_1.operandStack.push(5);
+                    break;
+                }
+                // lconst_0
+                case 0x09: {
+                    this_1.operandStack.push(1);
+                    break;
+                }
+                // lconst_1
+                case 0x0a: {
+                    this_1.operandStack.push(2);
+                    break;
+                }
+                // fconst_0
+                case 0x0b: {
+                    this_1.operandStack.push(0.0);
+                    break;
+                }
+                // fconst_1
+                case 0x0c: {
+                    this_1.operandStack.push(1.0);
+                    break;
+                }
+                // fconst_2
+                case 0x0d: {
+                    this_1.operandStack.push(2.0);
+                    break;
+                }
+                // dconst_0
+                case 0x0e: {
+                    this_1.operandStack.push(0.0);
+                    break;
+                }
+                // dconst_1
+                case 0x0f: {
+                    this_1.operandStack.push(1.0);
+                    break;
+                }
+                // bipush
+                case 0x10: {
+                    var data = this_1.opcode.operands[0];
+                    this_1.operandStack.push(data);
+                    break;
+                }
+                // sipush
+                case 0x11: {
+                    var byte1 = this_1.opcode.operands[0];
+                    var byte2 = this_1.opcode.operands[1];
+                    this_1.operandStack.push((byte1 << 8) | byte2);
+                    break;
+                }
+                // iload
+                case 0x15: {
+                    var index_2 = this_1.opcode.operands[0];
+                    this_1.operandStack.push(this_1.locals[index_2].value);
+                    break;
+                }
+                // lload
+                case 0x16: {
+                    var index_3 = this_1.opcode.operands[0];
+                    this_1.operandStack.push(this_1.locals[index_3].value);
+                    break;
+                }
+                // fload
+                case 0x17: {
+                    var index_4 = this_1.opcode.operands[0];
+                    this_1.operandStack.push(this_1.locals[index_4].value);
+                    break;
+                }
+                // dload
+                case 0x18: {
+                    var index_5 = this_1.opcode.operands[0];
+                    this_1.operandStack.push(this_1.locals[index_5].value);
+                    break;
+                }
+                // aload
+                case 0x19: {
+                    var index_6 = this_1.opcode.operands[0];
+                    this_1.operandStack.push(this_1.locals[index_6].value);
+                    break;
+                }
+                // iload_0
+                case 0x1a: {
+                    this_1.operandStack.push(this_1.locals[0].value);
+                    break;
+                }
+                // iload_1
+                case 0x1b: {
+                    this_1.operandStack.push(this_1.locals[1].value);
+                    break;
+                }
+                // iload_2
+                case 0x1c: {
+                    this_1.operandStack.push(this_1.locals[2].value);
+                    break;
+                }
+                // iload_3
+                case 0x1d: {
+                    this_1.operandStack.push(this_1.locals[3].value);
+                    break;
+                }
+                // lload_0
+                case 0x1e: {
+                    this_1.operandStack.push(this_1.locals[0].value);
+                    break;
+                }
+                // lload_1
+                case 0x1f: {
+                    this_1.operandStack.push(this_1.locals[1].value);
+                    break;
+                }
+                // lload_2
+                case 0x20: {
+                    this_1.operandStack.push(this_1.locals[2].value);
+                    break;
+                }
+                // lload_3
+                case 0x21: {
+                    this_1.operandStack.push(this_1.locals[3].value);
+                    break;
+                }
+                // fload_0
+                case 0x22: {
+                    this_1.operandStack.push(this_1.locals[0].value);
+                    break;
+                }
+                // fload_1
+                case 0x23: {
+                    this_1.operandStack.push(this_1.locals[1].value);
+                    break;
+                }
+                // fload_2
+                case 0x24: {
+                    this_1.operandStack.push(this_1.locals[2].value);
+                    break;
+                }
+                // fload_3
+                case 0x25: {
+                    this_1.operandStack.push(this_1.locals[3].value);
+                    break;
+                }
+                // dload_0
+                case 0x26: {
+                    this_1.operandStack.push(this_1.locals[0].value);
+                    break;
+                }
+                // dload_1
+                case 0x27: {
+                    this_1.operandStack.push(this_1.locals[1].value);
+                    break;
+                }
+                // dload_2
+                case 0x28: {
+                    this_1.operandStack.push(this_1.locals[2].value);
+                    break;
+                }
+                // dload_3
+                case 0x29: {
+                    this_1.operandStack.push(this_1.locals[3].value);
+                    break;
+                }
+                // aload_0
+                case 0x2a: {
+                    this_1.operandStack.push(this_1.locals[0].value);
+                    break;
+                }
+                // aload_1
+                case 0x2b: {
+                    this_1.operandStack.push(this_1.locals[1].value);
+                    break;
+                }
+                // aload_2
+                case 0x2c: {
+                    this_1.operandStack.push(this_1.locals[2].value);
+                    break;
+                }
+                // aload_3
+                case 0x2d: {
+                    this_1.operandStack.push(this_1.locals[3].value);
+                    break;
+                }
+                // iaload
+                case 0x2e:
+                // laload
+                case 0x2f:
+                // faload
+                case 0x30:
+                // daload
+                case 0x31:
+                // aaload
+                case 0x32:
+                // baload
+                case 0x33:
+                // caload
+                case 0x34:
+                // saload
+                case 0x35: {
+                    var index_7 = this_1.operandStack.pop();
+                    var array = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.runtimeDataArea.objectHeap[array.heapIndex][index_7]);
+                    break;
+                }
+                // istore
+                case 0x36: {
+                    var index_8 = this_1.opcode.operands[0];
+                    this_1.locals[index_8] = new types_1.JavaVariable("java.lang.Integer", this_1.operandStack.pop());
+                    break;
+                }
+                // lstore
+                case 0x37: {
+                    var index_9 = this_1.opcode.operands[0];
+                    this_1.locals[index_9] = new types_1.JavaVariable("java.lang.Long", this_1.operandStack.pop());
+                    break;
+                }
+                // fstore
+                case 0x38: {
+                    var index_10 = this_1.opcode.operands[0];
+                    this_1.locals[index_10] = new types_1.JavaVariable("java.lang.Float", this_1.operandStack.pop());
+                    break;
+                }
+                // dstore
+                case 0x39: {
+                    var index_11 = this_1.opcode.operands[0];
+                    this_1.locals[index_11] = new types_1.JavaVariable("java.lang.Double", this_1.operandStack.pop());
+                    break;
+                }
+                // astore
+                case 0x3a: {
+                    var index_12 = this_1.opcode.operands[0];
+                    var obj = this_1.operandStack.pop();
+                    this_1.locals[index_12] = new types_1.JavaVariable(obj == null ? null : obj.type.name, obj);
+                    break;
+                }
+                // istore_0
+                case 0x3b: {
+                    this_1.locals[0] = new types_1.JavaVariable("java.lang.Integer", this_1.operandStack.pop());
+                    break;
+                }
+                // istore_1
+                case 0x3c: {
+                    this_1.locals[1] = new types_1.JavaVariable("java.lang.Integer", this_1.operandStack.pop());
+                    break;
+                }
+                // istore_2
+                case 0x3d: {
+                    this_1.locals[2] = new types_1.JavaVariable("java.lang.Integer", this_1.operandStack.pop());
+                    break;
+                }
+                // istore_3
+                case 0x3e: {
+                    this_1.locals[3] = new types_1.JavaVariable("java.lang.Integer", this_1.operandStack.pop());
+                    break;
+                }
+                // lstore_0
+                case 0x3f: {
+                    this_1.locals[0] = new types_1.JavaVariable("java.lang.Long", this_1.operandStack.pop());
+                    break;
+                }
+                // lstore_1
+                case 0x40: {
+                    this_1.locals[1] = new types_1.JavaVariable("java.lang.Long", this_1.operandStack.pop());
+                    break;
+                }
+                // lstore_2
+                case 0x41: {
+                    this_1.locals[2] = new types_1.JavaVariable("java.lang.Long", this_1.operandStack.pop());
+                    break;
+                }
+                // lstore_3
+                case 0x42: {
+                    this_1.locals[3] = new types_1.JavaVariable("java.lang.Long", this_1.operandStack.pop());
+                    break;
+                }
+                // fstore_0
+                case 0x43: {
+                    this_1.locals[0] = new types_1.JavaVariable("java.lang.Float", this_1.operandStack.pop());
+                    break;
+                }
+                // fstore_1
+                case 0x44: {
+                    this_1.locals[1] = new types_1.JavaVariable("java.lang.Float", this_1.operandStack.pop());
+                    break;
+                }
+                // fstore_2
+                case 0x45: {
+                    this_1.locals[2] = new types_1.JavaVariable("java.lang.Float", this_1.operandStack.pop());
+                    break;
+                }
+                // fstore_3
+                case 0x46: {
+                    this_1.locals[3] = new types_1.JavaVariable("java.lang.Float", this_1.operandStack.pop());
+                    break;
+                }
+                // dstore_0
+                case 0x47: {
+                    this_1.locals[0] = new types_1.JavaVariable("java.lang.Double", this_1.operandStack.pop());
+                    break;
+                }
+                // dstore_1
+                case 0x48: {
+                    this_1.locals[1] = new types_1.JavaVariable("java.lang.Double", this_1.operandStack.pop());
+                    break;
+                }
+                // dstore_2
+                case 0x48: {
+                    this_1.locals[2] = new types_1.JavaVariable("java.lang.Double", this_1.operandStack.pop());
+                    break;
+                }
+                // dstore_3
+                case 0x4a: {
+                    this_1.locals[3] = new types_1.JavaVariable("java.lang.Double", this_1.operandStack.pop());
+                    break;
+                }
+                // astore_0
+                case 0x4b: {
+                    var obj = this_1.operandStack.pop();
+                    this_1.locals[0] = new types_1.JavaVariable(obj == null ? null : obj.type.name, obj);
+                    break;
+                }
+                // astore_1
+                case 0x4c: {
+                    var obj = this_1.operandStack.pop();
+                    this_1.locals[1] = new types_1.JavaVariable(obj == null ? null : obj.type.name, obj);
+                    break;
+                }
+                // astore_2
+                case 0x4d: {
+                    var obj = this_1.operandStack.pop();
+                    this_1.locals[2] = new types_1.JavaVariable(obj == null ? null : obj.type.name, obj);
+                    break;
+                }
+                // astore_3
+                case 0x4e: {
+                    var obj = this_1.operandStack.pop();
+                    this_1.locals[3] = new types_1.JavaVariable(obj == null ? null : obj.type.name, obj);
+                    break;
+                }
+                // iastore
+                case 0x4f:
+                // lastore
+                case 0x50:
+                // fastore
+                case 0x51:
+                // dastore
+                case 0x52:
+                // aastore
+                case 0x53:
+                // bastore
+                case 0x54:
+                // castore
+                case 0x55:
+                // sastore
+                case 0x56: {
+                    var value = this_1.operandStack.pop();
+                    var index_13 = this_1.operandStack.pop();
+                    var array = this_1.operandStack.pop();
+                    this_1.runtimeDataArea.objectHeap[array.heapIndex][index_13] = value;
+                    // array[index] = value;
+                    break;
+                }
+                // pop
+                case 0x57: {
+                    this_1.operandStack.pop();
+                    break;
+                }
+                // pop2
+                case 0x58: {
+                    // TODO
+                    var isCategory1 = function (data) { return data instanceof types_1.JavaVariable || data instanceof types_1.JavaVariable; };
+                    var isCategory2 = function (data) { return data instanceof types_1.JavaVariable || data instanceof types_1.JavaVariable; };
+                    var value1 = this_1.operandStack.pop();
+                    if (isCategory2(value1))
+                        break;
+                    else if (isCategory1(value1)) {
+                        var value2 = this_1.operandStack.pop();
+                        if (isCategory1(value2))
+                            break;
+                        else {
+                            console.error("Illegal operation: pop2 with category 1.");
+                            return { value: void 0 };
+                        }
+                    }
+                    break;
+                }
+                // dup
+                case 0x59: {
+                    var original = this_1.operandStack.pop();
+                    if (original == null) {
+                        this_1.operandStack.push(null);
+                        this_1.operandStack.push(null);
+                        break;
+                    }
+                    if (typeof original == "number") {
+                        this_1.operandStack.push(original);
+                        this_1.operandStack.push(original);
+                        break;
+                    }
+                    var copied = Object.assign(Object.create(Object.getPrototypeOf(original)), original);
+                    var copied2 = Object.assign(Object.create(Object.getPrototypeOf(original)), original);
+                    this_1.operandStack.push(copied);
+                    this_1.operandStack.push(copied2);
+                    break;
+                }
+                // dup_x1
+                case 0x5a: {
+                    var value1 = this_1.operandStack.pop();
+                    var value2 = this_1.operandStack.pop();
+                    if (value1 == null) {
+                        this_1.operandStack.push(null);
+                        this_1.operandStack.push(value2);
+                        this_1.operandStack.push(null);
+                        break;
+                    }
+                    if (typeof value1 == "number") {
+                        this_1.operandStack.push(value1);
+                        this_1.operandStack.push(value2);
+                        this_1.operandStack.push(value1);
+                        break;
+                    }
+                    var copied = Object.assign(Object.create(Object.getPrototypeOf(value1)), value1);
+                    var copied2 = Object.assign(Object.create(Object.getPrototypeOf(value1)), value1);
+                    this_1.operandStack.push(copied);
+                    this_1.operandStack.push(value2);
+                    this_1.operandStack.push(copied2);
+                    break;
+                }
+                // iadd
+                case 0x60: {
+                    this_1.operandStack.push(this_1.operandStack.pop() + this_1.operandStack.pop());
+                    break;
+                }
+                // ladd
+                case 0x61: {
+                    this_1.operandStack.push(this_1.operandStack.pop() + this_1.operandStack.pop());
+                    break;
+                }
+                // fadd
+                case 0x62: {
+                    this_1.operandStack.push(this_1.operandStack.pop() + this_1.operandStack.pop());
+                    break;
+                }
+                // dadd
+                case 0x63: {
+                    this_1.operandStack.push(this_1.operandStack.pop() + this_1.operandStack.pop());
+                    break;
+                }
+                // isub
+                case 0x64: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 - value2);
+                    break;
+                }
+                // lsub
+                case 0x65: {
+                    var value2 = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.operandStack.pop() - value2);
+                    break;
+                }
+                // fsub
+                case 0x66: {
+                    var value2 = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.operandStack.pop() - value2);
+                    break;
+                }
+                // dsub
+                case 0x67: {
+                    var value2 = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.operandStack.pop() - value2);
+                    break;
+                }
+                // imul
+                case 0x68: {
+                    var value2 = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.operandStack.pop() * value2);
+                    break;
+                }
+                // lmul
+                case 0x69: {
+                    var value2 = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.operandStack.pop() * value2);
+                    break;
+                }
+                // fmul
+                case 0x6a: {
+                    var value2 = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.operandStack.pop() * value2);
+                    break;
+                }
+                // dmul
+                case 0x6b: {
+                    var value2 = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.operandStack.pop() * value2);
+                    break;
+                }
+                // idiv
+                case 0x6c: {
+                    var value2 = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.operandStack.pop() / value2);
+                    break;
+                }
+                // ldiv
+                case 0x6d: {
+                    var value2 = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.operandStack.pop() / value2);
+                    break;
+                }
+                // fdiv
+                case 0x6e: {
+                    var value2 = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.operandStack.pop() / value2);
+                    break;
+                }
+                // ddiv
+                case 0x6f: {
+                    var value2 = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.operandStack.pop() / value2);
+                    break;
+                }
+                // irem
+                case 0x70: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 % value2);
+                    break;
+                }
+                // lrem
+                case 0x71: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 % value2);
+                    break;
+                }
+                // frem
+                case 0x72: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 % value2);
+                    break;
+                }
+                // drem
+                case 0x73: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 % value2);
+                    break;
+                }
+                // ineg
+                case 0x74: {
+                    this_1.operandStack.push(-this_1.operandStack.pop());
+                    break;
+                }
+                // lneg
+                case 0x75: {
+                    this_1.operandStack.push(-this_1.operandStack.pop());
+                    break;
+                }
+                // fneg
+                case 0x76: {
+                    this_1.operandStack.push(-this_1.operandStack.pop());
+                    break;
+                }
+                // dneg
+                case 0x77: {
+                    this_1.operandStack.push(-this_1.operandStack.pop());
+                    break;
+                }
+                // ishl
+                case 0x78: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 << value2);
+                    break;
+                }
+                // lshl
+                case 0x79: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 << value2);
+                    break;
+                }
+                // ishr
+                case 0x7a: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 >> value2);
+                    break;
+                }
+                // lshr
+                case 0x7b: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 >> value2);
+                    break;
+                }
+                // iushr
+                case 0x7c: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 >> value2);
+                    break;
+                }
+                // lushr
+                case 0x7d: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 >> value2);
+                    break;
+                }
+                // iand
+                case 0x7e: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 & value2);
+                    break;
+                }
+                // land
+                case 0x7f: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 & value2);
+                    break;
+                }
+                // ior
+                case 0x80: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 | value2);
+                    break;
+                }
+                // lor
+                case 0x81: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 | value2);
+                    break;
+                }
+                // ixor
+                case 0x82: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 ^ value2);
+                    break;
+                }
+                // lxor
+                case 0x83: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    this_1.operandStack.push(value1 ^ value2);
+                    break;
+                }
+                // iinc
+                case 0x84: {
+                    var index_14 = this_1.opcode.operands[0];
+                    var vConst = this_1.opcode.operands[1];
+                    this_1.locals[index_14].value = this_1.locals[index_14].value + vConst;
+                    break;
+                }
+                // i2l~i2s
+                // TypeScript has only number type so these operation don't have any effects.
+                case 0x85:
+                case 0x86:
+                case 0x87:
+                case 0x88:
+                case 0x89:
+                case 0x8a:
+                case 0x8b:
+                case 0x8c:
+                case 0x8d:
+                case 0x8e:
+                case 0x8f:
+                case 0x90:
+                case 0x91:
+                case 0x92:
+                case 0x93:
+                    break;
+                // lcmp
+                case 0x94: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if (value2 < value1)
+                        this_1.operandStack.push(1);
+                    else if (value2 == value1)
+                        this_1.operandStack.push(0);
+                    else
+                        this_1.operandStack.push(-1);
+                    break;
+                }
+                // fcmpl
+                case 0x95: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if (isNaN(value1) || isNaN(value2))
+                        this_1.operandStack.push(-1);
+                    else if (value2 < value1)
+                        this_1.operandStack.push(1);
+                    else if (value2 == value1)
+                        this_1.operandStack.push(0);
+                    else
+                        this_1.operandStack.push(-1);
+                    break;
+                }
+                // fcmpg
+                case 0x96: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if (isNaN(value1) || isNaN(value2))
+                        this_1.operandStack.push(-1);
+                    else if (value2 < value1)
+                        this_1.operandStack.push(1);
+                    else if (value2 == value1)
+                        this_1.operandStack.push(0);
+                    else
+                        this_1.operandStack.push(1);
+                    break;
+                }
+                // dcmpl
+                case 0x97: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if (isNaN(value1) || isNaN(value2))
+                        this_1.operandStack.push(-1);
+                    else if (value2 < value1)
+                        this_1.operandStack.push(1);
+                    else if (value2 == value1)
+                        this_1.operandStack.push(0);
+                    else
+                        this_1.operandStack.push(-1);
+                    break;
+                }
+                // dcmpg
+                case 0x98: {
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if (isNaN(value1) || isNaN(value2))
+                        this_1.operandStack.push(-1);
+                    else if (value2 < value1)
+                        this_1.operandStack.push(1);
+                    else if (value2 == value1)
+                        this_1.operandStack.push(0);
+                    else
+                        this_1.operandStack.push(1);
+                    break;
+                }
+                // ifeq
+                case 0x99: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    var a = this_1.operandStack.pop();
+                    if (a === 0 || !a) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // ifne
+                case 0x9a: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    if (this_1.operandStack.pop() !== 0) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // iflt
+                case 0x9b: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    if (this_1.operandStack.pop() < 0) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // ifge
+                case 0x9c: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    if (this_1.operandStack.pop() >= 0) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // ifgt
+                case 0x9d: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    if (this_1.operandStack.pop() > 0) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // ifle
+                case 0x9e: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    if (this_1.operandStack.pop() <= 0) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // if_icmpeq
+                case 0x9f: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if (value1 === value2) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // if_icmpne
+                case 0xa0: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if (value1 !== value2) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // if_icmplt
+                case 0xa1: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if (value1 < value2) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // if_icmpge
+                case 0xa2: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if (value1 >= value2) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // if_icmpgt
+                case 0xa3: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if (value1 > value2) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // if_icmple
+                case 0xa4: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if (value1 <= value2) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // if_acmpeq
+                case 0xa5: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if ((value1 == null && value2 == null)) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    if ((value1 != null && value2 == null) || (value1 == null && value2 != null)) {
+                        break;
+                    }
+                    // TODO
+                    if (value1.type.name === "java.lang.String" && value2.type.name === "java.lang.String") {
+                        var hash1 = this_1.runtimeDataArea.objectHeap[value1.heapIndex].filter(function (v) { return v.name === "hash"; })[0].value;
+                        var hash2 = this_1.runtimeDataArea.objectHeap[value2.heapIndex].filter(function (v) { return v.name === "hash"; })[0].value;
+                        if (hash1 === hash2) {
+                            return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                        }
+                    }
+                    if (value1.type.name === value2.type.name) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // if_acmpne
+                case 0xa6: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    var value2 = this_1.operandStack.pop();
+                    var value1 = this_1.operandStack.pop();
+                    if ((value1 == null && value2 == null))
+                        break;
+                    if ((value1 != null && value2 == null) || (value1 == null && value2 != null)) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    // TODO
+                    if (value1.type.name === "java.lang.String" && value2.type.name === "java.lang.String") {
+                        var hash1 = this_1.runtimeDataArea.objectHeap[value1.heapIndex].filter(function (v) { return v.name === "hash"; })[0].value;
+                        var hash2 = this_1.runtimeDataArea.objectHeap[value2.heapIndex].filter(function (v) { return v.name === "hash"; })[0].value;
+                        if (hash1 !== hash2) {
+                            return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                        }
+                    }
+                    /*
+                    console.log(value1, value2)
+                    if (value1.type.name !== value2.type.name) {
+                        return this.executeOpcodes(this.opcode.id + ((branchByte1 << 8) | branchByte2));
+                    }
+
+                     */
+                    // TODO
+                    if (value1.type.name == "java.lang.Class") {
+                        var hashCode1 = JavaObject_1.JavaObject.hashCode(this_1.thread, this_1.javaClass, value1);
+                        var hashCode2 = JavaObject_1.JavaObject.hashCode(this_1.thread, this_1.javaClass, value2);
+                        if (hashCode1 !== hashCode2) {
+                            return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                        }
+                    }
+                    else {
+                        if (value1.type.name !== value2.type.name) {
+                            return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                        }
+                    }
+                    break;
+                }
+                // goto
+                case 0xa7: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                }
+                // tableswitch
+                case 0xaa: {
+                    var def = this_1.opcode.operands[0];
+                    var low = this_1.opcode.operands[1];
+                    var high = this_1.opcode.operands[2];
+                    var index_15 = this_1.operandStack.pop();
+                    var newOperands = this_1.operandStack.reverse();
+                    console.log(index_15, def, this_1.opcode.id + def, newOperands);
+                    if (index_15 < low || high < index_15) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + def) };
+                    }
+                    else {
+                        // TODO
+                        console.log(index_15 - low, newOperands);
+                        return { value: void 0 };
+                    }
+                    return { value: this_1.executeOpcodes(this_1.opcode.id + def) };
+                }
+                // lookupswitch
+                case 0xab: {
+                    var key = this_1.operandStack.pop();
+                    var def = this_1.opcode.operands[0];
+                    var npairs = this_1.opcode.operands[1];
+                    for (var j = 2; j < npairs + 2; j++) {
+                        if (this_1.opcode.operands[j] == key) {
+                            return { value: this_1.executeOpcodes(this_1.opcode.id + this_1.opcode.operands[j + 1]) };
+                        }
+                    }
+                    return { value: this_1.executeOpcodes(this_1.opcode.id + def) };
+                }
+                // ireturn
+                case 0xac: {
+                    this_1.isRunning = false;
+                    return { value: this_1.operandStack.pop() };
+                }
+                // lreturn
+                case 0xad: {
+                    this_1.isRunning = false;
+                    return { value: this_1.operandStack.pop() };
+                }
+                // freturn
+                case 0xae: {
+                    this_1.isRunning = false;
+                    return { value: this_1.operandStack.pop() };
+                }
+                // dreturn
+                case 0xaf: {
+                    this_1.isRunning = false;
+                    return { value: this_1.operandStack.pop() };
+                }
+                // areturn
+                case 0xb0: {
+                    this_1.isRunning = false;
+                    return { value: this_1.operandStack.pop() };
+                }
+                // return
+                case 0xb1: {
+                    this_1.isRunning = false;
+                    return { value: void 0 };
+                }
+                // invokespecial
+                case 0xb7: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var methodRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                    var methodNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.nameAndTypeIndex).info;
+                    var argumentsAndReturnType = (0, ClassFileLoader_js_1.getArgumentsAndReturnType)((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
+                    var descriptor = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex);
+                    var argumentsCount = argumentsAndReturnType[0].length;
+                    var clazz = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.classIndex).info;
+                    var invokeMethodName = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.nameIndex).split("/").join(".");
+                    var className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, clazz.nameIndex).split("/").join(".");
+                    var methodArgs = [];
+                    for (var i_2 = 0; i_2 < argumentsCount; i_2++) {
+                        methodArgs.push(this_1.operandStack.pop());
+                    }
+                    // TODO
+                    if (className === "java.lang.ThreadLocal") {
+                        this_1.operandStack.push(null);
+                        break;
+                    }
+                    var obj = this_1.operandStack.pop();
+                    var result = this_1.thread.invokeMethod(invokeMethodName, descriptor, BootstrapClassLoader_1.default.getInstance().findClass(className), methodArgs, obj);
+                    if (result !== undefined) {
+                        this_1.operandStack.push(result);
+                    }
+                    break;
+                }
+                // invokestatic
+                case 0xb8: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var methodRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                    var methodNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.nameAndTypeIndex).info;
+                    var descriptor = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex);
+                    var clazz = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.classIndex).info;
+                    var className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, clazz.nameIndex).split("/").join(".");
+                    var invokeMethodName = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.nameIndex);
+                    var argumentsAndReturnType = (0, ClassFileLoader_js_1.getArgumentsAndReturnType)((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
+                    var argumentsCount = argumentsAndReturnType[0].length;
+                    var methodArgs = [];
+                    // TODO
+                    if (invokeMethodName == "newUpdater") {
+                        this_1.operandStack.push(null);
+                        break;
+                    }
+                    for (var i_3 = 0; i_3 < argumentsCount; i_3++) {
+                        methodArgs.push(this_1.operandStack.pop());
+                    }
+                    // TODO
+                    if (className == "java.lang.reflect.Modifier") {
+                        var klass = BootstrapClassLoader_1.default.getInstance().findClass(className.split("/").join("."));
+                        klass.initStatic(this_1.thread);
+                    }
+                    var result = this_1.thread.invokeMethod(invokeMethodName, descriptor, BootstrapClassLoader_1.default.getInstance().findClass(className), methodArgs, null);
+                    if (result !== undefined) {
+                        this_1.operandStack.push(result);
+                    }
+                    break;
+                }
+                // invokeinterface
+                case 0xb9: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var methodRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                    var methodNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, methodRef.nameAndTypeIndex).info;
+                    var descriptor = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex);
+                    var invokeMethodName = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.nameIndex);
+                    var argumentsAndReturnType = (0, ClassFileLoader_js_1.getArgumentsAndReturnType)((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, methodNameAndTypeRef.descriptorIndex));
+                    var argumentsCount = argumentsAndReturnType[0].length;
+                    var methodArgs = [];
+                    for (var i_4 = 0; i_4 < argumentsCount; i_4++) {
+                        methodArgs.push(this_1.operandStack.pop());
+                    }
+                    var obj = this_1.operandStack.pop();
+                    var result = this_1.thread.invokeMethod(invokeMethodName, descriptor, obj.type, methodArgs, obj);
+                    if (result !== undefined) {
+                        this_1.operandStack.push(result);
+                    }
+                    break;
+                }
+                // invokedynamic
+                case 0xba: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var invokeDynamicRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                    var bootstrapMethodAttr = this_1.javaClass.attributes.filter(function (attribute) { return (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(_this.constantPool, attribute.attributeNameIndex) == "BootstrapMethods"; })[0];
+                    var bootstrapMethodRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, bootstrapMethodAttr.bootstrapMethods[invokeDynamicRef.bootstrapMethodAttrIndex].bootstrapMethodRef).info;
+                    var bootstrapMethod = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, bootstrapMethodRef.referenceIndex).info;
+                    var bootstrapMethodClass = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, bootstrapMethod.classIndex).info;
+                    var nameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, invokeDynamicRef.nameAndTypeIndex).info;
+                    var bootstrapNameAndTypeRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, bootstrapMethod.nameAndTypeIndex).info;
+                    var implMethodHandle = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, bootstrapMethodAttr.bootstrapMethods[invokeDynamicRef.bootstrapMethodAttrIndex].bootstrapArguments[1]).info;
+                    var implMethodNameAndType = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, implMethodHandle.referenceIndex).info.nameAndTypeIndex).info;
+                    var caller = this_1.thread.invokeMethod("lookup", "()Ljava/lang/invoke/MethodHandles$Lookup;", BootstrapClassLoader_1.default.getInstance().findClass("java.lang.invoke.MethodHandles"), [], null);
+                    console.log("A");
+                    var invokedName = this_1.runtimeDataArea.createStringObject(this_1.thread, (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, nameAndTypeRef.nameIndex));
+                    console.log("B");
+                    var invokedType = this_1.runtimeDataArea.createObject("java.lang.invoke.MethodType");
+                    var array = this_1.runtimeDataArea.createAArray("java.lang.Class", 0);
+                    this_1.thread.invokeMethod("<init>", "([Ljava/lang/Class;Ljava/lang/Class;)V", invokedType.type, [
+                        this_1.runtimeDataArea.createClassObject(this_1.thread, BootstrapClassLoader_1.default.getInstance().findClass("java.lang.Runnable")),
+                        array
+                    ], invokedType);
+                    console.log("C");
+                    var samMethodType = this_1.runtimeDataArea.createObject("java.lang.invoke.MethodType");
+                    var array0 = this_1.runtimeDataArea.createAArray("java.lang.Class", 0);
+                    this_1.thread.invokeMethod("<init>", "([Ljava/lang/Class;Ljava/lang/Class;)V", samMethodType.type, [
+                        this_1.runtimeDataArea.createClassObject(this_1.thread, BootstrapClassLoader_1.default.getInstance().findClass("java.lang.Void")),
+                        array0
+                    ], samMethodType);
+                    console.log("D");
+                    var implMethod = this_1.thread.invokeMethod("findVirtual", "(Ljava/lang/Class;Ljava/lang/String;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;", caller.type, [
+                        invokedType,
+                        this_1.runtimeDataArea.createStringObject(this_1.thread, (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, implMethodNameAndType.nameIndex)),
+                        this_1.runtimeDataArea.createClassObject(this_1.thread, this_1.javaClass)
+                    ], caller);
+                    console.log("E");
+                    var instantiatedMethodType = this_1.runtimeDataArea.createObject("java.lang.invoke.MethodType");
+                    var array1 = this_1.runtimeDataArea.createAArray("java.lang.Class", 0);
+                    this_1.thread.invokeMethod("<init>", "([Ljava/lang/Class;Ljava/lang/Class;)V", instantiatedMethodType.type, [
+                        this_1.runtimeDataArea.createClassObject(this_1.thread, BootstrapClassLoader_1.default.getInstance().findClass("java.lang.Void")),
+                        array1
+                    ], instantiatedMethodType);
+                    console.log("F");
+                    var callSite = this_1.thread.invokeMethod((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, bootstrapNameAndTypeRef.nameIndex), (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, bootstrapNameAndTypeRef.descriptorIndex), BootstrapClassLoader_1.default.getInstance().findClass((0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, bootstrapMethodClass.nameIndex).split("/").join(".")), [caller, invokedName, invokedType, samMethodType, implMethod, instantiatedMethodType], null);
+                    console.log("G");
+                    break;
+                }
+                // new
+                case 0xbb: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                    var className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex).split("/").join(".");
+                    var object = this_1.runtimeDataArea.createObject(className);
+                    object.init(this_1.runtimeDataArea);
+                    this_1.operandStack.push(object);
+                    break;
+                }
+                // newarray
+                case 0xbc: {
+                    var type = this_1.opcode.operands[0];
+                    var count = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.runtimeDataArea.createPArray(type, count));
+                    break;
+                }
+                // anewarray
+                case 0xbd: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                    var className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex);
+                    var count = this_1.operandStack.pop();
+                    this_1.operandStack.push(this_1.runtimeDataArea.createAArray(className.split("/").join("."), count));
+                    break;
+                }
+                // arraylength
+                case 0xbe: {
+                    var array = this_1.operandStack.pop();
+                    if (!array.isArray) {
+                        throw new Error("The stack values is not array object.");
+                    }
+                    this_1.operandStack.push(this_1.runtimeDataArea.objectHeap[array.heapIndex].length);
+                    break;
+                }
+                // athrow
+                case 0xbf: {
+                    var throwable_1 = this_1.operandStack.pop();
+                    if (throwable_1 == null) {
+                        throwable_1 = this_1.runtimeDataArea.createObject("java.lang.NullPointerException");
+                    }
+                    var codeAttributes = this_1.method.attributes.filter(function (attribute) { return (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(_this.constantPool, attribute.attributeNameIndex) === "Code"; });
+                    if (!codeAttributes || codeAttributes.length == 0) {
+                        console.error("CodeAttribute does not exist!");
+                        break;
+                    }
+                    var codeAttribute = codeAttributes[0];
+                    var handlers = codeAttribute.exceptionTable.filter((function (value) {
+                        if (value.catchType != 0) {
+                            var catchType = _this.constantPool[value.catchType].info;
+                            return value.startPc <= _this.opcode.id && _this.opcode.id <= value.endPc
+                                && (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(_this.constantPool, catchType.nameIndex).split("/").join(".") === throwable_1.type.name;
+                        }
+                        else {
+                            return value.startPc <= _this.opcode.id && _this.opcode.id <= value.endPc;
+                        }
+                    }));
+                    if (handlers.length > 0) {
+                        var handler = handlers[0];
+                        var result = this_1.executeOpcodes(handler.handlerPc);
+                        this_1.operandStack = [];
+                        this_1.operandStack.push(throwable_1);
+                        return { value: result };
+                    }
+                    break;
+                }
+                // checkcast
+                case 0xc0: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    var ref = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (branchByte1 << 8) | branchByte2);
+                    // TODO
+                    break;
+                }
+                // monitorenter
+                case 0xc2: {
+                    // TODO
+                    this_1.operandStack.pop();
+                    break;
+                }
+                // monitorexit
+                case 0xc3: {
+                    // TODO
+                    this_1.operandStack.pop();
+                    break;
+                }
+                // multianewarray
+                case 0xc5: {
+                    var indexByte1 = this_1.opcode.operands[0];
+                    var indexByte2 = this_1.opcode.operands[1];
+                    var classRef = (0, ClassFileLoader_js_1.getConstantPoolInfo)(this_1.constantPool, (indexByte1 << 8) | indexByte2).info;
+                    var className = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this_1.constantPool, classRef.nameIndex);
+                    var dimension = this_1.opcode.operands[2];
+                    var sizes = new Array(dimension);
+                    for (var j = 0; j < dimension; j++) {
+                        sizes[j] = this_1.operandStack.pop();
+                    }
+                    this_1.operandStack.push(this_1.runtimeDataArea.createMDArray(className.split("/").join("."), dimension, sizes));
+                    break;
+                }
+                // ifnull
+                case 0xc6: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    var value = this_1.operandStack.pop();
+                    if (value == null) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+                // ifnonnull
+                case 0xc7: {
+                    var branchByte1 = this_1.opcode.operands[0];
+                    var branchByte2 = this_1.opcode.operands[1];
+                    var value = this_1.operandStack.pop();
+                    if (value) {
+                        return { value: this_1.executeOpcodes(this_1.opcode.id + ((branchByte1 << 8) | branchByte2)) };
+                    }
+                    break;
+                }
+            }
+        };
+        var this_1 = this;
+        for (var i = index; i < this.opcodes.length; i++) {
+            var state_1 = _loop_1(i);
+            if (typeof state_1 === "object")
+                return state_1.value;
+            if (state_1 === "break")
+                break;
+        }
     };
     Frame.prototype.loadOpcodes = function () {
         var _this = this;
@@ -1612,13 +1557,25 @@ var Frame = /** @class */ (function () {
         var codeAttribute = codeAttributes[0];
         var code = codeAttribute.code;
         code.resetOffset();
+        var name = (0, ConstantPoolInfo_js_1.readUtf8FromConstantPool)(this.constantPool, this.method.nameIndex);
         var opcode;
         var id = 0;
         while (code.offset < code.getLength()) {
             opcode = code.getUint8();
+            if (name == "isMethodHandleInvokeName")
+                console.log(id);
             switch (opcode) {
                 // nop
                 case 0x00: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
+                    break;
+                }
+                // aconst_null
+                case 0x01: {
                     this.opcodes.push({
                         id: id,
                         opcode: opcode,
@@ -1636,6 +1593,36 @@ var Frame = /** @class */ (function () {
                     id += 2;
                     break;
                 }
+                // putstatic
+                case 0xb3: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8(), code.getUint8()]
+                    });
+                    id += 2;
+                    break;
+                }
+                // getfield
+                case 0xb4: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8(), code.getUint8()]
+                    });
+                    id += 2;
+                    break;
+                }
+                // putfield
+                case 0xb5: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8(), code.getUint8()]
+                    });
+                    id += 2;
+                    break;
+                }
                 // ldc
                 case 0x12: {
                     this.opcodes.push({
@@ -1644,6 +1631,16 @@ var Frame = /** @class */ (function () {
                         operands: [code.getUint8()]
                     });
                     id++;
+                    break;
+                }
+                // ldc_w
+                case 0x13: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8(), code.getUint8()]
+                    });
+                    id += 2;
                     break;
                 }
                 // ldc2_w
@@ -1800,6 +1797,16 @@ var Frame = /** @class */ (function () {
                         operands: [code.getInt8()]
                     });
                     id++;
+                    break;
+                }
+                // sipush
+                case 0x11: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8(), code.getUint8()]
+                    });
+                    id += 2;
                     break;
                 }
                 // iload
@@ -2334,6 +2341,15 @@ var Frame = /** @class */ (function () {
                     });
                     break;
                 }
+                // dup_x1
+                case 0x5a: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
+                    break;
+                }
                 // iadd
                 case 0x60: {
                     this.opcodes.push({
@@ -2857,6 +2873,26 @@ var Frame = /** @class */ (function () {
                     id += 2;
                     break;
                 }
+                // if_acmpeq
+                case 0xa5: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8(), code.getUint8()]
+                    });
+                    id += 2;
+                    break;
+                }
+                // if_acmpne
+                case 0xa6: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8(), code.getUint8()]
+                    });
+                    id += 2;
+                    break;
+                }
                 // goto
                 case 0xa7: {
                     this.opcodes.push({
@@ -2867,8 +2903,108 @@ var Frame = /** @class */ (function () {
                     id += 2;
                     break;
                 }
+                // tableswitch
+                case 0xaa: {
+                    var padding = (4 - (id + 1) % 4) % 4;
+                    var operands = [];
+                    var count = padding;
+                    for (var i = 0; i < padding; i++) {
+                        code.getUint8(); // padding
+                    }
+                    // defaultByte
+                    var defaultNum = (code.getUint8() << 24) | (code.getUint8() << 16) | (code.getUint8() << 8) | code.getUint8();
+                    count += 4;
+                    // lowByte
+                    var lowNum = (code.getUint8() << 24) | (code.getUint8() << 16) | (code.getUint8() << 8) | code.getUint8();
+                    count += 4;
+                    // highByte
+                    var highNum = (code.getUint8() << 24) | (code.getUint8() << 16) | (code.getUint8() << 8) | code.getUint8();
+                    count += 4;
+                    var n = highNum - lowNum + 1;
+                    operands.push(defaultNum, lowNum, highNum);
+                    // jump offsets
+                    for (var i = 0; i < n; i++) {
+                        // match
+                        operands.push((code.getUint8() << 24) | (code.getUint8() << 16) | (code.getUint8() << 8) | code.getUint8());
+                        count += 4;
+                    }
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: operands
+                    });
+                    id += count;
+                    break;
+                }
+                // lookupswitch
+                case 0xab: {
+                    var padding = (4 - (id + 1) % 4) % 4;
+                    var operands = [];
+                    var count = padding;
+                    for (var i = 0; i < padding; i++) {
+                        code.getUint8(); // padding
+                    }
+                    // defaultByte
+                    operands.push((code.getUint8() << 24) | (code.getUint8() << 16) | (code.getUint8() << 8) | code.getUint8());
+                    count += 4;
+                    // npairs
+                    operands.push((code.getUint8() << 24) | (code.getUint8() << 16) | (code.getUint8() << 8) | code.getUint8());
+                    count += 4;
+                    // match-offset pairs
+                    for (var i = 0; i < operands[1]; i++) {
+                        // match
+                        operands.push((code.getUint8() << 24) | (code.getUint8() << 16) | (code.getUint8() << 8) | code.getUint8());
+                        count += 4;
+                        // offset
+                        operands.push((code.getUint8() << 24) | (code.getUint8() << 16) | (code.getUint8() << 8) | code.getUint8());
+                        count += 4;
+                    }
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: operands
+                    });
+                    id += count;
+                    break;
+                }
                 // ireturn
                 case 0xac: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
+                    break;
+                }
+                // lreturn
+                case 0xad: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
+                    break;
+                }
+                // freturn
+                case 0xae: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
+                    break;
+                }
+                // dreturn
+                case 0xaf: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
+                    break;
+                }
+                // areturn
+                case 0xb0: {
                     this.opcodes.push({
                         id: id,
                         opcode: opcode,
@@ -2903,6 +3039,26 @@ var Frame = /** @class */ (function () {
                         operands: [code.getUint8(), code.getUint8()]
                     });
                     id += 2;
+                    break;
+                }
+                // invokeinterface
+                case 0xb9: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8(), code.getUint8(), code.getUint8(), code.getUint8()]
+                    });
+                    id += 4;
+                    break;
+                }
+                // invokedynamic
+                case 0xba: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: [code.getUint8(), code.getUint8(), code.getUint8(), code.getUint8()]
+                    });
+                    id += 4;
                     break;
                 }
                 // new
@@ -2944,6 +3100,15 @@ var Frame = /** @class */ (function () {
                     });
                     break;
                 }
+                // athrow
+                case 0xbf: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
+                    break;
+                }
                 // checkcast
                 case 0xc0: {
                     this.opcodes.push({
@@ -2952,6 +3117,24 @@ var Frame = /** @class */ (function () {
                         operands: [code.getUint8(), code.getUint8()]
                     });
                     id += 2;
+                    break;
+                }
+                // monitorenter
+                case 0xc2: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
+                    break;
+                }
+                // monitorexit
+                case 0xc3: {
+                    this.opcodes.push({
+                        id: id,
+                        opcode: opcode,
+                        operands: []
+                    });
                     break;
                 }
                 // multianewarray

@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "JVM on TypeScript",
   "main": "dist/main.js",
+
+
   "scripts": {
     "dev": "ts-node src/main.ts",
     "dev:watch": "ts-node-dev --respawn src/main.ts",

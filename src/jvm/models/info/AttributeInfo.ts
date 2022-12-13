@@ -46,7 +46,7 @@ export interface InnerClassesAttribute extends Attribute {
     classes: Class[]
 }
 
-export interface EnclosingMethod extends Attribute {
+export interface EnclosingMethodAttribute extends Attribute {
     classIndex: number,
     methodIndex: number
 }
@@ -104,7 +104,10 @@ export interface RuntimeInvisibleParameterAnnotationsAttribute extends Attribute
     parameterAnnotations: ParameterAnnotation[]
 }
 
-// TODO
+export interface BootstrapMethodsAttribute extends Attribute {
+    numBootstrapMethods: number,
+    bootstrapMethods: BootstrapMethod[]
+}
 
 export type ExceptionTable = {
     startPc: number,
@@ -176,6 +179,12 @@ export type Class = {
     innerClassAccessFlags: number
 }
 
+export type BootstrapMethod = {
+    bootstrapMethodRef: number,
+    numBootstrapMethods: number,
+    bootstrapArguments: number[]
+}
+
 export const readAttributes = (constantPool: ConstantPoolInfo[], length: number, buffer: ByteBuffer): Attribute[] => {
     const result: Attribute[] = [];
 
@@ -203,6 +212,25 @@ export const readAttributes = (constantPool: ConstantPoolInfo[], length: number,
             case "LocalVariableTable": {
                 result.push(processLocalVariableAttribute(attributeNameIndex, attributeLength, buffer));
                 break;
+            }
+
+            case "InnerClasses": {
+                result.push(processInnerClassesAttribute(attributeNameIndex, attributeLength, buffer));
+                break;
+            }
+
+            case "BootstrapMethods": {
+                result.push(processBootstrapMethodsAttribute(attributeNameIndex, attributeLength, buffer));
+                break;
+            }
+
+            case "EnclosingMethod": {
+                result.push(processEnclosingMethodAttribute(attributeNameIndex, attributeLength, buffer));
+                break;
+            }
+
+            default: {
+                buffer.offset += attributeLength;
             }
         }
     }
@@ -270,6 +298,55 @@ export const processLineNumberAttribute = (attributeNameIndex: number, attribute
         info: [],
         lineNumberTableLength: lineNumberTableLength,
         lineNumberTable: lineNumberTable
+    };
+}
+
+export const processInnerClassesAttribute = (attributeNameIndex: number, attributeLength: number, buffer: ByteBuffer): InnerClassesAttribute => {
+    const numberOfClasses = buffer.getUint16();
+    const innerClasses: Class[] = [];
+    for (let i = 0; i < numberOfClasses; i++) {
+        innerClasses.push({
+            innerClassInfoIndex: buffer.getUint16(),
+            outerClassInfoIndex: buffer.getUint16(),
+            innerNameIndex: buffer.getUint16(),
+            innerClassAccessFlags: buffer.getUint16()
+        })
+    }
+
+    return {
+        attributeNameIndex: attributeNameIndex,
+        attributeLength: attributeLength,
+        info: [],
+        classes: innerClasses,
+        numberOfClasses: numberOfClasses
+    };
+}
+
+export const processBootstrapMethodsAttribute = (attributeNameIndex: number, attributeLength: number, buffer: ByteBuffer): BootstrapMethodsAttribute => {
+    const numBootstrapMethods = buffer.getUint16();
+    const methods: BootstrapMethod[] = [];
+    for (let i = 0; i < numBootstrapMethods; i++) {
+        const bootstrapMethodRef = buffer.getUint16();
+        const numBootstrapMethods = buffer.getUint16();
+        const args: number[] = [];
+
+        for (let j = 0; j < numBootstrapMethods; j++) {
+            args.push(buffer.getUint16());
+        }
+
+        methods.push({
+            bootstrapMethodRef: bootstrapMethodRef,
+            numBootstrapMethods: numBootstrapMethods,
+            bootstrapArguments: args
+        });
+    }
+
+    return {
+        attributeNameIndex: attributeNameIndex,
+        attributeLength: attributeLength,
+        info: [],
+        bootstrapMethods: methods,
+        numBootstrapMethods: numBootstrapMethods
     };
 }
 
@@ -436,6 +513,18 @@ export const processLocalVariableAttribute = (attributeNameIndex: number, attrib
         attributeLength: attributeLength,
         localVariableTable: localVariableTable,
         localVariableTableLength: localVariableTableLength,
+        info: []
+    }
+}
+
+export const processEnclosingMethodAttribute = (attributeNameIndex: number, attributeLength: number, buffer: ByteBuffer): EnclosingMethodAttribute => {
+    const classIndex = buffer.getUint16();
+    const methodIndex = buffer.getUint16();
+    return  {
+        attributeNameIndex: attributeNameIndex,
+        attributeLength: attributeLength,
+        classIndex: classIndex,
+        methodIndex: methodIndex,
         info: []
     }
 }
