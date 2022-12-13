@@ -1,5 +1,5 @@
 {
-  "name": "jvm-on-typescript",
+  "name": "churu-vm",
   "version": "1.0.0",
   "description": "JVM on TypeScript",
   "main": "dist/main.js",
@@ -16,12 +16,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/itsu-dev/jvm-on-typescript.git"
+    "url": "git+https://github.com/itsu-dev/ChuruVM.git"
   },
   "author": "itsu",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/itsu-dev/jvm-on-typescript/issues"
+    "url": "https://github.com/itsu-dev/ChuruVM/issues"
   },
   "homepage": "https://github.com/itsu-dev/jvm-on-typescript#readme",
   "devDependencies": {
