@@ -110,8 +110,8 @@ var JVM = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 libraries = {
-                    "/jvm-on-typescript/lib/rt.jar": false,
-                    //"/jvm-on-typescript/lib/java-dom-api.jar": false
+                    "./lib/rt.jar": false,
+                    "./lib/java-dom-api.jar": false
                 };
                 checkForLibraries = function () {
                     for (var _i = 0, _a = Object.keys(libraries); _i < _a.length; _i++) {
