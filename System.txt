@@ -1,0 +1,1230 @@
+Classfile /C:/Users/itsu0/.jdks/corretto-1.8.0_282/jre/lib/rt/java/lang/System.class
+  Last modified 2021/01/14; size 7464 bytes
+  SHA-256 checksum 29c2f33e311649eee3eb697621efec1b0030aa61f2905e266519807bab47cdc2
+  Compiled from "System.java"
+public final class java.lang.System
+  minor version: 0
+  major version: 52
+  flags: (0x0031) ACC_PUBLIC, ACC_FINAL, ACC_SUPER
+  this_class: #7                          // java/lang/System
+  super_class: #107                       // java/lang/Object
+  interfaces: 0, fields: 7, methods: 40, attributes: 2
+Constant pool:
+    #1 = Methodref          #107.#198     // java/lang/Object."<init>":()V
+    #2 = Methodref          #7.#199       // java/lang/System.checkIO:()V
+    #3 = Methodref          #7.#200       // java/lang/System.setIn0:(Ljava/io/InputStream;)V
+    #4 = Methodref          #7.#201       // java/lang/System.setOut0:(Ljava/io/PrintStream;)V
+    #5 = Methodref          #7.#202       // java/lang/System.setErr0:(Ljava/io/PrintStream;)V
+    #6 = Fieldref           #7.#203       // java/lang/System.cons:Ljava/io/Console;
+    #7 = Class              #204          // java/lang/System
+    #8 = Methodref          #205.#206     // sun/misc/SharedSecrets.getJavaIOAccess:()Lsun/misc/JavaIOAccess;
+    #9 = InterfaceMethodref #207.#208     // sun/misc/JavaIOAccess.console:()Ljava/io/Console;
+   #10 = Methodref          #209.#210     // java/nio/channels/spi/SelectorProvider.provider:()Ljava/nio/channels/spi/SelectorProvider;
+   #11 = Methodref          #209.#211     // java/nio/channels/spi/SelectorProvider.inheritedChannel:()Ljava/nio/channels/Channel;
+   #12 = Methodref          #7.#212       // java/lang/System.getSecurityManager:()Ljava/lang/SecurityManager;
+   #13 = Class              #213          // java/lang/RuntimePermission
+   #14 = String             #214          // setIO
+   #15 = Methodref          #13.#215      // java/lang/RuntimePermission."<init>":(Ljava/lang/String;)V
+   #16 = Methodref          #216.#217     // java/lang/SecurityManager.checkPermission:(Ljava/security/Permission;)V
+   #17 = String             #218          // java.lang
+   #18 = Methodref          #216.#219     // java/lang/SecurityManager.checkPackageAccess:(Ljava/lang/String;)V
+   #19 = Class              #220          // java/lang/Exception
+   #20 = Methodref          #7.#221       // java/lang/System.setSecurityManager0:(Ljava/lang/SecurityManager;)V
+   #21 = String             #146          // setSecurityManager
+   #22 = Methodref          #107.#222     // java/lang/Object.getClass:()Ljava/lang/Class;
+   #23 = Methodref          #223.#224     // java/lang/Class.getClassLoader:()Ljava/lang/ClassLoader;
+   #24 = Class              #225          // java/lang/System$1
+   #25 = Methodref          #24.#226      // java/lang/System$1."<init>":(Ljava/lang/SecurityManager;)V
+   #26 = Methodref          #227.#228     // java/security/AccessController.doPrivileged:(Ljava/security/PrivilegedAction;)Ljava/lang/Object;
+   #27 = Fieldref           #7.#229       // java/lang/System.security:Ljava/lang/SecurityManager;
+   #28 = Methodref          #216.#230     // java/lang/SecurityManager.checkPropertiesAccess:()V
+   #29 = Fieldref           #7.#231       // java/lang/System.props:Ljava/util/Properties;
+   #30 = Fieldref           #7.#232       // java/lang/System.lineSeparator:Ljava/lang/String;
+   #31 = Class              #233          // java/util/Properties
+   #32 = Methodref          #31.#198      // java/util/Properties."<init>":()V
+   #33 = Methodref          #7.#234       // java/lang/System.initProperties:(Ljava/util/Properties;)Ljava/util/Properties;
+   #34 = Methodref          #7.#235       // java/lang/System.checkKey:(Ljava/lang/String;)V
+   #35 = Methodref          #216.#236     // java/lang/SecurityManager.checkPropertyAccess:(Ljava/lang/String;)V
+   #36 = Methodref          #31.#237      // java/util/Properties.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+   #37 = Methodref          #31.#238      // java/util/Properties.getProperty:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+   #38 = Class              #239          // java/util/PropertyPermission
+   #39 = Class              #240          // sun/security/util/SecurityConstants
+   #40 = String             #241          // write
+   #41 = Methodref          #38.#242      // java/util/PropertyPermission."<init>":(Ljava/lang/String;Ljava/lang/String;)V
+   #42 = Methodref          #31.#243      // java/util/Properties.setProperty:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;
+   #43 = Class              #244          // java/lang/String
+   #44 = Methodref          #31.#245      // java/util/Properties.remove:(Ljava/lang/Object;)Ljava/lang/Object;
+   #45 = Class              #246          // java/lang/NullPointerException
+   #46 = String             #247          // key can\'t be null
+   #47 = Methodref          #45.#215      // java/lang/NullPointerException."<init>":(Ljava/lang/String;)V
+   #48 = String             #248          //
+   #49 = Methodref          #43.#249      // java/lang/String.equals:(Ljava/lang/Object;)Z
+   #50 = Class              #250          // java/lang/IllegalArgumentException
+   #51 = String             #251          // key can\'t be empty
+   #52 = Methodref          #50.#215      // java/lang/IllegalArgumentException."<init>":(Ljava/lang/String;)V
+   #53 = Class              #252          // java/lang/StringBuilder
+   #54 = Methodref          #53.#198      // java/lang/StringBuilder."<init>":()V
+   #55 = String             #253          // getenv.
+   #56 = Methodref          #53.#254      // java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   #57 = Methodref          #53.#255      // java/lang/StringBuilder.toString:()Ljava/lang/String;
+   #58 = Methodref          #256.#257     // java/lang/ProcessEnvironment.getenv:(Ljava/lang/String;)Ljava/lang/String;
+   #59 = String             #258          // getenv.*
+   #60 = Methodref          #256.#259     // java/lang/ProcessEnvironment.getenv:()Ljava/util/Map;
+   #61 = Methodref          #260.#261     // java/lang/Runtime.getRuntime:()Ljava/lang/Runtime;
+   #62 = Methodref          #260.#262     // java/lang/Runtime.exit:(I)V
+   #63 = Methodref          #260.#263     // java/lang/Runtime.gc:()V
+   #64 = Methodref          #260.#264     // java/lang/Runtime.runFinalization:()V
+   #65 = Methodref          #260.#265     // java/lang/Runtime.runFinalizersOnExit:(Z)V
+   #66 = Methodref          #266.#267     // sun/reflect/Reflection.getCallerClass:()Ljava/lang/Class;
+   #67 = Methodref          #260.#268     // java/lang/Runtime.load0:(Ljava/lang/Class;Ljava/lang/String;)V
+   #68 = Methodref          #260.#269     // java/lang/Runtime.loadLibrary0:(Ljava/lang/Class;Ljava/lang/String;)V
+   #69 = Class              #270          // java/io/PrintStream
+   #70 = Class              #271          // java/io/BufferedOutputStream
+   #71 = Methodref          #70.#272      // java/io/BufferedOutputStream."<init>":(Ljava/io/OutputStream;I)V
+   #72 = Methodref          #69.#273      // java/io/PrintStream."<init>":(Ljava/io/OutputStream;ZLjava/lang/String;)V
+   #73 = Class              #274          // java/io/UnsupportedEncodingException
+   #74 = Methodref          #69.#275      // java/io/PrintStream."<init>":(Ljava/io/OutputStream;Z)V
+   #75 = Methodref          #276.#277     // sun/misc/VM.saveAndRemoveProperties:(Ljava/util/Properties;)V
+   #76 = String             #278          // line.separator
+   #77 = Methodref          #279.#280     // jdk/internal/util/StaticProperty.jdkSerialFilter:()Ljava/lang/String;
+   #78 = Methodref          #281.#282     // sun/misc/Version.init:()V
+   #79 = Class              #283          // java/io/FileInputStream
+   #80 = Fieldref           #284.#285     // java/io/FileDescriptor.in:Ljava/io/FileDescriptor;
+   #81 = Methodref          #79.#286      // java/io/FileInputStream."<init>":(Ljava/io/FileDescriptor;)V
+   #82 = Class              #287          // java/io/FileOutputStream
+   #83 = Fieldref           #284.#288     // java/io/FileDescriptor.out:Ljava/io/FileDescriptor;
+   #84 = Methodref          #82.#286      // java/io/FileOutputStream."<init>":(Ljava/io/FileDescriptor;)V
+   #85 = Fieldref           #284.#289     // java/io/FileDescriptor.err:Ljava/io/FileDescriptor;
+   #86 = Class              #290          // java/io/BufferedInputStream
+   #87 = Methodref          #86.#291      // java/io/BufferedInputStream."<init>":(Ljava/io/InputStream;)V
+   #88 = String             #292          // sun.stdout.encoding
+   #89 = Methodref          #7.#293       // java/lang/System.newPrintStream:(Ljava/io/FileOutputStream;Ljava/lang/String;)Ljava/io/PrintStream;
+   #90 = String             #294          // sun.stderr.encoding
+   #91 = String             #295          // zip
+   #92 = Methodref          #7.#296       // java/lang/System.loadLibrary:(Ljava/lang/String;)V
+   #93 = Methodref          #297.#298     // java/lang/Terminator.setup:()V
+   #94 = Methodref          #276.#299     // sun/misc/VM.initializeOSEnvironment:()V
+   #95 = Methodref          #300.#301     // java/lang/Thread.currentThread:()Ljava/lang/Thread;
+   #96 = Methodref          #300.#302     // java/lang/Thread.getThreadGroup:()Ljava/lang/ThreadGroup;
+   #97 = Methodref          #303.#304     // java/lang/ThreadGroup.add:(Ljava/lang/Thread;)V
+   #98 = Methodref          #7.#305       // java/lang/System.setJavaLangAccess:()V
+   #99 = Methodref          #276.#306     // sun/misc/VM.booted:()V
+  #100 = Class              #307          // java/lang/System$2
+  #101 = Methodref          #100.#198     // java/lang/System$2."<init>":()V
+  #102 = Methodref          #205.#308     // sun/misc/SharedSecrets.setJavaLangAccess:(Lsun/misc/JavaLangAccess;)V
+  #103 = Methodref          #7.#309       // java/lang/System.registerNatives:()V
+  #104 = Fieldref           #7.#310       // java/lang/System.in:Ljava/io/InputStream;
+  #105 = Fieldref           #7.#311       // java/lang/System.out:Ljava/io/PrintStream;
+  #106 = Fieldref           #7.#312       // java/lang/System.err:Ljava/io/PrintStream;
+  #107 = Class              #313          // java/lang/Object
+  #108 = Utf8               InnerClasses
+  #109 = Utf8               in
+  #110 = Utf8               Ljava/io/InputStream;
+  #111 = Utf8               out
+  #112 = Utf8               Ljava/io/PrintStream;
+  #113 = Utf8               err
+  #114 = Utf8               security
+  #115 = Utf8               Ljava/lang/SecurityManager;
+  #116 = Utf8               cons
+  #117 = Utf8               Ljava/io/Console;
+  #118 = Utf8               props
+  #119 = Utf8               Ljava/util/Properties;
+  #120 = Utf8               lineSeparator
+  #121 = Utf8               Ljava/lang/String;
+  #122 = Utf8               registerNatives
+  #123 = Utf8               ()V
+  #124 = Utf8               <init>
+  #125 = Utf8               Code
+  #126 = Utf8               LineNumberTable
+  #127 = Utf8               setIn
+  #128 = Utf8               (Ljava/io/InputStream;)V
+  #129 = Utf8               setOut
+  #130 = Utf8               (Ljava/io/PrintStream;)V
+  #131 = Utf8               setErr
+  #132 = Utf8               console
+  #133 = Utf8               ()Ljava/io/Console;
+  #134 = Utf8               StackMapTable
+  #135 = Class              #313          // java/lang/Object
+  #136 = Class              #314          // java/lang/Throwable
+  #137 = Utf8               inheritedChannel
+  #138 = Utf8               ()Ljava/nio/channels/Channel;
+  #139 = Utf8               Exceptions
+  #140 = Class              #315          // java/io/IOException
+  #141 = Utf8               checkIO
+  #142 = Class              #316          // java/lang/SecurityManager
+  #143 = Utf8               setIn0
+  #144 = Utf8               setOut0
+  #145 = Utf8               setErr0
+  #146 = Utf8               setSecurityManager
+  #147 = Utf8               (Ljava/lang/SecurityManager;)V
+  #148 = Class              #220          // java/lang/Exception
+  #149 = Utf8               setSecurityManager0
+  #150 = Utf8               getSecurityManager
+  #151 = Utf8               ()Ljava/lang/SecurityManager;
+  #152 = Utf8               currentTimeMillis
+  #153 = Utf8               ()J
+  #154 = Utf8               nanoTime
+  #155 = Utf8               arraycopy
+  #156 = Utf8               (Ljava/lang/Object;ILjava/lang/Object;II)V
+  #157 = Utf8               identityHashCode
+  #158 = Utf8               (Ljava/lang/Object;)I
+  #159 = Utf8               initProperties
+  #160 = Utf8               (Ljava/util/Properties;)Ljava/util/Properties;
+  #161 = Utf8               getProperties
+  #162 = Utf8               ()Ljava/util/Properties;
+  #163 = Utf8               ()Ljava/lang/String;
+  #164 = Utf8               setProperties
+  #165 = Utf8               (Ljava/util/Properties;)V
+  #166 = Utf8               getProperty
+  #167 = Utf8               (Ljava/lang/String;)Ljava/lang/String;
+  #168 = Utf8               (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+  #169 = Utf8               setProperty
+  #170 = Utf8               clearProperty
+  #171 = Utf8               checkKey
+  #172 = Utf8               (Ljava/lang/String;)V
+  #173 = Utf8               getenv
+  #174 = Utf8               ()Ljava/util/Map;
+  #175 = Utf8               Signature
+  #176 = Utf8               ()Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;
+  #177 = Utf8               exit
+  #178 = Utf8               (I)V
+  #179 = Utf8               gc
+  #180 = Utf8               runFinalization
+  #181 = Utf8               runFinalizersOnExit
+  #182 = Utf8               (Z)V
+  #183 = Utf8               Deprecated
+  #184 = Utf8               RuntimeVisibleAnnotations
+  #185 = Utf8               Ljava/lang/Deprecated;
+  #186 = Utf8               load
+  #187 = Utf8               Lsun/reflect/CallerSensitive;
+  #188 = Utf8               loadLibrary
+  #189 = Utf8               mapLibraryName
+  #190 = Utf8               newPrintStream
+  #191 = Utf8               (Ljava/io/FileOutputStream;Ljava/lang/String;)Ljava/io/PrintStream;
+  #192 = Class              #274          // java/io/UnsupportedEncodingException
+  #193 = Utf8               initializeSystemClass
+  #194 = Utf8               setJavaLangAccess
+  #195 = Utf8               <clinit>
+  #196 = Utf8               SourceFile
+  #197 = Utf8               System.java
+  #198 = NameAndType        #124:#123     // "<init>":()V
+  #199 = NameAndType        #141:#123     // checkIO:()V
+  #200 = NameAndType        #143:#128     // setIn0:(Ljava/io/InputStream;)V
+  #201 = NameAndType        #144:#130     // setOut0:(Ljava/io/PrintStream;)V
+  #202 = NameAndType        #145:#130     // setErr0:(Ljava/io/PrintStream;)V
+  #203 = NameAndType        #116:#117     // cons:Ljava/io/Console;
+  #204 = Utf8               java/lang/System
+  #205 = Class              #317          // sun/misc/SharedSecrets
+  #206 = NameAndType        #318:#319     // getJavaIOAccess:()Lsun/misc/JavaIOAccess;
+  #207 = Class              #320          // sun/misc/JavaIOAccess
+  #208 = NameAndType        #132:#133     // console:()Ljava/io/Console;
+  #209 = Class              #321          // java/nio/channels/spi/SelectorProvider
+  #210 = NameAndType        #322:#323     // provider:()Ljava/nio/channels/spi/SelectorProvider;
+  #211 = NameAndType        #137:#138     // inheritedChannel:()Ljava/nio/channels/Channel;
+  #212 = NameAndType        #150:#151     // getSecurityManager:()Ljava/lang/SecurityManager;
+  #213 = Utf8               java/lang/RuntimePermission
+  #214 = Utf8               setIO
+  #215 = NameAndType        #124:#172     // "<init>":(Ljava/lang/String;)V
+  #216 = Class              #316          // java/lang/SecurityManager
+  #217 = NameAndType        #324:#325     // checkPermission:(Ljava/security/Permission;)V
+  #218 = Utf8               java.lang
+  #219 = NameAndType        #326:#172     // checkPackageAccess:(Ljava/lang/String;)V
+  #220 = Utf8               java/lang/Exception
+  #221 = NameAndType        #149:#147     // setSecurityManager0:(Ljava/lang/SecurityManager;)V
+  #222 = NameAndType        #327:#328     // getClass:()Ljava/lang/Class;
+  #223 = Class              #329          // java/lang/Class
+  #224 = NameAndType        #330:#331     // getClassLoader:()Ljava/lang/ClassLoader;
+  #225 = Utf8               java/lang/System$1
+  #226 = NameAndType        #124:#147     // "<init>":(Ljava/lang/SecurityManager;)V
+  #227 = Class              #332          // java/security/AccessController
+  #228 = NameAndType        #333:#334     // doPrivileged:(Ljava/security/PrivilegedAction;)Ljava/lang/Object;
+  #229 = NameAndType        #114:#115     // security:Ljava/lang/SecurityManager;
+  #230 = NameAndType        #335:#123     // checkPropertiesAccess:()V
+  #231 = NameAndType        #118:#119     // props:Ljava/util/Properties;
+  #232 = NameAndType        #120:#121     // lineSeparator:Ljava/lang/String;
+  #233 = Utf8               java/util/Properties
+  #234 = NameAndType        #159:#160     // initProperties:(Ljava/util/Properties;)Ljava/util/Properties;
+  #235 = NameAndType        #171:#172     // checkKey:(Ljava/lang/String;)V
+  #236 = NameAndType        #336:#172     // checkPropertyAccess:(Ljava/lang/String;)V
+  #237 = NameAndType        #166:#167     // getProperty:(Ljava/lang/String;)Ljava/lang/String;
+  #238 = NameAndType        #166:#168     // getProperty:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+  #239 = Utf8               java/util/PropertyPermission
+  #240 = Utf8               sun/security/util/SecurityConstants
+  #241 = Utf8               write
+  #242 = NameAndType        #124:#337     // "<init>":(Ljava/lang/String;Ljava/lang/String;)V
+  #243 = NameAndType        #169:#338     // setProperty:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;
+  #244 = Utf8               java/lang/String
+  #245 = NameAndType        #339:#340     // remove:(Ljava/lang/Object;)Ljava/lang/Object;
+  #246 = Utf8               java/lang/NullPointerException
+  #247 = Utf8               key can\'t be null
+  #248 = Utf8
+  #249 = NameAndType        #341:#342     // equals:(Ljava/lang/Object;)Z
+  #250 = Utf8               java/lang/IllegalArgumentException
+  #251 = Utf8               key can\'t be empty
+  #252 = Utf8               java/lang/StringBuilder
+  #253 = Utf8               getenv.
+  #254 = NameAndType        #343:#344     // append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  #255 = NameAndType        #345:#163     // toString:()Ljava/lang/String;
+  #256 = Class              #346          // java/lang/ProcessEnvironment
+  #257 = NameAndType        #173:#167     // getenv:(Ljava/lang/String;)Ljava/lang/String;
+  #258 = Utf8               getenv.*
+  #259 = NameAndType        #173:#174     // getenv:()Ljava/util/Map;
+  #260 = Class              #347          // java/lang/Runtime
+  #261 = NameAndType        #348:#349     // getRuntime:()Ljava/lang/Runtime;
+  #262 = NameAndType        #177:#178     // exit:(I)V
+  #263 = NameAndType        #179:#123     // gc:()V
+  #264 = NameAndType        #180:#123     // runFinalization:()V
+  #265 = NameAndType        #181:#182     // runFinalizersOnExit:(Z)V
+  #266 = Class              #350          // sun/reflect/Reflection
+  #267 = NameAndType        #351:#328     // getCallerClass:()Ljava/lang/Class;
+  #268 = NameAndType        #352:#353     // load0:(Ljava/lang/Class;Ljava/lang/String;)V
+  #269 = NameAndType        #354:#353     // loadLibrary0:(Ljava/lang/Class;Ljava/lang/String;)V
+  #270 = Utf8               java/io/PrintStream
+  #271 = Utf8               java/io/BufferedOutputStream
+  #272 = NameAndType        #124:#355     // "<init>":(Ljava/io/OutputStream;I)V
+  #273 = NameAndType        #124:#356     // "<init>":(Ljava/io/OutputStream;ZLjava/lang/String;)V
+  #274 = Utf8               java/io/UnsupportedEncodingException
+  #275 = NameAndType        #124:#357     // "<init>":(Ljava/io/OutputStream;Z)V
+  #276 = Class              #358          // sun/misc/VM
+  #277 = NameAndType        #359:#165     // saveAndRemoveProperties:(Ljava/util/Properties;)V
+  #278 = Utf8               line.separator
+  #279 = Class              #360          // jdk/internal/util/StaticProperty
+  #280 = NameAndType        #361:#163     // jdkSerialFilter:()Ljava/lang/String;
+  #281 = Class              #362          // sun/misc/Version
+  #282 = NameAndType        #363:#123     // init:()V
+  #283 = Utf8               java/io/FileInputStream
+  #284 = Class              #364          // java/io/FileDescriptor
+  #285 = NameAndType        #109:#365     // in:Ljava/io/FileDescriptor;
+  #286 = NameAndType        #124:#366     // "<init>":(Ljava/io/FileDescriptor;)V
+  #287 = Utf8               java/io/FileOutputStream
+  #288 = NameAndType        #111:#365     // out:Ljava/io/FileDescriptor;
+  #289 = NameAndType        #113:#365     // err:Ljava/io/FileDescriptor;
+  #290 = Utf8               java/io/BufferedInputStream
+  #291 = NameAndType        #124:#128     // "<init>":(Ljava/io/InputStream;)V
+  #292 = Utf8               sun.stdout.encoding
+  #293 = NameAndType        #190:#191     // newPrintStream:(Ljava/io/FileOutputStream;Ljava/lang/String;)Ljava/io/PrintStream;
+  #294 = Utf8               sun.stderr.encoding
+  #295 = Utf8               zip
+  #296 = NameAndType        #188:#172     // loadLibrary:(Ljava/lang/String;)V
+  #297 = Class              #367          // java/lang/Terminator
+  #298 = NameAndType        #368:#123     // setup:()V
+  #299 = NameAndType        #369:#123     // initializeOSEnvironment:()V
+  #300 = Class              #370          // java/lang/Thread
+  #301 = NameAndType        #371:#372     // currentThread:()Ljava/lang/Thread;
+  #302 = NameAndType        #373:#374     // getThreadGroup:()Ljava/lang/ThreadGroup;
+  #303 = Class              #375          // java/lang/ThreadGroup
+  #304 = NameAndType        #376:#377     // add:(Ljava/lang/Thread;)V
+  #305 = NameAndType        #194:#123     // setJavaLangAccess:()V
+  #306 = NameAndType        #378:#123     // booted:()V
+  #307 = Utf8               java/lang/System$2
+  #308 = NameAndType        #194:#379     // setJavaLangAccess:(Lsun/misc/JavaLangAccess;)V
+  #309 = NameAndType        #122:#123     // registerNatives:()V
+  #310 = NameAndType        #109:#110     // in:Ljava/io/InputStream;
+  #311 = NameAndType        #111:#112     // out:Ljava/io/PrintStream;
+  #312 = NameAndType        #113:#112     // err:Ljava/io/PrintStream;
+  #313 = Utf8               java/lang/Object
+  #314 = Utf8               java/lang/Throwable
+  #315 = Utf8               java/io/IOException
+  #316 = Utf8               java/lang/SecurityManager
+  #317 = Utf8               sun/misc/SharedSecrets
+  #318 = Utf8               getJavaIOAccess
+  #319 = Utf8               ()Lsun/misc/JavaIOAccess;
+  #320 = Utf8               sun/misc/JavaIOAccess
+  #321 = Utf8               java/nio/channels/spi/SelectorProvider
+  #322 = Utf8               provider
+  #323 = Utf8               ()Ljava/nio/channels/spi/SelectorProvider;
+  #324 = Utf8               checkPermission
+  #325 = Utf8               (Ljava/security/Permission;)V
+  #326 = Utf8               checkPackageAccess
+  #327 = Utf8               getClass
+  #328 = Utf8               ()Ljava/lang/Class;
+  #329 = Utf8               java/lang/Class
+  #330 = Utf8               getClassLoader
+  #331 = Utf8               ()Ljava/lang/ClassLoader;
+  #332 = Utf8               java/security/AccessController
+  #333 = Utf8               doPrivileged
+  #334 = Utf8               (Ljava/security/PrivilegedAction;)Ljava/lang/Object;
+  #335 = Utf8               checkPropertiesAccess
+  #336 = Utf8               checkPropertyAccess
+  #337 = Utf8               (Ljava/lang/String;Ljava/lang/String;)V
+  #338 = Utf8               (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;
+  #339 = Utf8               remove
+  #340 = Utf8               (Ljava/lang/Object;)Ljava/lang/Object;
+  #341 = Utf8               equals
+  #342 = Utf8               (Ljava/lang/Object;)Z
+  #343 = Utf8               append
+  #344 = Utf8               (Ljava/lang/String;)Ljava/lang/StringBuilder;
+  #345 = Utf8               toString
+  #346 = Utf8               java/lang/ProcessEnvironment
+  #347 = Utf8               java/lang/Runtime
+  #348 = Utf8               getRuntime
+  #349 = Utf8               ()Ljava/lang/Runtime;
+  #350 = Utf8               sun/reflect/Reflection
+  #351 = Utf8               getCallerClass
+  #352 = Utf8               load0
+  #353 = Utf8               (Ljava/lang/Class;Ljava/lang/String;)V
+  #354 = Utf8               loadLibrary0
+  #355 = Utf8               (Ljava/io/OutputStream;I)V
+  #356 = Utf8               (Ljava/io/OutputStream;ZLjava/lang/String;)V
+  #357 = Utf8               (Ljava/io/OutputStream;Z)V
+  #358 = Utf8               sun/misc/VM
+  #359 = Utf8               saveAndRemoveProperties
+  #360 = Utf8               jdk/internal/util/StaticProperty
+  #361 = Utf8               jdkSerialFilter
+  #362 = Utf8               sun/misc/Version
+  #363 = Utf8               init
+  #364 = Utf8               java/io/FileDescriptor
+  #365 = Utf8               Ljava/io/FileDescriptor;
+  #366 = Utf8               (Ljava/io/FileDescriptor;)V
+  #367 = Utf8               java/lang/Terminator
+  #368 = Utf8               setup
+  #369 = Utf8               initializeOSEnvironment
+  #370 = Utf8               java/lang/Thread
+  #371 = Utf8               currentThread
+  #372 = Utf8               ()Ljava/lang/Thread;
+  #373 = Utf8               getThreadGroup
+  #374 = Utf8               ()Ljava/lang/ThreadGroup;
+  #375 = Utf8               java/lang/ThreadGroup
+  #376 = Utf8               add
+  #377 = Utf8               (Ljava/lang/Thread;)V
+  #378 = Utf8               booted
+  #379 = Utf8               (Lsun/misc/JavaLangAccess;)V
+{
+  public static final java.io.InputStream in;
+    descriptor: Ljava/io/InputStream;
+    flags: (0x0019) ACC_PUBLIC, ACC_STATIC, ACC_FINAL
+
+  public static final java.io.PrintStream out;
+    descriptor: Ljava/io/PrintStream;
+    flags: (0x0019) ACC_PUBLIC, ACC_STATIC, ACC_FINAL
+
+  public static final java.io.PrintStream err;
+    descriptor: Ljava/io/PrintStream;
+    flags: (0x0019) ACC_PUBLIC, ACC_STATIC, ACC_FINAL
+
+  private static volatile java.lang.SecurityManager security;
+    descriptor: Ljava/lang/SecurityManager;
+    flags: (0x004a) ACC_PRIVATE, ACC_STATIC, ACC_VOLATILE
+
+  private static volatile java.io.Console cons;
+    descriptor: Ljava/io/Console;
+    flags: (0x004a) ACC_PRIVATE, ACC_STATIC, ACC_VOLATILE
+
+  private static java.util.Properties props;
+    descriptor: Ljava/util/Properties;
+    flags: (0x000a) ACC_PRIVATE, ACC_STATIC
+
+  private static java.lang.String lineSeparator;
+    descriptor: Ljava/lang/String;
+    flags: (0x000a) ACC_PRIVATE, ACC_STATIC
+
+  private static native void registerNatives();
+    descriptor: ()V
+    flags: (0x010a) ACC_PRIVATE, ACC_STATIC, ACC_NATIVE
+
+  private java.lang.System();
+    descriptor: ()V
+    flags: (0x0002) ACC_PRIVATE
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 76: 0
+        line 77: 4
+
+  public static void setIn(java.io.InputStream);
+    descriptor: (Ljava/io/InputStream;)V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: invokestatic  #2                  // Method checkIO:()V
+         3: aload_0
+         4: invokestatic  #3                  // Method setIn0:(Ljava/io/InputStream;)V
+         7: return
+      LineNumberTable:
+        line 153: 0
+        line 154: 3
+        line 155: 7
+
+  public static void setOut(java.io.PrintStream);
+    descriptor: (Ljava/io/PrintStream;)V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: invokestatic  #2                  // Method checkIO:()V
+         3: aload_0
+         4: invokestatic  #4                  // Method setOut0:(Ljava/io/PrintStream;)V
+         7: return
+      LineNumberTable:
+        line 177: 0
+        line 178: 3
+        line 179: 7
+
+  public static void setErr(java.io.PrintStream);
+    descriptor: (Ljava/io/PrintStream;)V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: invokestatic  #2                  // Method checkIO:()V
+         3: aload_0
+         4: invokestatic  #5                  // Method setErr0:(Ljava/io/PrintStream;)V
+         7: return
+      LineNumberTable:
+        line 201: 0
+        line 202: 3
+        line 203: 7
+
+  public static java.io.Console console();
+    descriptor: ()Ljava/io/Console;
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=2, args_size=0
+         0: getstatic     #6                  // Field cons:Ljava/io/Console;
+         3: ifnonnull     32
+         6: ldc           #7                  // class java/lang/System
+         8: dup
+         9: astore_0
+        10: monitorenter
+        11: invokestatic  #8                  // Method sun/misc/SharedSecrets.getJavaIOAccess:()Lsun/misc/JavaIOAccess;
+        14: invokeinterface #9,  1            // InterfaceMethod sun/misc/JavaIOAccess.console:()Ljava/io/Console;
+        19: putstatic     #6                  // Field cons:Ljava/io/Console;
+        22: aload_0
+        23: monitorexit
+        24: goto          32
+        27: astore_1
+        28: aload_0
+        29: monitorexit
+        30: aload_1
+        31: athrow
+        32: getstatic     #6                  // Field cons:Ljava/io/Console;
+        35: areturn
+      Exception table:
+         from    to  target type
+            11    24    27   any
+            27    30    27   any
+      LineNumberTable:
+        line 215: 0
+        line 216: 6
+        line 217: 11
+        line 218: 22
+        line 220: 32
+      StackMapTable: number_of_entries = 2
+        frame_type = 255 /* full_frame */
+          offset_delta = 27
+          locals = [ class java/lang/Object ]
+          stack = [ class java/lang/Throwable ]
+        frame_type = 250 /* chop */
+          offset_delta = 4
+
+  public static java.nio.channels.Channel inheritedChannel() throws java.io.IOException;
+    descriptor: ()Ljava/nio/channels/Channel;
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=0, args_size=0
+         0: invokestatic  #10                 // Method java/nio/channels/spi/SelectorProvider.provider:()Ljava/nio/channels/spi/SelectorProvider;
+         3: invokevirtual #11                 // Method java/nio/channels/spi/SelectorProvider.inheritedChannel:()Ljava/nio/channels/Channel;
+         6: areturn
+      LineNumberTable:
+        line 249: 0
+    Exceptions:
+      throws java.io.IOException
+
+  private static void checkIO();
+    descriptor: ()V
+    flags: (0x000a) ACC_PRIVATE, ACC_STATIC
+    Code:
+      stack=4, locals=1, args_size=0
+         0: invokestatic  #12                 // Method getSecurityManager:()Ljava/lang/SecurityManager;
+         3: astore_0
+         4: aload_0
+         5: ifnull        21
+         8: aload_0
+         9: new           #13                 // class java/lang/RuntimePermission
+        12: dup
+        13: ldc           #14                 // String setIO
+        15: invokespecial #15                 // Method java/lang/RuntimePermission."<init>":(Ljava/lang/String;)V
+        18: invokevirtual #16                 // Method java/lang/SecurityManager.checkPermission:(Ljava/security/Permission;)V
+        21: return
+      LineNumberTable:
+        line 253: 0
+        line 254: 4
+        line 255: 8
+        line 257: 21
+      StackMapTable: number_of_entries = 1
+        frame_type = 252 /* append */
+          offset_delta = 21
+          locals = [ class java/lang/SecurityManager ]
+
+  private static native void setIn0(java.io.InputStream);
+    descriptor: (Ljava/io/InputStream;)V
+    flags: (0x010a) ACC_PRIVATE, ACC_STATIC, ACC_NATIVE
+
+  private static native void setOut0(java.io.PrintStream);
+    descriptor: (Ljava/io/PrintStream;)V
+    flags: (0x010a) ACC_PRIVATE, ACC_STATIC, ACC_NATIVE
+
+  private static native void setErr0(java.io.PrintStream);
+    descriptor: (Ljava/io/PrintStream;)V
+    flags: (0x010a) ACC_PRIVATE, ACC_STATIC, ACC_NATIVE
+
+  public static void setSecurityManager(java.lang.SecurityManager);
+    descriptor: (Ljava/lang/SecurityManager;)V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=2, args_size=1
+         0: aload_0
+         1: ldc           #17                 // String java.lang
+         3: invokevirtual #18                 // Method java/lang/SecurityManager.checkPackageAccess:(Ljava/lang/String;)V
+         6: goto          10
+         9: astore_1
+        10: aload_0
+        11: invokestatic  #20                 // Method setSecurityManager0:(Ljava/lang/SecurityManager;)V
+        14: return
+      Exception table:
+         from    to  target type
+             0     6     9   Class java/lang/Exception
+      LineNumberTable:
+        line 289: 0
+        line 292: 6
+        line 290: 9
+        line 293: 10
+        line 294: 14
+      StackMapTable: number_of_entries = 2
+        frame_type = 73 /* same_locals_1_stack_item */
+          stack = [ class java/lang/Exception ]
+        frame_type = 0 /* same */
+
+  private static synchronized void setSecurityManager0(java.lang.SecurityManager);
+    descriptor: (Ljava/lang/SecurityManager;)V
+    flags: (0x002a) ACC_PRIVATE, ACC_STATIC, ACC_SYNCHRONIZED
+    Code:
+      stack=4, locals=2, args_size=1
+         0: invokestatic  #12                 // Method getSecurityManager:()Ljava/lang/SecurityManager;
+         3: astore_1
+         4: aload_1
+         5: ifnull        21
+         8: aload_1
+         9: new           #13                 // class java/lang/RuntimePermission
+        12: dup
+        13: ldc           #21                 // String setSecurityManager
+        15: invokespecial #15                 // Method java/lang/RuntimePermission."<init>":(Ljava/lang/String;)V
+        18: invokevirtual #16                 // Method java/lang/SecurityManager.checkPermission:(Ljava/security/Permission;)V
+        21: aload_0
+        22: ifnull        47
+        25: aload_0
+        26: invokevirtual #22                 // Method java/lang/Object.getClass:()Ljava/lang/Class;
+        29: invokevirtual #23                 // Method java/lang/Class.getClassLoader:()Ljava/lang/ClassLoader;
+        32: ifnull        47
+        35: new           #24                 // class java/lang/System$1
+        38: dup
+        39: aload_0
+        40: invokespecial #25                 // Method java/lang/System$1."<init>":(Ljava/lang/SecurityManager;)V
+        43: invokestatic  #26                 // Method java/security/AccessController.doPrivileged:(Ljava/security/PrivilegedAction;)Ljava/lang/Object;
+        46: pop
+        47: aload_0
+        48: putstatic     #27                 // Field security:Ljava/lang/SecurityManager;
+        51: return
+      LineNumberTable:
+        line 298: 0
+        line 299: 4
+        line 302: 8
+        line 306: 21
+        line 315: 35
+        line 324: 47
+        line 325: 51
+      StackMapTable: number_of_entries = 2
+        frame_type = 252 /* append */
+          offset_delta = 21
+          locals = [ class java/lang/SecurityManager ]
+        frame_type = 25 /* same */
+
+  public static java.lang.SecurityManager getSecurityManager();
+    descriptor: ()Ljava/lang/SecurityManager;
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=0, args_size=0
+         0: getstatic     #27                 // Field security:Ljava/lang/SecurityManager;
+         3: areturn
+      LineNumberTable:
+        line 336: 0
+
+  public static native long currentTimeMillis();
+    descriptor: ()J
+    flags: (0x0109) ACC_PUBLIC, ACC_STATIC, ACC_NATIVE
+
+  public static native long nanoTime();
+    descriptor: ()J
+    flags: (0x0109) ACC_PUBLIC, ACC_STATIC, ACC_NATIVE
+
+  public static native void arraycopy(java.lang.Object, int, java.lang.Object, int, int);
+    descriptor: (Ljava/lang/Object;ILjava/lang/Object;II)V
+    flags: (0x0109) ACC_PUBLIC, ACC_STATIC, ACC_NATIVE
+
+  public static native int identityHashCode(java.lang.Object);
+    descriptor: (Ljava/lang/Object;)I
+    flags: (0x0109) ACC_PUBLIC, ACC_STATIC, ACC_NATIVE
+
+  private static native java.util.Properties initProperties(java.util.Properties);
+    descriptor: (Ljava/util/Properties;)Ljava/util/Properties;
+    flags: (0x010a) ACC_PRIVATE, ACC_STATIC, ACC_NATIVE
+
+  public static java.util.Properties getProperties();
+    descriptor: ()Ljava/util/Properties;
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=1, args_size=0
+         0: invokestatic  #12                 // Method getSecurityManager:()Ljava/lang/SecurityManager;
+         3: astore_0
+         4: aload_0
+         5: ifnull        12
+         8: aload_0
+         9: invokevirtual #28                 // Method java/lang/SecurityManager.checkPropertiesAccess:()V
+        12: getstatic     #29                 // Field props:Ljava/util/Properties;
+        15: areturn
+      LineNumberTable:
+        line 630: 0
+        line 631: 4
+        line 632: 8
+        line 635: 12
+      StackMapTable: number_of_entries = 1
+        frame_type = 252 /* append */
+          offset_delta = 12
+          locals = [ class java/lang/SecurityManager ]
+
+  public static java.lang.String lineSeparator();
+    descriptor: ()Ljava/lang/String;
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=0, args_size=0
+         0: getstatic     #30                 // Field lineSeparator:Ljava/lang/String;
+         3: areturn
+      LineNumberTable:
+        line 650: 0
+
+  public static void setProperties(java.util.Properties);
+    descriptor: (Ljava/util/Properties;)V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=2, args_size=1
+         0: invokestatic  #12                 // Method getSecurityManager:()Ljava/lang/SecurityManager;
+         3: astore_1
+         4: aload_1
+         5: ifnull        12
+         8: aload_1
+         9: invokevirtual #28                 // Method java/lang/SecurityManager.checkPropertiesAccess:()V
+        12: aload_0
+        13: ifnonnull     29
+        16: new           #31                 // class java/util/Properties
+        19: dup
+        20: invokespecial #32                 // Method java/util/Properties."<init>":()V
+        23: astore_0
+        24: aload_0
+        25: invokestatic  #33                 // Method initProperties:(Ljava/util/Properties;)Ljava/util/Properties;
+        28: pop
+        29: aload_0
+        30: putstatic     #29                 // Field props:Ljava/util/Properties;
+        33: return
+      LineNumberTable:
+        line 678: 0
+        line 679: 4
+        line 680: 8
+        line 682: 12
+        line 683: 16
+        line 684: 24
+        line 686: 29
+        line 687: 33
+      StackMapTable: number_of_entries = 2
+        frame_type = 252 /* append */
+          offset_delta = 12
+          locals = [ class java/lang/SecurityManager ]
+        frame_type = 16 /* same */
+
+  public static java.lang.String getProperty(java.lang.String);
+    descriptor: (Ljava/lang/String;)Ljava/lang/String;
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=2, args_size=1
+         0: aload_0
+         1: invokestatic  #34                 // Method checkKey:(Ljava/lang/String;)V
+         4: invokestatic  #12                 // Method getSecurityManager:()Ljava/lang/SecurityManager;
+         7: astore_1
+         8: aload_1
+         9: ifnull        17
+        12: aload_1
+        13: aload_0
+        14: invokevirtual #35                 // Method java/lang/SecurityManager.checkPropertyAccess:(Ljava/lang/String;)V
+        17: getstatic     #29                 // Field props:Ljava/util/Properties;
+        20: aload_0
+        21: invokevirtual #36                 // Method java/util/Properties.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+        24: areturn
+      LineNumberTable:
+        line 716: 0
+        line 717: 4
+        line 718: 8
+        line 719: 12
+        line 722: 17
+      StackMapTable: number_of_entries = 1
+        frame_type = 252 /* append */
+          offset_delta = 17
+          locals = [ class java/lang/SecurityManager ]
+
+  public static java.lang.String getProperty(java.lang.String, java.lang.String);
+    descriptor: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=3, locals=3, args_size=2
+         0: aload_0
+         1: invokestatic  #34                 // Method checkKey:(Ljava/lang/String;)V
+         4: invokestatic  #12                 // Method getSecurityManager:()Ljava/lang/SecurityManager;
+         7: astore_2
+         8: aload_2
+         9: ifnull        17
+        12: aload_2
+        13: aload_0
+        14: invokevirtual #35                 // Method java/lang/SecurityManager.checkPropertyAccess:(Ljava/lang/String;)V
+        17: getstatic     #29                 // Field props:Ljava/util/Properties;
+        20: aload_0
+        21: aload_1
+        22: invokevirtual #37                 // Method java/util/Properties.getProperty:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+        25: areturn
+      LineNumberTable:
+        line 752: 0
+        line 753: 4
+        line 754: 8
+        line 755: 12
+        line 758: 17
+      StackMapTable: number_of_entries = 1
+        frame_type = 252 /* append */
+          offset_delta = 17
+          locals = [ class java/lang/SecurityManager ]
+
+  public static java.lang.String setProperty(java.lang.String, java.lang.String);
+    descriptor: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=5, locals=3, args_size=2
+         0: aload_0
+         1: invokestatic  #34                 // Method checkKey:(Ljava/lang/String;)V
+         4: invokestatic  #12                 // Method getSecurityManager:()Ljava/lang/SecurityManager;
+         7: astore_2
+         8: aload_2
+         9: ifnull        26
+        12: aload_2
+        13: new           #38                 // class java/util/PropertyPermission
+        16: dup
+        17: aload_0
+        18: ldc           #40                 // String write
+        20: invokespecial #41                 // Method java/util/PropertyPermission."<init>":(Ljava/lang/String;Ljava/lang/String;)V
+        23: invokevirtual #16                 // Method java/lang/SecurityManager.checkPermission:(Ljava/security/Permission;)V
+        26: getstatic     #29                 // Field props:Ljava/util/Properties;
+        29: aload_0
+        30: aload_1
+        31: invokevirtual #42                 // Method java/util/Properties.setProperty:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;
+        34: checkcast     #43                 // class java/lang/String
+        37: areturn
+      LineNumberTable:
+        line 791: 0
+        line 792: 4
+        line 793: 8
+        line 794: 12
+        line 798: 26
+      StackMapTable: number_of_entries = 1
+        frame_type = 252 /* append */
+          offset_delta = 26
+          locals = [ class java/lang/SecurityManager ]
+
+  public static java.lang.String clearProperty(java.lang.String);
+    descriptor: (Ljava/lang/String;)Ljava/lang/String;
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=5, locals=2, args_size=1
+         0: aload_0
+         1: invokestatic  #34                 // Method checkKey:(Ljava/lang/String;)V
+         4: invokestatic  #12                 // Method getSecurityManager:()Ljava/lang/SecurityManager;
+         7: astore_1
+         8: aload_1
+         9: ifnull        26
+        12: aload_1
+        13: new           #38                 // class java/util/PropertyPermission
+        16: dup
+        17: aload_0
+        18: ldc           #40                 // String write
+        20: invokespecial #41                 // Method java/util/PropertyPermission."<init>":(Ljava/lang/String;Ljava/lang/String;)V
+        23: invokevirtual #16                 // Method java/lang/SecurityManager.checkPermission:(Ljava/security/Permission;)V
+        26: getstatic     #29                 // Field props:Ljava/util/Properties;
+        29: aload_0
+        30: invokevirtual #44                 // Method java/util/Properties.remove:(Ljava/lang/Object;)Ljava/lang/Object;
+        33: checkcast     #43                 // class java/lang/String
+        36: areturn
+      LineNumberTable:
+        line 829: 0
+        line 830: 4
+        line 831: 8
+        line 832: 12
+        line 835: 26
+      StackMapTable: number_of_entries = 1
+        frame_type = 252 /* append */
+          offset_delta = 26
+          locals = [ class java/lang/SecurityManager ]
+
+  private static void checkKey(java.lang.String);
+    descriptor: (Ljava/lang/String;)V
+    flags: (0x000a) ACC_PRIVATE, ACC_STATIC
+    Code:
+      stack=3, locals=1, args_size=1
+         0: aload_0
+         1: ifnonnull     14
+         4: new           #45                 // class java/lang/NullPointerException
+         7: dup
+         8: ldc           #46                 // String key can\'t be null
+        10: invokespecial #47                 // Method java/lang/NullPointerException."<init>":(Ljava/lang/String;)V
+        13: athrow
+        14: aload_0
+        15: ldc           #48                 // String
+        17: invokevirtual #49                 // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+        20: ifeq          33
+        23: new           #50                 // class java/lang/IllegalArgumentException
+        26: dup
+        27: ldc           #51                 // String key can\'t be empty
+        29: invokespecial #52                 // Method java/lang/IllegalArgumentException."<init>":(Ljava/lang/String;)V
+        32: athrow
+        33: return
+      LineNumberTable:
+        line 839: 0
+        line 840: 4
+        line 842: 14
+        line 843: 23
+        line 845: 33
+      StackMapTable: number_of_entries = 2
+        frame_type = 14 /* same */
+        frame_type = 18 /* same */
+
+  public static java.lang.String getenv(java.lang.String);
+    descriptor: (Ljava/lang/String;)Ljava/lang/String;
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=5, locals=2, args_size=1
+         0: invokestatic  #12                 // Method getSecurityManager:()Ljava/lang/SecurityManager;
+         3: astore_1
+         4: aload_1
+         5: ifnull        38
+         8: aload_1
+         9: new           #13                 // class java/lang/RuntimePermission
+        12: dup
+        13: new           #53                 // class java/lang/StringBuilder
+        16: dup
+        17: invokespecial #54                 // Method java/lang/StringBuilder."<init>":()V
+        20: ldc           #55                 // String getenv.
+        22: invokevirtual #56                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        25: aload_0
+        26: invokevirtual #56                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        29: invokevirtual #57                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+        32: invokespecial #15                 // Method java/lang/RuntimePermission."<init>":(Ljava/lang/String;)V
+        35: invokevirtual #16                 // Method java/lang/SecurityManager.checkPermission:(Ljava/security/Permission;)V
+        38: aload_0
+        39: invokestatic  #58                 // Method java/lang/ProcessEnvironment.getenv:(Ljava/lang/String;)Ljava/lang/String;
+        42: areturn
+      LineNumberTable:
+        line 894: 0
+        line 895: 4
+        line 896: 8
+        line 899: 38
+      StackMapTable: number_of_entries = 1
+        frame_type = 252 /* append */
+          offset_delta = 38
+          locals = [ class java/lang/SecurityManager ]
+
+  public static java.util.Map<java.lang.String, java.lang.String> getenv();
+    descriptor: ()Ljava/util/Map;
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=4, locals=1, args_size=0
+         0: invokestatic  #12                 // Method getSecurityManager:()Ljava/lang/SecurityManager;
+         3: astore_0
+         4: aload_0
+         5: ifnull        21
+         8: aload_0
+         9: new           #13                 // class java/lang/RuntimePermission
+        12: dup
+        13: ldc           #59                 // String getenv.*
+        15: invokespecial #15                 // Method java/lang/RuntimePermission."<init>":(Ljava/lang/String;)V
+        18: invokevirtual #16                 // Method java/lang/SecurityManager.checkPermission:(Ljava/security/Permission;)V
+        21: invokestatic  #60                 // Method java/lang/ProcessEnvironment.getenv:()Ljava/util/Map;
+        24: areturn
+      LineNumberTable:
+        line 944: 0
+        line 945: 4
+        line 946: 8
+        line 949: 21
+      StackMapTable: number_of_entries = 1
+        frame_type = 252 /* append */
+          offset_delta = 21
+          locals = [ class java/lang/SecurityManager ]
+    Signature: #176                         // ()Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;
+
+  public static void exit(int);
+    descriptor: (I)V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=1, args_size=1
+         0: invokestatic  #61                 // Method java/lang/Runtime.getRuntime:()Ljava/lang/Runtime;
+         3: iload_0
+         4: invokevirtual #62                 // Method java/lang/Runtime.exit:(I)V
+         7: return
+      LineNumberTable:
+        line 973: 0
+        line 974: 7
+
+  public static void gc();
+    descriptor: ()V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=0, args_size=0
+         0: invokestatic  #61                 // Method java/lang/Runtime.getRuntime:()Ljava/lang/Runtime;
+         3: invokevirtual #63                 // Method java/lang/Runtime.gc:()V
+         6: return
+      LineNumberTable:
+        line 995: 0
+        line 996: 6
+
+  public static void runFinalization();
+    descriptor: ()V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=0, args_size=0
+         0: invokestatic  #61                 // Method java/lang/Runtime.getRuntime:()Ljava/lang/Runtime;
+         3: invokevirtual #64                 // Method java/lang/Runtime.runFinalization:()V
+         6: return
+      LineNumberTable:
+        line 1017: 0
+        line 1018: 6
+
+  public static void runFinalizersOnExit(boolean);
+    descriptor: (Z)V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: iload_0
+         1: invokestatic  #65                 // Method java/lang/Runtime.runFinalizersOnExit:(Z)V
+         4: return
+      LineNumberTable:
+        line 1047: 0
+        line 1048: 4
+    Deprecated: true
+    RuntimeVisibleAnnotations:
+      0: #185()
+        java.lang.Deprecated
+
+  public static void load(java.lang.String);
+    descriptor: (Ljava/lang/String;)V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=3, locals=1, args_size=1
+         0: invokestatic  #61                 // Method java/lang/Runtime.getRuntime:()Ljava/lang/Runtime;
+         3: invokestatic  #66                 // Method sun/reflect/Reflection.getCallerClass:()Ljava/lang/Class;
+         6: aload_0
+         7: invokevirtual #67                 // Method java/lang/Runtime.load0:(Ljava/lang/Class;Ljava/lang/String;)V
+        10: return
+      LineNumberTable:
+        line 1088: 0
+        line 1089: 10
+    RuntimeVisibleAnnotations:
+      0: #187()
+        sun.reflect.CallerSensitive
+
+  public static void loadLibrary(java.lang.String);
+    descriptor: (Ljava/lang/String;)V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=3, locals=1, args_size=1
+         0: invokestatic  #61                 // Method java/lang/Runtime.getRuntime:()Ljava/lang/Runtime;
+         3: invokestatic  #66                 // Method sun/reflect/Reflection.getCallerClass:()Ljava/lang/Class;
+         6: aload_0
+         7: invokevirtual #68                 // Method java/lang/Runtime.loadLibrary0:(Ljava/lang/Class;Ljava/lang/String;)V
+        10: return
+      LineNumberTable:
+        line 1124: 0
+        line 1125: 10
+    RuntimeVisibleAnnotations:
+      0: #187()
+        sun.reflect.CallerSensitive
+
+  public static native java.lang.String mapLibraryName(java.lang.String);
+    descriptor: (Ljava/lang/String;)Ljava/lang/String;
+    flags: (0x0109) ACC_PUBLIC, ACC_STATIC, ACC_NATIVE
+
+  private static java.io.PrintStream newPrintStream(java.io.FileOutputStream, java.lang.String);
+    descriptor: (Ljava/io/FileOutputStream;Ljava/lang/String;)Ljava/io/PrintStream;
+    flags: (0x000a) ACC_PRIVATE, ACC_STATIC
+    Code:
+      stack=6, locals=3, args_size=2
+         0: aload_1
+         1: ifnull        26
+         4: new           #69                 // class java/io/PrintStream
+         7: dup
+         8: new           #70                 // class java/io/BufferedOutputStream
+        11: dup
+        12: aload_0
+        13: sipush        128
+        16: invokespecial #71                 // Method java/io/BufferedOutputStream."<init>":(Ljava/io/OutputStream;I)V
+        19: iconst_1
+        20: aload_1
+        21: invokespecial #72                 // Method java/io/PrintStream."<init>":(Ljava/io/OutputStream;ZLjava/lang/String;)V
+        24: areturn
+        25: astore_2
+        26: new           #69                 // class java/io/PrintStream
+        29: dup
+        30: new           #70                 // class java/io/BufferedOutputStream
+        33: dup
+        34: aload_0
+        35: sipush        128
+        38: invokespecial #71                 // Method java/io/BufferedOutputStream."<init>":(Ljava/io/OutputStream;I)V
+        41: iconst_1
+        42: invokespecial #74                 // Method java/io/PrintStream."<init>":(Ljava/io/OutputStream;Z)V
+        45: areturn
+      Exception table:
+         from    to  target type
+             4    24    25   Class java/io/UnsupportedEncodingException
+      LineNumberTable:
+        line 1145: 0
+        line 1147: 4
+        line 1148: 25
+        line 1150: 26
+      StackMapTable: number_of_entries = 2
+        frame_type = 89 /* same_locals_1_stack_item */
+          stack = [ class java/io/UnsupportedEncodingException ]
+        frame_type = 0 /* same */
+
+  private static void initializeSystemClass();
+    descriptor: ()V
+    flags: (0x000a) ACC_PRIVATE, ACC_STATIC
+    Code:
+      stack=3, locals=4, args_size=0
+         0: new           #31                 // class java/util/Properties
+         3: dup
+         4: invokespecial #32                 // Method java/util/Properties."<init>":()V
+         7: putstatic     #29                 // Field props:Ljava/util/Properties;
+        10: getstatic     #29                 // Field props:Ljava/util/Properties;
+        13: invokestatic  #33                 // Method initProperties:(Ljava/util/Properties;)Ljava/util/Properties;
+        16: pop
+        17: getstatic     #29                 // Field props:Ljava/util/Properties;
+        20: invokestatic  #75                 // Method sun/misc/VM.saveAndRemoveProperties:(Ljava/util/Properties;)V
+        23: getstatic     #29                 // Field props:Ljava/util/Properties;
+        26: ldc           #76                 // String line.separator
+        28: invokevirtual #36                 // Method java/util/Properties.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+        31: putstatic     #30                 // Field lineSeparator:Ljava/lang/String;
+        34: invokestatic  #77                 // Method jdk/internal/util/StaticProperty.jdkSerialFilter:()Ljava/lang/String;
+        37: pop
+        38: invokestatic  #78                 // Method sun/misc/Version.init:()V
+        41: new           #79                 // class java/io/FileInputStream
+        44: dup
+        45: getstatic     #80                 // Field java/io/FileDescriptor.in:Ljava/io/FileDescriptor;
+        48: invokespecial #81                 // Method java/io/FileInputStream."<init>":(Ljava/io/FileDescriptor;)V
+        51: astore_0
+        52: new           #82                 // class java/io/FileOutputStream
+        55: dup
+        56: getstatic     #83                 // Field java/io/FileDescriptor.out:Ljava/io/FileDescriptor;
+        59: invokespecial #84                 // Method java/io/FileOutputStream."<init>":(Ljava/io/FileDescriptor;)V
+        62: astore_1
+        63: new           #82                 // class java/io/FileOutputStream
+        66: dup
+        67: getstatic     #85                 // Field java/io/FileDescriptor.err:Ljava/io/FileDescriptor;
+        70: invokespecial #84                 // Method java/io/FileOutputStream."<init>":(Ljava/io/FileDescriptor;)V
+        73: astore_2
+        74: new           #86                 // class java/io/BufferedInputStream
+        77: dup
+        78: aload_0
+        79: invokespecial #87                 // Method java/io/BufferedInputStream."<init>":(Ljava/io/InputStream;)V
+        82: invokestatic  #3                  // Method setIn0:(Ljava/io/InputStream;)V
+        85: aload_1
+        86: getstatic     #29                 // Field props:Ljava/util/Properties;
+        89: ldc           #88                 // String sun.stdout.encoding
+        91: invokevirtual #36                 // Method java/util/Properties.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+        94: invokestatic  #89                 // Method newPrintStream:(Ljava/io/FileOutputStream;Ljava/lang/String;)Ljava/io/PrintStream;
+        97: invokestatic  #4                  // Method setOut0:(Ljava/io/PrintStream;)V
+       100: aload_2
+       101: getstatic     #29                 // Field props:Ljava/util/Properties;
+       104: ldc           #90                 // String sun.stderr.encoding
+       106: invokevirtual #36                 // Method java/util/Properties.getProperty:(Ljava/lang/String;)Ljava/lang/String;
+       109: invokestatic  #89                 // Method newPrintStream:(Ljava/io/FileOutputStream;Ljava/lang/String;)Ljava/io/PrintStream;
+       112: invokestatic  #5                  // Method setErr0:(Ljava/io/PrintStream;)V
+       115: ldc           #91                 // String zip
+       117: invokestatic  #92                 // Method loadLibrary:(Ljava/lang/String;)V
+       120: invokestatic  #93                 // Method java/lang/Terminator.setup:()V
+       123: invokestatic  #94                 // Method sun/misc/VM.initializeOSEnvironment:()V
+       126: invokestatic  #95                 // Method java/lang/Thread.currentThread:()Ljava/lang/Thread;
+       129: astore_3
+       130: aload_3
+       131: invokevirtual #96                 // Method java/lang/Thread.getThreadGroup:()Ljava/lang/ThreadGroup;
+       134: aload_3
+       135: invokevirtual #97                 // Method java/lang/ThreadGroup.add:(Ljava/lang/Thread;)V
+       138: invokestatic  #98                 // Method setJavaLangAccess:()V
+       141: invokestatic  #99                 // Method sun/misc/VM.booted:()V
+       144: return
+      LineNumberTable:
+        line 1167: 0
+        line 1168: 10
+        line 1184: 17
+        line 1187: 23
+        line 1188: 34
+        line 1189: 38
+        line 1191: 41
+        line 1192: 52
+        line 1193: 63
+        line 1194: 74
+        line 1195: 85
+        line 1196: 100
+        line 1200: 115
+        line 1203: 120
+        line 1209: 123
+        line 1213: 126
+        line 1214: 130
+        line 1217: 138
+        line 1223: 141
+        line 1224: 144
+
+  private static void setJavaLangAccess();
+    descriptor: ()V
+    flags: (0x000a) ACC_PRIVATE, ACC_STATIC
+    Code:
+      stack=2, locals=0, args_size=0
+         0: new           #100                // class java/lang/System$2
+         3: dup
+         4: invokespecial #101                // Method java/lang/System$2."<init>":()V
+         7: invokestatic  #102                // Method sun/misc/SharedSecrets.setJavaLangAccess:(Lsun/misc/JavaLangAccess;)V
+        10: return
+      LineNumberTable:
+        line 1228: 0
+        line 1276: 10
+
+  static {};
+    descriptor: ()V
+    flags: (0x0008) ACC_STATIC
+    Code:
+      stack=1, locals=0, args_size=0
+         0: invokestatic  #103                // Method registerNatives:()V
+         3: aconst_null
+         4: putstatic     #104                // Field in:Ljava/io/InputStream;
+         7: aconst_null
+         8: putstatic     #105                // Field out:Ljava/io/PrintStream;
+        11: aconst_null
+        12: putstatic     #106                // Field err:Ljava/io/PrintStream;
+        15: aconst_null
+        16: putstatic     #27                 // Field security:Ljava/lang/SecurityManager;
+        19: aconst_null
+        20: putstatic     #6                  // Field cons:Ljava/io/Console;
+        23: return
+      LineNumberTable:
+        line 72: 0
+        line 85: 3
+        line 112: 7
+        line 126: 11
+        line 130: 15
+        line 205: 19
+}
+SourceFile: "System.java"
+InnerClasses:
+  static #100;                            // class java/lang/System$2
+  static #24;                             // class java/lang/System$1

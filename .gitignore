@@ -1,0 +1,7 @@
+# Project exclude paths
+# *.js
+*.js.map
+*.js
+./dist/
+.idea/
+./node_modules
