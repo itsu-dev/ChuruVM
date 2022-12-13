@@ -2,7 +2,7 @@ import {JVM} from "./jvm/jvm.js";
 
 const todo = () => {
     const image = document.getElementById("loading");
-    fetch("./lib/java-dom-api.jar").then((data) => {
+    fetch("./java-dom-api.jar").then((data) => {
         data.arrayBuffer().then(array => {
             const jvmArgs = {
                 Xss: 100

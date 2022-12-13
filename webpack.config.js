@@ -10,7 +10,7 @@ module.exports = {
     target: 'web',
 
     output: {
-        path: path.join(__dirname, "docs"),
+        path: path.join(__dirname, "./"),
         filename: "main.js"
     },
 

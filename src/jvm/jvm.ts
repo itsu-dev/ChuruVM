@@ -66,8 +66,8 @@ export class JVM {
 
     async loadLibraries() {
         const libraries: {[key: string]: boolean} = {
-            "./lib/rt.jar": false,
-            "./lib/java-dom-api.jar": false
+            "./rt.jar": false,
+            //"./java-dom-api.jar": false
         }
 
         const checkForLibraries = (): boolean => {
