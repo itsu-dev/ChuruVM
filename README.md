@@ -2,8 +2,8 @@
 A tiny JVM (Java Virtual Machine) program written in TypeScript.  
 This virtual machine specification complaints [Java Virtual Machine Specification (Java SE 8 Edition)](https://docs.oracle.com/javase/specs/jvms/se8/html/index.html).
   
-This project is for research purpose, and we aim at understanding the structure of JVM and 
-proposing a new way to develop web frontend. For these reason, we will not accept any PRs
+This project is for research purpose, and we are aiming at understanding the structure of JVM and 
+proposing a new way to develop web frontends. For these reason, we will not accept any PRs
 targeting codes in this repository. As a result of this project, this VM will support
 all features of JVM defined at the specification. 
 
