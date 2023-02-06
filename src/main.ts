@@ -16,6 +16,7 @@ const todo = () => {
 }
 
 const index = () => {
+    console.log("loading file...")
     const reader = new FileReader();
     const fileInput = document.getElementById("file_input") as HTMLInputElement;
 

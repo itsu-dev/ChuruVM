@@ -38,6 +38,10 @@ export class JVM {
             OutputLogger.setLogger(this.jvmArgs["logger"]);
         }
 
+        if (this.jvmArgs["Xss"] == null) {
+           this.jvmArgs["Xss"] = 100;
+        }
+
         await this.loadLibraries();
     }
 
