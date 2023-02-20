@@ -2,12 +2,12 @@ import {JVM} from "./jvm/jvm.js";
 
 const todo = () => {
     const image = document.getElementById("loading");
-    fetch("./java-dom-api.jar").then((data) => {
+    fetch("./todo.jar").then((data) => {
         data.arrayBuffer().then(array => {
             const jvmArgs = {
                 Xss: 100
             }
-            const jvm = new JVM(new Uint8Array(array), "java-dom-api.jar", jvmArgs, [], () => {
+            const jvm = new JVM(new Uint8Array(array), "todo.jar", jvmArgs, [], () => {
                 image.style.display = "none";
             });
             jvm.launch();
@@ -34,6 +34,6 @@ const index = () => {
 }
 
 window.onload = () => {
-    index();
-    //todo();
+    //index();
+    todo();
 }

@@ -11,7 +11,7 @@ module.exports = {
 
     output: {
         path: path.join(__dirname, "./"),
-        filename: "main.js"
+        filename: "todo.js"
     },
 
     module: {
