@@ -34,6 +34,6 @@ const index = () => {
 }
 
 window.onload = () => {
-    //index();
-    todo();
+    // index();
+    // todo();
 }

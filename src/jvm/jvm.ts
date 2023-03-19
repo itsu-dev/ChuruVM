@@ -161,6 +161,8 @@ export class JVM {
 
 }
 
+(window as any).JVM = JVM;
+
 export const throwErrorOrException = (throwable: Throwable) => {
     throwable.printStackTrace()
 }
