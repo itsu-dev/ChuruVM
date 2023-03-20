@@ -16,6 +16,7 @@ var logClass = function (tag, className) {
 };
 exports.logClass = logClass;
 var logText = function (text) {
-    document.getElementById("out").value += "".concat(text, "\n");
+    if (document.getElementById("out"))
+        document.getElementById("out").value += "".concat(text, "\n");
 };
 //# sourceMappingURL=Log.js.map

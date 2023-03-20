@@ -1,19 +1,23 @@
 export class OutputLogger {
     private static logger: Logger = new class {
         log(text: string) {
-            (document.getElementById("out") as HTMLDivElement).innerHTML += `<span>${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}<br /></span>`;
+            if (document.getElementById("out"))
+                (document.getElementById("out") as HTMLDivElement).innerHTML += `<span>${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}<br /></span>`;
         }
 
         write(char: string) {
             if (char !== "\n") {
-                (document.getElementById("out") as HTMLDivElement).innerHTML += `<span>${char.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span>`;
+                if (document.getElementById("out"))
+                    (document.getElementById("out") as HTMLDivElement).innerHTML += `<span>${char.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span>`;
             } else {
-                (document.getElementById("out") as HTMLDivElement).innerHTML += "<br />";
+                if (document.getElementById("out"))
+                    (document.getElementById("out") as HTMLDivElement).innerHTML += "<br />";
             }
         }
 
         error(text: string) {
-            (document.getElementById("out") as HTMLDivElement).innerHTML += `<span style='color: red;'>${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}<br /></span>`;
+            if (document.getElementById("out"))
+                (document.getElementById("out") as HTMLDivElement).innerHTML += `<span style='color: red;'>${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}<br /></span>`;
         }
     };
 

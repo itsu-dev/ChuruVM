@@ -14,5 +14,6 @@ export const logClass = (tag: string, className) => {
 }
 
 const logText = (text) => {
-    (document.getElementById("out") as HTMLTextAreaElement).value += `${text}\n`;
+    if (document.getElementById("out"))
+        (document.getElementById("out") as HTMLTextAreaElement).value += `${text}\n`;
 }

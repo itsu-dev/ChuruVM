@@ -132,7 +132,7 @@ export class JVM {
         system.initStatic(thread);
 
         JVMThread.init(thread);
-        
+
         thread.invokeMethod("initializeSystemClass", "()V", system, []);
         console.log("VM is Booted!")
     }

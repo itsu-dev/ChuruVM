@@ -86,7 +86,8 @@ export default class RuntimeDataArea {
         const javaClass = BootstrapClassLoader.getInstance().findClass(className);
         const variables = new Array<JavaVariable>(javaClass.getFieldsCount());
         this.objectHeap.push(variables);
-        (document.getElementById("heap") as HTMLDivElement).innerHTML += `<span>${this.objectHeap.length - 1}: ${className}<br /></span>`;
+        if (document.getElementById("heap"))
+            (document.getElementById("heap") as HTMLDivElement).innerHTML += `<span>${this.objectHeap.length - 1}: ${className}<br /></span>`;
         const obj = new JavaObject(BootstrapClassLoader.getInstance().findClass(javaClass.name), this.objectHeap.length - 1);
         obj.init(this);
         return obj;

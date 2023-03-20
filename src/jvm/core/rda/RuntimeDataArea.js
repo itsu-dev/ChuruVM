@@ -215,7 +215,8 @@ var RuntimeDataArea = /** @class */ (function () {
         var javaClass = BootstrapClassLoader_1.default.getInstance().findClass(className);
         var variables = new Array(javaClass.getFieldsCount());
         this.objectHeap.push(variables);
-        document.getElementById("heap").innerHTML += "<span>".concat(this.objectHeap.length - 1, ": ").concat(className, "<br /></span>");
+        if (document.getElementById("heap"))
+            document.getElementById("heap").innerHTML += "<span>".concat(this.objectHeap.length - 1, ": ").concat(className, "<br /></span>");
         var obj = new types_1.JavaObject(BootstrapClassLoader_1.default.getInstance().findClass(javaClass.name), this.objectHeap.length - 1);
         obj.init(this);
         return obj;

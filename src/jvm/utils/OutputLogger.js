@@ -20,18 +20,22 @@ var OutputLogger = /** @class */ (function () {
         function class_1() {
         }
         class_1.prototype.log = function (text) {
-            document.getElementById("out").innerHTML += "<span>".concat(text.replace(/</g, "&lt;").replace(/>/g, "&gt;"), "<br /></span>");
+            if (document.getElementById("out"))
+                document.getElementById("out").innerHTML += "<span>".concat(text.replace(/</g, "&lt;").replace(/>/g, "&gt;"), "<br /></span>");
         };
         class_1.prototype.write = function (char) {
             if (char !== "\n") {
-                document.getElementById("out").innerHTML += "<span>".concat(char.replace(/</g, "&lt;").replace(/>/g, "&gt;"), "</span>");
+                if (document.getElementById("out"))
+                    document.getElementById("out").innerHTML += "<span>".concat(char.replace(/</g, "&lt;").replace(/>/g, "&gt;"), "</span>");
             }
             else {
-                document.getElementById("out").innerHTML += "<br />";
+                if (document.getElementById("out"))
+                    document.getElementById("out").innerHTML += "<br />";
             }
         };
         class_1.prototype.error = function (text) {
-            document.getElementById("out").innerHTML += "<span style='color: red;'>".concat(text.replace(/</g, "&lt;").replace(/>/g, "&gt;"), "<br /></span>");
+            if (document.getElementById("out"))
+                document.getElementById("out").innerHTML += "<span style='color: red;'>".concat(text.replace(/</g, "&lt;").replace(/>/g, "&gt;"), "<br /></span>");
         };
         return class_1;
     }());
