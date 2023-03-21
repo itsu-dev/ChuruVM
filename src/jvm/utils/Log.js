@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logClass = exports.logMethod = void 0;
-var log = false;
+var log = true;
 var logMethod = function (tag, className, methodName) {
     if (log) {
         // logText(`[${tag}] ${className}#${methodName}`);

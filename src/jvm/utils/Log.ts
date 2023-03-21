@@ -1,4 +1,4 @@
-const log = false;
+const log = true;
 
 export const logMethod = (tag: string, className: string, methodName) => {
     if (log) {
